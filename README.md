@@ -32,6 +32,20 @@
 - 開発初期段階
 - Django環境構築、アプリ作成、テンプレート表示まで実装済み
 
+### 環境構築方法
+
+#### 仮想環境作成
+python -m venv venv
+
+#### 仮想環境起動
+venv/Scripts/activate
+
+#### Djangoインストール
+pip install django
+
+#### サーバー起動
+python manage.py runserver
+
 ### 今後の実装予定
 
 - タスク・習慣のCRUD機能完成
