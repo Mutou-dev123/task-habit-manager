@@ -6,7 +6,7 @@
 <h2>タスク一覧</h2>
 
 {% for task in tasks %}
-    <p>{{ task.title }} - {{ task.status }}</p>
+    <p><a href="/tasks/{{ task.id }}/">{{ task.title }}</a> - {{ task.status }}</p>
 {% endfor %}
 
 {% endblock %}
