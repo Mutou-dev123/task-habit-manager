@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+<h2>タスク一覧</h2>
+
+{% for task in tasks %}
+    <p>{{ task.title }} - {{ task.status }}</p>
+{% endfor %}
+
+{% endblock %}
