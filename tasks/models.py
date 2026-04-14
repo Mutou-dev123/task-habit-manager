@@ -21,3 +21,4 @@ class Task(models.Model):
     # 新しいタスク順
     class Meta:
         ordering = ["-created_at"]
+    # .order_by()を毎回書かなくてよくなる
