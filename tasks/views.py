@@ -47,3 +47,17 @@ def task_delete(request, pk):
         return redirect("task_list")
     
     return render(request, "tasks/task_confirm_delete.html", {"task": task})
+
+# タスク完了
+def task_complete(request, pk):
+    task = get_object_or_404(Task, id=pk)
+    task.status = "done"
+    task.save()
+    return redirect("task_list")
+
+# タスク完了取り消し
+def task_undo(request, pk):
+    task = get_object_or_404(Task, id=pk)
+    task.status = "todo"
+    task.save()
+    return redirect("task_list")

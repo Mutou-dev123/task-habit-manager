@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tasks', '0002_task_delete_tasks'),
+        ("tasks", "0002_task_delete_tasks"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='task',
-            name='status',
-            field=models.CharField(choices=[('draft', '下書き'), ('todo', '未着手'), ('doing', '進行中'), ('done', '完了')], default='draft', max_length=10),
+            model_name="task",
+            name="status",
+            field=models.CharField(choices=[("draft", "下書き"), ("todo", "未着手"), ("doing", "進行中"), ("done", "完了")], default="draft", max_length=10),
         ),
     ]
