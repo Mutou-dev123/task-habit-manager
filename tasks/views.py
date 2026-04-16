@@ -14,15 +14,8 @@ def task_detail(request, pk):
 
 # タスク作成
 def task_create(request):
-    if request.method == "POST":
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("task_list")
-    else:
-        form = TaskForm()
-
-    return render(request, "tasks/task_form.html", {"form": form})
+    form = TaskForm()
+    return render(request, "tasks/task_form.html", {"form": form, "mode": "create"})
 
 # タスク編集
 def task_update(request, pk):
@@ -32,11 +25,15 @@ def task_update(request, pk):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
-            return redirect("task_list")
+            return redirect("task_detail", pk=task.id)
     else:
         form = TaskForm(instance=task)
 
-    return render(request, "tasks/task_form.html", {"form": form})
+    return render(request, "tasks/task_form.html", {
+        "form": form,
+        "task": task,
+        "mode": "edit",
+    })
 
 # タスク削除
 def task_delete(request, pk):

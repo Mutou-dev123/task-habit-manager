@@ -3,13 +3,22 @@
 {% block title %}タスク作成{% endblock %}
 
 {% block content %}
-<h2>タスク作成</h2>
+{% if mode == "edit" %}
+    <h2>タスク編集</h2>
+{% else %}
+    <h2>タスク作成</h2>
+{% endif %}
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit">保存</button>
+    {% if mode == "edit" %}
+        <button type="submit">更新する</button>
+    {% else %}
+        <button type="submit">作成する</button>
+    {% endif %}
+
 </form>
 
 <a href="/tasks/">一覧へ戻る</a>

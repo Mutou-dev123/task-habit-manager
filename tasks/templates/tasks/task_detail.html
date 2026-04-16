@@ -35,6 +35,10 @@
 
 <hr>
 
-<a href="/tasks/">一覧へ戻る</a>
+<div>
+    <a href="/tasks/">一覧へ戻る</a>
+    <a href="/tasks/{{ task.id }}/edit">編集</a> 
+    <a href="/tasks/{{ task.id }}/delete">削除</a>
+</div>
 
 {% endblock %}
