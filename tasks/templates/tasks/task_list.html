@@ -13,12 +13,21 @@
         <p>{{ task.status }}</p>
 
         {% if task.status == "done" %}
-            <form method="post">
+
+            <form method="post" action="/tasks/{{ task.id }}/complete/" style="display: inline;">
                 {% csrf_token %}
-                <button type="submit">完了</button>
+                <button type="submit">✓ 完了</button>
             </form>
+
         {% else %}
-            <span>✓ 完了済み</span>
+
+            <form method="post" action="/tasks/{{ task.id }}/undo/" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit">↩ 取り消し</button>
+            </form>
+
+            <span>（完了済み）</span>
+
         {% endif %}
 
         <a href="/tasks/{{ task.id }}/edit">編集</a> 
