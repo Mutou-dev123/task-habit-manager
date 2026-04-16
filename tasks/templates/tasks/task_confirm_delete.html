@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>削除確認</h2>
+
+<p>{{ task.title }} を削除しますか？</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">削除する</button>
+</form>
+
+<a href="/tasks/">一覧へ戻る</a>
+
+{% endblock %}
