@@ -12,24 +12,20 @@
         <a href="/tasks/{{ task.id }}/">{{ task.title }}</a>
         <p>{{ task.status }}</p>
 
-        {% if task.status == "done" %}
-
-            <form method="post" action="/tasks/{{ task.id }}/complete/" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit">✓ 完了</button>
-            </form>
-
+        <!-- 進行状況に応じてボタン文字変更 -->
+        {% if task.status != "done" %}
+            <a href="/tasks/{{ task.id }}/next/">
+                {% if task.status == "todo" %}
+                    ▶ 開始
+                {% elif task.status == "doing" %}
+                    ✓ 完了
+                {% endif %}
+            </a>
         {% else %}
-
-            <form method="post" action="/tasks/{{ task.id }}/undo/" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit">↩ 取り消し</button>
-            </form>
-
-            <span>（完了済み）</span>
-
+            <span>✅ 完了済み</span>
         {% endif %}
-
+        
+        <a href="/tasks/{{ task.id }}/">詳細</a>
         <a href="/tasks/{{ task.id }}/edit">編集</a> 
         <a href="/tasks/{{ task.id }}/delete">削除</a>
     </div>

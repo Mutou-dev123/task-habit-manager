@@ -4,7 +4,7 @@ from .forms import TaskForm
 
 # タスク一覧
 def task_list(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.exclude(status="draft")   # 下書きは一覧では非表示
     return render(request, "tasks/task_list.html", {"tasks": tasks})
 
 # タスク詳細
@@ -14,8 +14,25 @@ def task_detail(request, pk):
 
 # タスク作成
 def task_create(request):
-    form = TaskForm()
-    return render(request, "tasks/task_form.html", {"form": form, "mode": "create"})
+    if request.method == "POST":
+        form = TaskForm(request.POST)
+
+        if form.is_valid():
+            task = form.save(commit=False)
+
+            # 作成か下書き保存かを判断
+            if "save_draft" in request.POST:
+                task.status = "draft"
+            else:
+                task.status = "todo"
+
+            task.save()
+            return redirect("task_list")
+    
+    else:
+        form = TaskForm()
+
+    return render(request, "tasks/task_form.html", {"form": form})
 
 # タスク編集
 def task_update(request, pk):
@@ -60,3 +77,25 @@ def task_undo(request, pk):
         task.status = "todo"
         task.save()
     return redirect("task_list")
+
+# ステータスワンクリック変更
+def task_next_status(request, pk):
+    task = get_object_or_404(Task, id=pk)
+
+    if task.status == "todo":
+        task.status = "doing"
+    elif task.status == "doing":
+        task.status = "done"
+
+    task.save()
+    return redirect("task_list")
+
+# ステータスプルダウン変更
+def task_update_status(request, pk):
+    task = get_object_or_404(Task, id=pk)
+
+    if request.method == "POST":
+        task.status = request.POST.get("status")
+        task.save()
+
+    return redirect("task_detail", pk=task.id)

@@ -33,6 +33,18 @@
     <p><strong>更新日：</strong>{{ task.updated_at }}</p>
 </div>
 
+<form method="post" action="/tasks/{{ task.id }}/status/">
+    {% csrf_token %}
+
+    <select name="status">
+        <option value="todo" {% if task.status == "todo" %}selected{% endif %}>未着手</option>
+        <option value="doing" {% if task.status == "doing" %}selected{% endif %}>進行中</option>
+        <option value="done" {% if task.status == "done" %}selected{% endif %}>完了</option>
+    </select>
+
+    <button type="submit">更新</button>
+</form>
+
 <hr>
 
 <div>
