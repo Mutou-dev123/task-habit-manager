@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>ダッシュボード</h2>
+
+<h3>今日のタスク</h3>
+
+<ul>
+{% for task in tasks %}
+    <li>{{ task.title }}（{{ task.get_status_display }}）</li>
+{% empty %}
+    <li>タスクはありません</li>
+{% endfor %}
+</ul>
+{% endblock %}

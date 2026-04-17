@@ -3,7 +3,7 @@ from django.db import models
 class Task(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    due_date = models.DateTimeField(null=True, blank=True)
+    due_date = models.DateField(null=True, blank=True)
     STATUS_CHOICES = [
         ("draft", "下書き"),
         ("todo", "未着手"),
