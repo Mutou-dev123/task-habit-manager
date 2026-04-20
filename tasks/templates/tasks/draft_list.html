@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>下書き一覧</h2>
+
+<ul>
+{% for task in drafts %}
+    <li>
+        {{ task.title }}
+
+        <a href="{% url 'task_update' task.id %}">編集</a>
+    </li>
+{% empty %}
+    <li>下書きはありません</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'task_create' %}">← 作成に戻る</a>
+{% endblock %}

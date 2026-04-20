@@ -7,6 +7,11 @@ def task_list(request):
     tasks = Task.objects.exclude(status="draft")   # 下書きは一覧では非表示
     return render(request, "tasks/task_list.html", {"tasks": tasks})
 
+# 下書きタスク一覧
+def draft_list(request):
+    drafts = Task.objects.filter(status="draft").order_by("-updated_at")
+    return render(request, "tasks/draft_list.html", {"drafts": drafts})
+
 # タスク詳細
 def task_detail(request, pk):
     task = get_object_or_404(Task, id=pk)
