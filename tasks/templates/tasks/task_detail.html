@@ -33,7 +33,7 @@
     <p><strong>更新日：</strong>{{ task.updated_at }}</p>
 </div>
 
-<form method="post" action="/tasks/{{ task.id }}/status/">
+<form method="post" action="{% url 'task_update_status' task.id %}">
     {% csrf_token %}
 
     <select name="status">

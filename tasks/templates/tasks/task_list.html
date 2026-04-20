@@ -5,16 +5,16 @@
 {% block content %}
 <h2>タスク一覧</h2>
 
-<a href="/tasks/create/">＋新規作成</a>
+<a href="{% url 'task_create' %}">＋新規作成</a>
 
 {% for task in tasks %}
     <div>
-        <a href="/tasks/{{ task.id }}/">{{ task.title }}</a>
+        <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
         <p>{{ task.status }}</p>
 
         <!-- 進行状況に応じてボタン文字変更 -->
         {% if task.status != "done" %}
-            <a href="/tasks/{{ task.id }}/next/">
+            <a href="{% url 'task_next_status' task.id %}">
                 {% if task.status == "todo" %}
                     ▶ 開始
                 {% elif task.status == "doing" %}
@@ -25,9 +25,9 @@
             <span>✅ 完了済み</span>
         {% endif %}
         
-        <a href="/tasks/{{ task.id }}/">詳細</a>
-        <a href="/tasks/{{ task.id }}/edit">編集</a> 
-        <a href="/tasks/{{ task.id }}/delete">削除</a>
+        <a href="{% url 'task_detail' task.id %}">詳細</a>
+        <a href="{% url 'task_update' task.id %}">編集</a> 
+        <a href="{% url 'task_delete' task.id %}">削除</a>
     </div>
 {% endfor %}
 
