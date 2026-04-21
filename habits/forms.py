@@ -5,4 +5,4 @@ from .models import Habit
 class HabitForm(forms.ModelForm):
     class Meta:
         model = Habit
-        fields = ["title", "description", "start_date", "end_date" "link"]
+        fields = ["title", "description", "start_date", "end_date", "link"]

@@ -10,6 +10,7 @@ class Habit(models.Model):
         ("active", "実行中"),
         ("archived", "終了"),
     ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="draft")
     link = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
