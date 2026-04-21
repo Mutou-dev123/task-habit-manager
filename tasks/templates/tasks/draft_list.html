@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}下書き一覧{% endblock %}
+
 {% block content %}
 <h2>下書き一覧</h2>
 
@@ -15,5 +17,6 @@
 {% endfor %}
 </ul>
 
-<a href="{% url 'task_create' %}">← 作成に戻る</a>
+<a href="{% url 'task_create' %}">タスク作成へ戻る</a>
+
 {% endblock %}

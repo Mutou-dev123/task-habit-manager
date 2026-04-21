@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}下書き一覧{% endblock %}
+
+{% block content %}
+<h2>下書き一覧</h2>
+
+<ul>
+{% for habit in habits %}
+    <li>
+        {{ task.title }}
+
+        <a href="{% url 'habit_update' habit.id %}">編集</a>
+    </li>
+{% empty %}
+    <li>下書きはありません</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'habit_create' %}">習慣作成へ戻る</a>
+
+{% endblock %}
