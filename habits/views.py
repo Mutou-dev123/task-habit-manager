@@ -90,3 +90,13 @@ def habit_uncheck(request, pk):
     ).delete()
 
     return redirect("habit_list")
+
+# ステータスプルダウン変更
+def habit_update_status(request, pk):
+    habit = get_object_or_404(Habit, id=pk)
+
+    if request.method == "POST":
+        habit.status = request.POST.get("status")
+        habit.save()
+
+    return redirect("habit_detail", pk=habit.id)

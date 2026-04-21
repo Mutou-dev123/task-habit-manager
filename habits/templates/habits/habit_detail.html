@@ -41,6 +41,17 @@
     </p>
 </div>
 
+<form method="post" action="{% url 'habit_update_status' habit.id %}">
+    {% csrf_token %}
+
+    <select name="status">
+        <option value="active" {% if habit.status == "active" %}selected{% endif %}>実行中</option>
+        <option value="archived" {% if habit.status == "archived" %}selected{% endif %}>終了</option>
+    </select>
+
+    <button type="submit">更新</button>
+</form>
+
 <hr>
 
 <div>
