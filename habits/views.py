@@ -5,7 +5,7 @@ from datetime import date
 
 # 習慣一覧
 def habit_list(request):
-    habits = Habit.objects.exclude(status="draft")
+    habits = Habit.objects.all()
     return render(request, "habits/habit_list.html", {"habits": habits})
 
 # 下書き習慣一覧
