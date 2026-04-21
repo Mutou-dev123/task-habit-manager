@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if habit %}
+        習慣編集
+    {% else %}
+        習慣作成
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if mode == "edit" %}
+    <h2>習慣編集</h2>
+{% else %}
+    <h2>習慣作成</h2>
+    <a href="{% url 'draft_list' %}">下書き一覧を見る</a>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    {% if mode == "edit" %}
+        <button type="submit">更新する</button>
+    {% else %}
+        <button type="submit" name="save_habit">作成する</button>
+        <button type="submit" name="save_draft">下書き保存</button>
+    {% endif %}
+</form>
+
+<a href="{% url 'habit_list' %}">一覧へ戻る</a>
+
+{% endblock %}

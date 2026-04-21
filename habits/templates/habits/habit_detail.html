@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}習慣詳細{% endblock %}
+
+{% block content %}
+<h2>習慣詳細</h2>
+
+<div>
+    <h3>{{ habit.title }}</h3>
+
+    <p><strong>ステータス：</strong>{{ habit.get_status_display }}</p>
+
+    <p><strong>メモ：</strong><br>
+    {{ habit.description|linebreaks }}</p>
+
+    <p><strong>開始：</strong>
+        {% if habit.start_date %}
+            {{ habit.start_date }}
+        {% else %}
+            未設定
+        {% endif %}
+    </p>
+
+    <p><strong>終了：</strong>
+        {% if habit.end_date %}
+            {{ habit.end_date }}
+        {% else %}
+            未設定
+        {% endif %}
+    </p>
+
+    <p><strong>リンク：</strong>
+    {% if habit.link %}
+        <a href="{{ habit.link }}" target="_blank">開く</a>
+    {% else %}
+        なし
+    {% endif %}
+
+    <p><strong>作成日：</strong>{{ habit.created_at }}</p>
+    <p><strong>更新日：</strong>{{ habit.updated_at }}</p>
+    </p>
+</div>
+
+<hr>
+
+<div>
+    <a href="{% url 'habit_list' %}">一覧へ戻る</a>
+    <a href="{% url 'habit_update' habit.id %}">編集</a>
+    <a href="{% url 'habit_delete' habit.id %}">削除</a>
+</div>
+
+{% endblock %}
