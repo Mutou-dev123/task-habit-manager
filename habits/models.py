@@ -5,6 +5,11 @@ class Habit(models.Model):
     description = models.TextField(blank=True)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
+    STATUS_CHOICES = [
+        ("draft", "下書き"),
+        ("active", "実行中"),
+        ("archived", "終了"),
+    ]
     link = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
