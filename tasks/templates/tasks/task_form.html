@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}タスク作成{% endblock %}
+{% block title %}
+    {% if task %}
+        タスク編集
+    {% else %}
+        タスク作成
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 {% if mode == "edit" %}
