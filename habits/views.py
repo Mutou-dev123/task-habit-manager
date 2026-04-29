@@ -5,7 +5,7 @@ from datetime import date
 
 # 習慣一覧
 def habit_list(request):
-    habits = Habit.objects.exclude(status="archived")
+    habits = Habit.objects.filter(status="active")
     today = date.today()
 
     logs = HabitLog.objects.filter(date=today)
