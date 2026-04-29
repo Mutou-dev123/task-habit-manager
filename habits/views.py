@@ -17,9 +17,9 @@ def habit_list(request):
     })
 
 # 下書き習慣一覧
-def draft_list(request):
+def habit_draft_list(request):
     drafts = Habit.objects.filter(status="draft").order_by("-updated_at")
-    return render(request, "habits/draft_list.html", {"habits": drafts})
+    return render(request, "habits/habit_draft_list.html", {"habits": drafts})
 
 # 習慣詳細
 def habit_detail(request, pk):

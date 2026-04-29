@@ -11,5 +11,5 @@ urlpatterns = [
     path("<int:pk>/undo/", views.task_undo, name="task_undo"),
     path("<int:pk>/next/", views.task_next_status, name="task_next_status"),
     path("<int:pk>/status/", views.task_update_status, name="task_update_status"),
-    path("drafts/", views.draft_list, name="draft_list"),
+    path("drafts/", views.task_draft_list, name="task_draft_list"),
 ]

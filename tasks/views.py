@@ -8,9 +8,9 @@ def task_list(request):
     return render(request, "tasks/task_list.html", {"tasks": tasks})
 
 # 下書きタスク一覧
-def draft_list(request):
+def task_draft_list(request):
     drafts = Task.objects.filter(status="draft").order_by("-updated_at")
-    return render(request, "tasks/draft_list.html", {"drafts": drafts})
+    return render(request, "tasks/task_draft_list.html", {"drafts": drafts})
 
 # タスク詳細
 def task_detail(request, pk):
