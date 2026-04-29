@@ -16,8 +16,9 @@ def calendar_view(request):
     cal = calendar.monthcalendar(year, month)
 
     # タスク取得
-    tasks = Task.objects.filter(
-        status="todo",
+    tasks = Task.objects.exclude(
+        status="draft"
+    ).filter(
         due_date__isnull=False,
         due_date__year=year,
         due_date__month=month
