@@ -6,7 +6,15 @@ from datetime import date
 # 習慣一覧
 def habit_list(request):
     habits = Habit.objects.all()
-    return render(request, "habits/habit_list.html", {"habits": habits})
+    today = date.today()
+
+    logs = HabitLog.objects.filter(date=today)
+    done_habits_ids = set(log.habit_id for log in logs)
+
+    return render(request, "habits/habit_list.html", {
+        "habits": habits,
+        "done_habit_ids": done_habits_ids,
+    })
 
 # 下書き習慣一覧
 def draft_list(request):

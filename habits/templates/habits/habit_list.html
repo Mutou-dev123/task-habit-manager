@@ -12,6 +12,18 @@
         <a href="{% url 'habit_detail' habit.id %}">{{ habit.title }}</a>
         <p>{{ habit.status }}</p>
 
+        {% if habit.id in done_habit_ids %}
+            <form method="post" action="{% url 'habit_uncheck' habit.id %}">
+                {% csrf_token %}
+                <button>✓済（取り消し）</button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'habit_check' habit.id %}">
+                {% csrf_token %}
+                <button>未実行 → 実行する</button>
+            </form>
+        {% endif %}
+
         <a href="{% url 'habit_detail' habit.id %}">詳細</a>
         <a href="{% url 'habit_update' habit.id %}">編集</a>
         <a href="{% url 'habit_delete' habit.id %}">削除</a>
