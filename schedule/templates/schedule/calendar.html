@@ -14,7 +14,11 @@
 
                 <!-- タスク -->
                 {% for task in task_dict|get_item:day %}
-                    <div>📌{{ task.title }}</div>
+                    {% if task.status == "done" %}
+                        <div style="color: gray;">✓{{ task.title }}</div>
+                    {% else %}
+                        <div>📌{{ task.title }}</div>
+                    {% endif %}
                 {% endfor %}
 
                 <!-- 習慣 -->
