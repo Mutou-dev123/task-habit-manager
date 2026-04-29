@@ -29,6 +29,9 @@
         <a href="{% url 'task_update' task.id %}">編集</a> 
         <a href="{% url 'task_delete' task.id %}">削除</a>
     </div>
+{% empty %}
+    <p>タスクはありません</p>
+    <a href="{% url 'task_create' %}">タスク作成</a>
 {% endfor %}
 
 {% endblock %}
