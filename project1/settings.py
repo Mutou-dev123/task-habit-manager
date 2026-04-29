@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "dashboard",
     "tasks",
     "habits",
+    "schedule",
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>カレンダー</h2>
+
+<table border="1">
+{% for week in calendar %}
+<tr>
+    {% for day in week %}
+        <td style="vertical-align: top; width: 120px; height: 100px;">
+            {% if day != 0 %}
+                <strong>{{ day }}</strong>
+
+                <!-- タスク -->
+                {% for task in task_dict.day %}
+                    <div>📌{{ task.title }}</div>
+                {% endfor %}
+
+                <!-- 習慣 -->
+                {% for log in habit_dict.day %}
+                    <div>✓{{ log.habit.title }}</div>
+                {% endfor %}
+            {% endif %}
+        </td>
+    {% endfor %}
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
