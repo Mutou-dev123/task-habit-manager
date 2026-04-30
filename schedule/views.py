@@ -29,16 +29,6 @@ def calendar_view(request):
         next_month = 1
         next_year += 1
     
-    context = {
-        "calendar": cal,
-        "year": year,
-        "month": month,
-        "prev_year": prev_year,
-        "prev_month": prev_month,
-        "next_year": next_year,
-        "next_month": next_month,
-    }
-
     # タスク取得
     tasks = Task.objects.exclude(
         status="draft"
@@ -58,12 +48,25 @@ def calendar_view(request):
     # 日付ごとにまとめる
     task_dict = defaultdict(list)
     for task in tasks:
-        if not task.due_date:
-            continue
         task_dict[task.due_date.day].append(task)
 
     habit_dict = defaultdict(list)
     for log in logs:
         habit_dict[log.date.day].append(log)
+
+    print(year, month)
+    print(tasks)
+
+    context = {
+        "calendar": cal,
+        "year": year,
+        "month": month,
+        "prev_year": prev_year,
+        "prev_month": prev_month,
+        "next_year": next_year,
+        "next_month": next_month,
+        "task_dict": dict(task_dict),
+        "habit_dict": dict(habit_dict),
+    }
 
     return render(request, "schedule/calendar.html", context)
