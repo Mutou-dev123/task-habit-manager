@@ -10,10 +10,34 @@ from habits.models import HabitLog
 def calendar_view(request):
     today = date.today()
 
-    year = today.year
-    month = today.month
+    # GETパラメータ取得
+    year = int(request.GET.get("year", today.year))
+    month = int(request.GET.get("month", today.month))
 
     cal = calendar.monthcalendar(year, month)
+
+    # 前月・次月計算
+    prev_month = month - 1
+    prev_year = year
+    if prev_month == 0:
+        prev_month = 12
+        prev_year -=1
+
+    next_month = month + 1
+    next_year = year
+    if next_month == 13:
+        next_month = 1
+        next_year += 1
+    
+    context = {
+        "calendar": cal,
+        "year": year,
+        "month": month,
+        "prev_year": prev_year,
+        "prev_month": prev_month,
+        "next_year": next_year,
+        "next_month": next_month,
+    }
 
     # タスク取得
     tasks = Task.objects.exclude(
@@ -42,9 +66,4 @@ def calendar_view(request):
     for log in logs:
         habit_dict[log.date.day].append(log)
 
-    return render(request, "schedule/calendar.html", {
-        "calendar": cal,
-        "task_dict": dict(task_dict),
-        "habit_dict": dict(habit_dict),
-        "today": today,
-    })
+    return render(request, "schedule/calendar.html", context)

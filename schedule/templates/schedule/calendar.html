@@ -4,6 +4,11 @@
 {% block content %}
 <h2>カレンダー</h2>
 
+<h2>{{ year }}年 {{ month }}月</h2>
+
+<a href="?year={{ prev_year }}&month={{ prev_month }}">← 前の月</a>
+<a href="?year={{ next_year }}&month={{ next_month }}">次の月 →</a>
+
 <table border="1">
 {% for week in calendar %}
 <tr>
