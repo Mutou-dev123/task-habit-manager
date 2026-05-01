@@ -16,13 +16,14 @@ def calendar_view(request):
 
     cal = calendar.monthcalendar(year, month)
 
-    # 前月・次月計算
+    # 前月
     prev_month = month - 1
     prev_year = year
     if prev_month == 0:
         prev_month = 12
         prev_year -=1
 
+    # 次月
     next_month = month + 1
     next_year = year
     if next_month == 13:
@@ -61,6 +62,7 @@ def calendar_view(request):
         "calendar": cal,
         "year": year,
         "month": month,
+        "today": today,
         "prev_year": prev_year,
         "prev_month": prev_month,
         "next_year": next_year,
