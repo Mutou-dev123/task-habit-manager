@@ -59,11 +59,7 @@ def habit_update(request, pk):
     else:
         form = HabitForm(instance=habit)
 
-    return render(request, "habits/habit_form.html", {
-        "form": form,
-        "habit": habit,
-        "mode": "mode",
-    })
+    return redirect("habit_detail", pk=habit.id)
 
 # 習慣削除
 def habit_delete(request, pk):

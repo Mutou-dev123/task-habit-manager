@@ -1,33 +1,99 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {% if habit %}
-        習慣編集
-    {% else %}
-        習慣作成
-    {% endif %}
+    {% if habit %}習慣編集{% else %}習慣作成{% endif %}
 {% endblock %}
 
 {% block content %}
-{% if mode == "edit" %}
-    <h2>習慣編集</h2>
-{% else %}
-    <h2>習慣作成</h2>
-    <a href="{% url 'habit_draft_list' %}">下書き一覧を見る</a>
-{% endif %}
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    {% if mode == "edit" %}
-        <button type="submit">更新する</button>
-    {% else %}
-        <button type="submit" name="save_habit">作成する</button>
-        <button type="submit" name="save_draft">下書き保存</button>
+    <h2>{% if form.instance.pk %}習慣編集{% else %}習慣作成{% endif %}</h2>
+    {% if not form.instance.pk %}
+        <a href="{% url 'habit_draft_list' %}">下書き一覧を見る</a>
     {% endif %}
-</form>
 
-<a href="{% url 'habit_list' %}">一覧へ戻る</a>
+    <form method="post" id="habit-form">
+        {% csrf_token %}
 
+        {# 基本情報 #}
+        <div class="field-group">
+            {{ form.title.label_tag }} {{ form.title }}
+            {{ form.description.label_tag }} {{ form.description }}
+        </div>
+
+        <div class="field-group">
+            {{ form.start_date.label_tag }} {{ form.start_date }}
+            {{ form.end_date.label_tag }} {{ form.end_date }}
+        </div>
+
+        <hr>
+
+        {# 頻度設定 #}
+        <div class="field-group">
+            {{ form.frequency.label_tag }} {{ form.frequency }}
+        </div>
+
+        {# 〇日おき指定 #}
+        <div id="div_interval" class="conditional-field">
+            {{ form.interval_days.label_tag }} {{ form.interval_days }}
+        </div>
+
+        {# 曜日指定 #}
+        <div id="div_weekday" class="conditional-field">
+            {{ form.weekdays.label_tag }}
+            <div class="weekday-checkboxes">
+                {{ form.weekdays }}
+            </div>
+        </div>
+
+        {# 回数指定 #}
+        <div id="div_count" class="conditional-field">
+            {{ form.count_type.label_tag }} {{ form.count_type }}
+            {{ form.target_count.label_tag }} {{ form.target_count }}
+        </div>
+
+        <div class="field-group">
+            {{ form.link.label_tag }} {{ form.link }}
+        </div>
+
+        <div class="form-actions">
+            {% if form.instance.pk %}
+                <button type="submit">更新する</button>
+            {% else %}
+                <button type="submit" name="save_habit">作成する</button>
+                <button type="submit" name="save_draft">下書き保存</button>
+            {% endif %}
+        </div>
+    </form>
+
+    <a href="{% url 'habit_list' %}">一覧へ戻る</a>
+
+    {# 動的制御スクリプト #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const freqSelect = document.querySelector('select[name="frequency"]');
+            const fields = {
+                'interval': document.getElementById('div_interval'),
+                'weekday': document.getElementById('div_weekday'),
+                'count': document.getElementById('div_count')
+            };
+
+            function toggleFields() {
+                const val = freqSelect.value;
+                Object.values(fields).forEach(el => el.style.display = 'none');
+
+                if (fields[val]) {
+                    fields[val].style.display = 'block';
+                }
+            }
+
+            freqSelect.addEventListener('change', toggleFields);
+            toggleFields();
+        });
+    </script>
+
+    <style>
+        .conditional-field { margin: 15px 0; padding: 10px; background: #f9f9f9; border-radius: 4px; }
+        .field-group { margin-bottom: 15px; }
+        .weekday-checkboxes ul { list-style: none; display: flex; gap: 10px; padding: 0; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+    </style>
 {% endblock %}
