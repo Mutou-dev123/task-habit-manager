@@ -28,8 +28,19 @@
                 {% endfor %}
 
                 <!-- 習慣 -->
-                {% for log in habit_dict|get_item:day %}
-                    <div>✓{{ log.habit.title }}</div>
+                {% for item in habit_dict|get_item:day %}
+
+                    {% if item.is_done %}
+                        <div style="color: green;">
+                            ✓ {{ item.habit.title }}
+                        </div>
+                    
+                    {% else %}
+                        <div>
+                            ⬜ {{ item.habit.title }}
+                        </div>
+                    {% endif %}
+
                 {% endfor %}
             {% endif %}
         </td>

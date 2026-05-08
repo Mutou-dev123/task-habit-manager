@@ -4,7 +4,7 @@ from collections import defaultdict # dict（辞書）の拡張モジュール
 
 from django.shortcuts import render
 from tasks.models import Task
-from habits.models import HabitLog
+from habits.models import Habit, HabitLog
 
 # カレンダー
 def calendar_view(request):
@@ -39,6 +39,8 @@ def calendar_view(request):
         due_date__month=month
     )
 
+    habits = Habit.objects.filter(status="active")
+
     # 習慣ログ取得
     logs = HabitLog.objects.filter(
         date__isnull=False,
@@ -52,8 +54,29 @@ def calendar_view(request):
         task_dict[task.due_date.day].append(task)
 
     habit_dict = defaultdict(list)
-    for log in logs:
-        habit_dict[log.date.day].append(log)
+    
+    for week in cal:
+        for day in week:
+
+            if day == 0:
+                continue
+
+            current_date = date(year, month, day)
+
+            for habit in habits:
+
+                if habit.is_scheduled_for(current_date):
+
+                    # 完了済み判定
+                    is_done = logs.filter(
+                        habit=habit,
+                        date=current_date
+                    ).exists()
+
+                    habit_dict[day].append({
+                        "habit": habit,
+                        "is_done": is_done,
+                    })
 
     print(year, month)
     print(tasks)

@@ -5,8 +5,11 @@ from datetime import date
 
 # 習慣一覧
 def habit_list(request):
-    habits = Habit.objects.filter(status="active")
     today = date.today()
+    habits = [
+        habit for habit in Habit.objects.filter(status="active")
+        if habit.is_scheduled_for(today)
+    ]
 
     logs = HabitLog.objects.filter(date=today)
     done_habits_ids = set(log.habit_id for log in logs)
