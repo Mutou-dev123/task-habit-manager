@@ -3,7 +3,6 @@ from django.contrib import admin
 from .models import Habit, HabitLog
 
 # Habit用の「管理画面フォーム」をカスタマイズするクラス
-
 # ここではweekdaysがJSONFieldでそのままだとadminで、
 # [0, 2, 4] のように表示されてしまう
 class HabitAdminForm(forms.ModelForm):
@@ -28,7 +27,8 @@ class HabitAdminForm(forms.ModelForm):
     # weekdays専用のバリデーション/変換処理
     def clean_weekdays(self):
         weekdays = self.cleaned_data.get("weekdays")    # チェックされた曜日取得
-        # self.cleaned_data ... 
+        # self.cleaned_data 
+        # ... is_valid()を通過したデータのみを格納するPython辞書
     
         if not weekdays:
             return None
