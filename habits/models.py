@@ -89,6 +89,10 @@ class HabitLog(models.Model):
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE, related_name="logs")
     date = models.DateField()
 
+    completed_at = models.DateTimeField(auto_now_add=True)
+
+    memo = models.TextField(blank=True)
+
     # 一日一回のみチェックを許可
     class Meta:
         constraints = [
