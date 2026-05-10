@@ -51,7 +51,7 @@
             {% if day != 0 %}
                 <strong>{{ day }}</strong>
 
-                {% if mode == "all" or mode == "task" %}
+                {% if mode == "all" or mode == "tasks" %}
 
                     <!-- タスク -->
                     {% for task in task_dict|get_item:day %}
