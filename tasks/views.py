@@ -19,6 +19,11 @@ def task_detail(request, pk):
 
 # タスク作成
 def task_create(request):
+
+    draft_exists = Task.objects.filter(
+        status="draft"
+    ).exists()
+
     if request.method == "POST":
         form = TaskForm(request.POST)
 
@@ -37,7 +42,10 @@ def task_create(request):
     else:
         form = TaskForm()
 
-    return render(request, "tasks/task_form.html", {"form": form})
+    return render(request, "tasks/task_form.html", {
+        "form": form,
+        "draft_exists": draft_exists,
+    })
 
 # タスク編集
 def task_update(request, pk):

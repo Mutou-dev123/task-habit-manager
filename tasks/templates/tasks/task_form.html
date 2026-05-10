@@ -9,11 +9,12 @@
 {% endblock %}
 
 {% block content %}
-{% if mode == "edit" %}
-    <h2>タスク編集</h2>
-{% else %}
-    <h2>タスク作成</h2>
-    <a href="{% url 'task_draft_list' %}">下書き一覧を見る</a>
+<h2>{% if form.instance.pk %}タスク編集{% else %}タスク作成{% endif %}</h2>
+
+{% if draft_exists %}
+    <a href="{% url 'task_draft_list' %}">
+        下書き一覧を見る
+    </a>
 {% endif %}
 
 <form method="post">

@@ -31,6 +31,11 @@ def habit_detail(request, pk):
 
 # 習慣作成
 def habit_create(request):
+
+    draft_exists = Habit.objects.filter(
+        status="draft"
+    ).exists
+
     if request.method == "POST":
         form = HabitForm(request.POST)
 
@@ -48,7 +53,10 @@ def habit_create(request):
     else:
         form = HabitForm()
 
-    return render(request, "habits/habit_form.html", {"form": form})
+    return render(request, "habits/habit_form.html", {
+        "form": form,
+        "draft_exists": draft_exists,
+        })
 
 # 習慣編集
 def habit_update(request, pk):
