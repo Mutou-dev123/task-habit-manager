@@ -33,7 +33,9 @@ class HabitForm(forms.ModelForm):
             self.initial["weekdays"] = self.instance.weekdays
 
     def clean_weekdays(self):
-        data = self.cleaned_data.get("weekdays")
-        if data:
-            return [int(d) for d in data]
-        return None
+        weekdays = self.cleaned_data.get("weekdays")
+        
+        if not weekdays:
+            return None
+        
+        return [int(w) for w in weekdays]

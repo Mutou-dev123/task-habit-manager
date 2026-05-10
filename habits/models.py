@@ -100,6 +100,9 @@ class Habit(models.Model):
         # ○日おき
         elif self.frequency == "interval":
 
+            if not self.interval_days:
+                return False
+
             # 開始日から何日経過したかを計算
             delta_days = (target_date - self.start_date).days
 
@@ -107,6 +110,9 @@ class Habit(models.Model):
         
         # 曜日指定
         elif self.frequency == "weekday":
+
+            if not self.weekdays:
+                return False
 
             return target_date.weekday() in self.weekdays
         

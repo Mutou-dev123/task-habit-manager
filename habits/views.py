@@ -56,13 +56,18 @@ def habit_update(request, pk):
 
     if request.method == "POST":
         form = HabitForm(request.POST, instance=habit)
+        
         if form.is_valid():
             form.save()
             return redirect("habit_detail", pk=habit.id)
     else:
         form = HabitForm(instance=habit)
 
-    return redirect("habit_detail", pk=habit.id)
+    return render(
+        request,
+        "habits/habit_form.html",
+        {"form": form}
+    )
 
 # 習慣削除
 def habit_delete(request, pk):
