@@ -49,7 +49,11 @@
             }
         </style>
             {% if day != 0 %}
-                <strong>{{ day }}</strong>
+                <strong>
+                    <a href="{% url 'day_detail' year month day %}">
+                        {{ day }}
+                    </a>
+                </strong>
 
                 {% if mode == "all" or mode == "tasks" %}
 

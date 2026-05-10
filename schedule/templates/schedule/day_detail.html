@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>
+    {{ target_date.year }}年
+    {{ target_date.month }}月
+    {{ target_date.day }}日
+</h2>
+
+<hr>
+
+<h3>タスク</h3>
+
+{% if tasks %}
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {{ task.title }}
+            </li>
+        {% endfor %}
+    </ul>
+
+{% else %}
+    <p>タスクはありません</p>
+
+{% endif %}
+
+<hr>
+
+<h3>習慣</h3>
+
+{% if scheduled_habits %}
+
+    <ul>
+
+        {% for habit in scheduled_habits %}
+
+        <li>
+            {% if habit.id in done_habit_ids %}
+                ✓
+            {% else %}
+                ⬜
+            {% endif %}
+
+            {{ habit.title }}
+
+        </li>
+
+        {% endfor %}
+
+    </ul>
+
+{% else %}
+
+    <p>習慣はありません</p>
+
+{% endif %}
+
+    </ul>
+<hr>
+
+<a href="{% url 'calendar_view' %}">
+    カレンダーへ戻る
+</a>
+
+{% endblock %}

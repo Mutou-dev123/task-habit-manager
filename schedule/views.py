@@ -80,9 +80,6 @@ def calendar_view(request):
                         "is_done": is_done,
                     })
 
-    print(year, month)
-    print(tasks)
-
     context = {
         "calendar": cal,
         "year": year,
@@ -98,3 +95,48 @@ def calendar_view(request):
     }
 
     return render(request, "schedule/calendar.html", context)
+
+# 日別詳細
+def day_detail(request, year, month, day):
+    
+    target_date = date(year, month, day)
+
+    tasks = Task.objects.filter(
+        due_date=target_date
+    ).exclude(
+        status="draft"
+    )
+
+    # 習慣取得
+    habits = Habit.objects.filter(
+        status="active"
+    )
+
+    # その日に予定されている習慣
+    scheduled_habits = [
+        habit for habit in habits
+        if habit.is_scheduled_for(target_date)
+    ]
+
+    # 完了済みログ
+    logs = HabitLog.objects.filter(
+        date=target_date
+    )
+
+    # 完了済み習慣ID
+    done_habit_ids = set(
+        log.habit_id for log in logs
+    )
+
+    context = {
+        "target_date": target_date,
+        "tasks": tasks,
+        "scheduled_habits": scheduled_habits,
+        "done_habit_ids": done_habit_ids,
+    }
+
+    return render(
+        request,
+        "schedule/day_detail.html",
+        context
+    )
