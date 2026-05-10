@@ -14,6 +14,8 @@ def calendar_view(request):
     year = int(request.GET.get("year", today.year))
     month = int(request.GET.get("month", today.month))
 
+    mode = request.GET.get("mode", "all")
+
     cal = calendar.monthcalendar(year, month)
 
     # 前月
@@ -92,6 +94,7 @@ def calendar_view(request):
         "next_month": next_month,
         "task_dict": dict(task_dict),
         "habit_dict": dict(habit_dict),
+        "mode": mode,
     }
 
     return render(request, "schedule/calendar.html", context)

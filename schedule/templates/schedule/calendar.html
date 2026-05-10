@@ -10,6 +10,21 @@
 <a href="{% url 'calendar_view' %}">今日</a>
 <a href="?year={{ next_year }}&month={{ next_month }}">次の月 →</a>
 
+<div style="margin: 10px 0;">
+
+    <a href="?year={{ year }}&month={{ month }}&mode=all">
+        [すべて]
+    </a>
+
+    <a href="?year={{ year }}&month={{ month }}&mode=tasks">
+        [タスク]
+    </a>
+
+    <a href="?year={{ year }}&month={{ month }}&mode=habits">
+        [習慣]
+    </a>
+</div>
+
 <table border="1">
 <tr>
     <th>月</th>
@@ -36,30 +51,36 @@
             {% if day != 0 %}
                 <strong>{{ day }}</strong>
 
-                <!-- タスク -->
-                {% for task in task_dict|get_item:day %}
-                    {% if task.status == "done" %}
-                        <div style="color: gray;">✓{{ task.title }}</div>
-                    {% else %}
-                        <div>📌{{ task.title }}</div>
-                    {% endif %}
-                {% endfor %}
+                {% if mode == "all" or mode == "task" %}
 
-                <!-- 習慣 -->
-                {% for item in habit_dict|get_item:day %}
+                    <!-- タスク -->
+                    {% for task in task_dict|get_item:day %}
+                        {% if task.status == "done" %}
+                            <div style="color: gray;">✓{{ task.title }}</div>
+                        {% else %}
+                            <div>📌{{ task.title }}</div>
+                        {% endif %}
+                    {% endfor %}
 
-                    {% if item.is_done %}
-                        <div style="color: green;">
-                            ✓ {{ item.habit.title }}
-                        </div>
-                    
-                    {% else %}
-                        <div>
-                            ⬜ {{ item.habit.title }}
-                        </div>
-                    {% endif %}
+                {% endif %}
 
-                {% endfor %}
+                {% if mode == "all" or mode == "habits" %}
+                    <!-- 習慣 -->
+                    {% for item in habit_dict|get_item:day %}
+
+                        {% if item.is_done %}
+                            <div style="color: green;">
+                                ✓ {{ item.habit.title }}
+                            </div>
+                        
+                        {% else %}
+                            <div>
+                                ⬜ {{ item.habit.title }}
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                {% endif %}
             {% endif %}
         </td>
     {% endfor %}
