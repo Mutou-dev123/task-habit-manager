@@ -23,11 +23,16 @@
 {% for week in calendar %}
 <tr>
     {% for day in week %}
-        <td style="vertical-align: top; width: 120px; height: 100px;
-            {% if day != 0 and year == today.year and month == today.month and day == today.day %}
-                background-color: #fff3cd;
-            {% endif %}"
+        <td
+            class="{% if day != 0 and year == today.year and month == today.month and day == today.day %}today{% endif %}"
+            style="vertical-align: top; width: 120px; height: 100px;"
         >
+
+        <style>
+            .today {
+                background-color: #fff3cd;
+            }
+        </style>
             {% if day != 0 %}
                 <strong>{{ day }}</strong>
 
