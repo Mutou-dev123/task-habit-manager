@@ -11,10 +11,23 @@
 <a href="?year={{ next_year }}&month={{ next_month }}">次の月 →</a>
 
 <table border="1">
+<tr>
+    <th>月</th>
+    <th>火</th>
+    <th>水</th>
+    <th>木</th>
+    <th>金</th>
+    <th>土</th>
+    <th>日</th>
+</tr>
 {% for week in calendar %}
 <tr>
     {% for day in week %}
-        <td style="vertical-align: top; width: 120px; height: 100px;">
+        <td style="vertical-align: top; width: 120px; height: 100px;
+            {% if day != 0 and year == today.year and month == today.month and day == today.day %}
+                background-color: #fff3cd;
+            {% endif %}"
+        >
             {% if day != 0 %}
                 <strong>{{ day }}</strong>
 
