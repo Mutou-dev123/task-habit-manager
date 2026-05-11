@@ -23,7 +23,9 @@
     <ul>
         {% for task in tasks %}
             <li>
-                {{ task.title }}
+                <a href="{% url 'task_detail' task.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
+                    {{ task.title }}
+                </a>
             </li>
         {% endfor %}
     </ul>

@@ -14,8 +14,23 @@ def task_draft_list(request):
 
 # タスク詳細
 def task_detail(request, pk):
-    task = get_object_or_404(Task, id=pk)
-    return render(request, "tasks/task_detail.html", {"task": task})
+    task = Task.objects.get(id=pk)
+
+    from_day = request.GET.get("from") == "day"
+
+    year = request.GET.get("year")
+    month = request.GET.get("month")
+    day = request.GET.get("day")
+
+    context = {
+        "task": task,
+        "from_day": from_day,
+        "year": year,
+        "month": month,
+        "day": day,
+    }
+
+    return render(request, "tasks/task_detail.html", context)
 
 # タスク作成
 def task_create(request):
