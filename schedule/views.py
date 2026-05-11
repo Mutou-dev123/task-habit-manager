@@ -1,5 +1,5 @@
 import calendar # カレンダー
-from datetime import date
+from datetime import date, datetime, timedelta
 from collections import defaultdict # dict（辞書）の拡張モジュール
 
 from django.shortcuts import render
@@ -99,10 +99,13 @@ def calendar_view(request):
 # 日別詳細
 def day_detail(request, year, month, day):
     
-    target_date = date(year, month, day)
+    current_date = date(year, month, day)
+
+    prev_date = current_date - timedelta(days=1)
+    next_date = current_date + timedelta(days=1)
 
     tasks = Task.objects.filter(
-        due_date=target_date
+        due_date=current_date
     ).exclude(
         status="draft"
     )
@@ -115,12 +118,12 @@ def day_detail(request, year, month, day):
     # その日に予定されている習慣
     scheduled_habits = [
         habit for habit in habits
-        if habit.is_scheduled_for(target_date)
+        if habit.is_scheduled_for(current_date)
     ]
 
     # 完了済みログ
     logs = HabitLog.objects.filter(
-        date=target_date
+        date=current_date
     )
 
     # 完了済み習慣ID
@@ -129,7 +132,18 @@ def day_detail(request, year, month, day):
     )
 
     context = {
-        "target_date": target_date,
+        "current_date": current_date,
+
+        # 前日の日付を渡す
+        "prev_year": prev_date.year,
+        "prev_month": prev_date.month,
+        "prev_day": prev_date.day,
+
+        # 翌日の日付を渡す
+        "next_year": next_date.year,
+        "next_month": next_date.month,
+        "next_day": next_date.day,
+
         "tasks": tasks,
         "scheduled_habits": scheduled_habits,
         "done_habit_ids": done_habit_ids,
