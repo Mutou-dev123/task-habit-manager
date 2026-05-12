@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import timedelta
+from .models import HabitSkip
 
 class Habit(models.Model):
     title = models.CharField(max_length=100)
@@ -91,6 +92,10 @@ class Habit(models.Model):
         
         # 終了日より後
         if self.end_date and target_date > self.end_date:
+            return False
+        
+        # 習慣スキップかどうか？
+        if HabitSkip.objects.filter(habit=self, date=target_date).exists():
             return False
         
         # 毎日
