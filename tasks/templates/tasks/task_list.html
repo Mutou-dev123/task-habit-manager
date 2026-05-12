@@ -6,6 +6,7 @@
 <h2>タスク一覧</h2>
 
 <a href="{% url 'task_create' %}">＋新規作成</a>
+<hr>
 
 {% for task in tasks %}
     <div>
@@ -28,6 +29,8 @@
         <a href="{% url 'task_detail' task.id %}">詳細</a>
         <a href="{% url 'task_update' task.id %}">編集</a> 
         <a href="{% url 'task_delete' task.id %}">削除</a>
+
+        <hr>
     </div>
 {% empty %}
     <p>タスクはありません</p>

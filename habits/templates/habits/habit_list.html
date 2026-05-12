@@ -6,6 +6,7 @@
 <h2>習慣一覧</h2>
 
 <a href="{% url 'habit_create' %}">＋新規作成</a>
+<hr>
 
 {% for habit in habits %}
     <div>
@@ -29,6 +30,8 @@
         <a href="{% url 'habit_detail' habit.id %}">詳細</a>
         <a href="{% url 'habit_update' habit.id %}">編集</a>
         <a href="{% url 'habit_delete' habit.id %}">削除</a>
+
+        <hr>
     </div>
 {% empty %}
     <p>習慣はありません</p>
