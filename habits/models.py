@@ -126,6 +126,7 @@ class Habit(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+# 習慣実行ログ
 class HabitLog(models.Model):
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE, related_name="logs")
     date = models.DateField()
@@ -143,3 +144,14 @@ class HabitLog(models.Model):
             models.Index(fields=["habit", "date"]),
         ]
         ordering = ["-date"]
+
+# 習慣スキップ
+class HabitSkip(models.Model):
+    habit = models.ForeignKey("Habit", on_delete=models.CASCADE)
+    date = models.DateField()
+
+    reason = models.CharField(max_length=200, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("habit", "date")
