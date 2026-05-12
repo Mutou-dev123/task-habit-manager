@@ -52,7 +52,9 @@
                 ⬜
             {% endif %}
 
-            {{ habit.title }}
+            <a href="{% url 'habit_detail' habit.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
+                {{ habit.title }}
+            </a>
 
         </li>
 

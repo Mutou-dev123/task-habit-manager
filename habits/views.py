@@ -26,8 +26,24 @@ def habit_draft_list(request):
 
 # 習慣詳細
 def habit_detail(request, pk):
-    habit = get_object_or_404(Habit, pk=pk)
-    return render(request, "habits/habit_detail.html", {"habit": habit})
+    
+    habit = Habit.objects.get(id=pk)
+
+    from_day = request.GET.get("from") == "day"
+
+    year = request.GET.get("year")
+    month = request.GET.get("month")
+    day = request.GET.get("day")
+
+    context = {
+        "habit": habit,
+        "from_day": from_day,
+        "year": year,
+        "month": month,
+        "day": day,
+    }
+
+    return render(request, "habits/habit_detail.html", context)
 
 # 習慣作成
 def habit_create(request):

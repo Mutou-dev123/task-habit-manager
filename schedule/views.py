@@ -45,10 +45,9 @@ def calendar_view(request):
 
     # 習慣ログ取得
     logs = HabitLog.objects.filter(
-        date__isnull=False,
         date__year=year,
         date__month=month
-    )
+    ).values("habit_id", "date")
 
     # 日付ごとにまとめる
     task_dict = defaultdict(list)
@@ -69,11 +68,13 @@ def calendar_view(request):
 
                 if habit.is_scheduled_for(current_date):
 
+                    log_set = set(
+                        (log["habit_id"], log["date"].day)
+                        for log in logs
+                    )
+
                     # 完了済み判定
-                    is_done = logs.filter(
-                        habit=habit,
-                        date=current_date
-                    ).exists()
+                    is_done = (habit.id, day) in log_set
 
                     habit_dict[day].append({
                         "habit": habit,
@@ -121,14 +122,9 @@ def day_detail(request, year, month, day):
         if habit.is_scheduled_for(current_date)
     ]
 
-    # 完了済みログ
-    logs = HabitLog.objects.filter(
-        date=current_date
-    )
-
-    # 完了済み習慣ID
     done_habit_ids = set(
-        log.habit_id for log in logs
+        HabitLog.objects.filter(date=current_date)
+        .values_list("habit_id", flat=True)
     )
 
     context = {
