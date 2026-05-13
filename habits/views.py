@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Habit, HabitLog
+from .models import Habit, HabitLog, HabitSkip
 from .forms import HabitForm
 from datetime import date
 
@@ -136,3 +136,34 @@ def habit_update_status(request, pk):
         habit.save()
 
     return redirect("habit_detail", pk=habit.id)
+
+# 習慣スキップ
+def habit_skip(request, pk):
+    habit = get_object_or_404(Habit, pk=pk)
+    today = date.today()
+
+    HabitSkip.objects.get_or_create(
+        habit=habit,
+        date=today
+    )
+
+    # 習慣を完了した記録を消す
+    HabitLog.objects.filter(
+        habit=habit,
+        date=today
+    ).delete()
+
+    return redirect("habit_list")
+
+# 習慣スキップ解除
+def habit_unskip(request, pk):
+    habit = get_object_or_404(Habit, pk=pk)
+    today = date.today()
+
+    # 習慣をスキップした記録を消す
+    HabitSkip.objects.filter(
+        habit=habit,
+        date=today
+    ).delete()
+
+    return redirect("habit_list")
