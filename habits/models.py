@@ -1,12 +1,14 @@
 from django.db import models
 from datetime import timedelta
-from .models import HabitSkip
 
+# 習慣モデル
 class Habit(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
+
+    # 習慣の進行状態
     STATUS_CHOICES = [
         ("draft", "下書き"),
         ("active", "実行中"),
@@ -14,6 +16,7 @@ class Habit(models.Model):
     ]
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="draft")
 
+    # 習慣頻度タイプの選択
     FREQUENCY_CHOICES = [
         ("daily", "毎日"),
         ("interval", "〇日おき"),
@@ -28,6 +31,7 @@ class Habit(models.Model):
 
     interval_days = models.PositiveIntegerField(null=True, blank=True)
 
+    # 習慣頻度タイプ：曜日指定
     WEEKDAY_CHOICES = [
         (0, "月"),
         (1, "火"),
@@ -39,6 +43,7 @@ class Habit(models.Model):
     ]
     weekdays = models.JSONField(null=True, blank=True)
 
+    # 習慣頻度タイプ：回数指定
     COUNT_TYPE_CHOICES = [
         ("week", "週"),
         ("month", "月"),
