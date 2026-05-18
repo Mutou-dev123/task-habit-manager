@@ -1,11 +1,43 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from .forms import TaskForm
+from django.db.models import Q, F
 
 # タスク一覧
 def task_list(request):
-    tasks = Task.objects.exclude(status="draft")   # 下書きは一覧では非表示
-    return render(request, "tasks/task_list.html", {"tasks": tasks})
+
+    tasks = Task.objects.exclude(status="draft")
+
+    q = request.GET.get("q", "").strip()
+    status = request.GET.get("status", "").strip()
+    sort = request.GET.get("sort", "").strip()
+
+    # 検索
+    if q:
+        tasks = tasks.filter(
+            Q(title__icontains=q) |
+            Q(description__icontains=q)
+        )
+
+    # フィルター
+    if status:
+        tasks = tasks.filter(status=status)
+
+    # 並び替え
+    if sort == "due":
+        tasks = tasks.order_by("due_date")
+
+    elif sort == "title":
+        tasks = tasks.order_by("title")
+
+    context = {
+        "tasks": tasks,
+        "q": q,
+        "status": status,
+        "sort": sort,
+    }
+
+    return render(request, "tasks/task_list.html", context)
 
 # 下書きタスク一覧
 def task_draft_list(request):
