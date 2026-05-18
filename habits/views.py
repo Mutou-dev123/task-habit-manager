@@ -2,21 +2,86 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Habit, HabitLog, HabitSkip
 from .forms import HabitForm
 from datetime import date
+from django.db.models import Q
 
 # 習慣一覧
 def habit_list(request):
     today = date.today()
+
+    # 実行中のみ
+    habits = Habit.objects.filter(status="active")
+
+    # 今日対象のみ
     habits = [
-        habit for habit in Habit.objects.filter(status="active")
+        habit for habit in habits
         if habit.is_scheduled_for(today)
     ]
 
+    # 今日のログ
     logs = HabitLog.objects.filter(date=today)
-    done_habits_ids = set(log.habit_id for log in logs)
+
+    done_habit_ids = set(
+        log.habit_id for log in logs
+    )
+
+    # 検索
+    q = request.GET.get("q", "").strip()
+
+    if q:
+        habits = [
+            habit for habit in habits
+            if q.lower() in habit.title.lower()
+            or q.lower() in habit.description.lower()
+        ]
+    
+    # 実施状態
+    state = request.GET.get("state", "").strip()
+
+    if state == "done":
+
+        habits = [
+            habit for habit in habits
+            if habit.id in done_habit_ids
+        ]
+
+    elif state == "not_done":
+
+        habits = [
+            habit for habit in habits
+            if habit.id not in done_habit_ids
+        ]
+
+    # 並び替え
+    sort = request.GET.get("sort", "").strip()
+
+    if sort == "title":
+
+        habits = sorted(
+            habits,
+            key=lambda h: h.title.lower()
+        )
+
+    elif sort == "old":
+
+        habits = sorted(
+            habits,
+            key=lambda h: h.created_at
+        )
+
+    else:
+
+        habits = sorted(
+            habits,
+            key=lambda h: h.created_at,
+            reverse=True
+        )
 
     return render(request, "habits/habit_list.html", {
         "habits": habits,
-        "done_habit_ids": done_habits_ids,
+        "done_habit_ids": done_habit_ids,
+        "q": q,
+        "state": state,
+        "sort": sort,
     })
 
 # 下書き習慣一覧

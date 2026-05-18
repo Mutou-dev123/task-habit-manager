@@ -6,6 +6,59 @@
 <h2>習慣一覧</h2>
 
 <a href="{% url 'habit_create' %}">＋新規作成</a>
+
+<form method="get">
+
+    <!-- 検索 -->
+    <input
+        type="text"
+        name="q"
+        placeholder="検索"
+        value="{{ q }}"
+    >
+
+    <!-- 実施状態 -->
+    <select name="state">
+
+        <option value="">すべて</option>
+
+        <option value="done"
+            {% if state == "done" %}selected{% endif %}>
+            実施済み
+        </option>
+
+        <option value="not_done"
+            {% if state == "not_done" %}selected{% endif %}>
+            未実施
+        </option>
+
+    </select>
+
+    <!-- 並び替え -->
+    <select name="sort">
+
+        <option value=""
+            {% if not sort %}selected{% endif %}>
+            新しい順
+        </option>
+
+        <option value="old"
+            {% if sort == "old" %}selected{% endif %}>
+            古い順
+        </option>
+
+        <option value="title"
+            {% if sort == "value" %}selected{% endif %}>
+            タイトル順
+        </option>
+
+    </select>
+
+    <button type="submit">
+        検索
+    </button>
+</form>
+
 <hr>
 
 {% for habit in habits %}
