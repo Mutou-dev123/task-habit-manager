@@ -39,20 +39,22 @@
 
 <h3>習慣</h3>
 
-{% if scheduled_habits %}
+{% if habit_states %}
 
     <ul>
 
-        {% for habit in scheduled_habits %}
+        {% for item in habit_states %}
 
         <li>
-            {% if habit.id in done_habit_ids %}
+            {% if item.state == "done" %}
                 ✓
+            {% elif item.state == "skipped" %}
+                ⏭
             {% else %}
                 ⬜
             {% endif %}
 
-            <a href="{% url 'habit_detail' habit.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
+            <a href="{% url 'habit_detail' item.habit.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
                 {{ habit.title }}
             </a>
 
