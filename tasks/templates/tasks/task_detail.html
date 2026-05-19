@@ -15,7 +15,7 @@
 
     <p><strong>期限：</strong>
         {% if task.due_date %}
-            {{ task.due_date }}
+            {{ task.due_date|date:"Y/m/d" }}
         {% else %}
             未設定
         {% endif %}
@@ -29,8 +29,8 @@
     {% endif %}
     </p>
 
-    <p><strong>作成日：</strong>{{ task.created_at }}</p>
-    <p><strong>更新日：</strong>{{ task.updated_at }}</p>
+    <p><strong>作成日時：</strong>{{ task.created_at|date:"Y/m/d H:i" }}</p>
+    <p><strong>更新日時：</strong>{{ task.updated_at|date:"Y/m/d H:i" }}</p>
 </div>
 
 <form method="post" action="{% url 'task_update_status' task.id %}">

@@ -15,7 +15,7 @@
 
     <p><strong>開始：</strong>
         {% if habit.start_date %}
-            {{ habit.start_date }}
+            {{ habit.start_date|date:"Y/m/d" }}
         {% else %}
             未設定
         {% endif %}
@@ -23,7 +23,7 @@
 
     <p><strong>終了：</strong>
         {% if habit.end_date %}
-            {{ habit.end_date }}
+            {{ habit.end_date|date:"Y/m/d" }}
         {% else %}
             未設定
         {% endif %}
@@ -36,8 +36,8 @@
         なし
     {% endif %}
 
-    <p><strong>作成日：</strong>{{ habit.created_at }}</p>
-    <p><strong>更新日：</strong>{{ habit.updated_at }}</p>
+    <p><strong>作成日時：</strong>{{ habit.created_at|date:"Y/m/d H:i" }}</p>
+    <p><strong>更新日時：</strong>{{ habit.updated_at|date:"Y/m/d H:i" }}</p>
     </p>
 </div>
 
