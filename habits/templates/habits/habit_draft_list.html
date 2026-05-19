@@ -10,13 +10,13 @@
     <li>
         {{ habit.title }}
 
-        <a href="{% url 'habit_update' habit.id %}">編集</a>
+        <a href="{% url 'habit_update' habit.id %}" class="btn edit">編集</a>
     </li>
 {% empty %}
     <li>下書きはありません</li>
 {% endfor %}
 </ul>
 
-<a href="{% url 'habit_create' %}">習慣作成へ戻る</a>
+<a href="{% url 'habit_create' %}" class="btn back">習慣作成へ戻る</a>
 
 {% endblock %}

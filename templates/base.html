@@ -1,29 +1,44 @@
 <!-- 全画面共通部分 -->
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block extra_css %}{% endblock %}
     <title>{% block title %}Task App{% endblock %}</title>
 </head>
+
 <body>
-    
-    <header>
-        <h1>Task & Habit App</h1>
 
-        <nav>
-            <a href="/">Dashboard</a> |
-            <a href="/tasks/">Tasks</a> |
-            <a href="/habits/">Habits</a> |
-            <a href="/schedule/">Schedule</a>
-        </nav>
+    <div class="container">
 
-        <hr>
+        <header>
+
+            <h1>Task & Habit App</h1>
+
+            <nav>
+
+                <a href="/">Dashboard</a> 
+
+                <a href="/tasks/">Tasks</a> 
+
+                <a href="/habits/">Habits</a>
+
+                <a href="/schedule/">Schedule</a>
+
+            </nav>
+
     </header>
 
     <main>
         {% block content %}
         {% endblock %}
     </main>
-    
+
+    </div>
+
 </body>
 </html>

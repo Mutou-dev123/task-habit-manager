@@ -12,7 +12,7 @@
 <h2>{% if form.instance.pk %}タスク編集{% else %}タスク作成{% endif %}</h2>
 
 {% if draft_exists %}
-    <a href="{% url 'task_draft_list' %}">
+    <a href="{% url 'task_draft_list' %}" class="btn draft">
         下書き一覧を見る
     </a>
 {% endif %}
@@ -22,14 +22,14 @@
     {{ form.as_p }}
 
     {% if mode == "edit" %}
-        <button type="submit">更新する</button>
+        <button type="submit" class="btn update">更新する</button>
     {% else %}
-        <button type="submit" name="save_task">作成する</button>
-        <button type="submit" name="save_draft">下書き保存</button>
+        <button type="submit" name="save_task" class="btn create">作成する</button>
+        <button type="submit" name="save_draft" class="btn draft">下書き保存</button>
     {% endif %}
 
 </form>
 
-<a href="{% url 'task_list' %}">一覧へ戻る</a>
+<a href="{% url 'task_list' %}" class="btn back">一覧へ戻る</a>
 
 {% endblock %}

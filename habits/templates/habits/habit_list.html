@@ -5,9 +5,9 @@
 {% block content %}
 <h2>習慣一覧</h2>
 
-<a href="{% url 'habit_create' %}">＋新規作成</a>
+<a href="{% url 'habit_create' %}" class="btn create">＋新規作成</a>
 
-<form method="get">
+<form method="get" class="inline-form">
 
     <!-- 検索 -->
     <input
@@ -59,10 +59,8 @@
     </button>
 </form>
 
-<hr>
-
 {% for habit in habits %}
-    <div>
+    <div class="card">
         <a href="{% url 'habit_detail' habit.id %}">{{ habit.title }}</a>
         <p>{{ habit.status }}</p>
 
@@ -70,21 +68,19 @@
             {% if habit.id in done_habit_ids %}
                 <form method="post" action="{% url 'habit_uncheck' habit.id %}">
                     {% csrf_token %}
-                    <button>✓済</button>
+                    <button class="btn disabled">✅</button>
                 </form>
             {% else %}
                 <form method="post" action="{% url 'habit_check' habit.id %}">
                     {% csrf_token %}
-                    <button>実行する</button>
+                    <button class="btn check">実行</button>
                 </form>
             {% endif %}
         {% endif %}
 
-        <a href="{% url 'habit_detail' habit.id %}">詳細</a>
-        <a href="{% url 'habit_update' habit.id %}">編集</a>
-        <a href="{% url 'habit_delete' habit.id %}">削除</a>
-
-        <hr>
+        <a href="{% url 'habit_detail' habit.id %}" class="btn detail">詳細</a>
+        <a href="{% url 'habit_update' habit.id %}" class="btn edit">編集</a>
+        <a href="{% url 'habit_delete' habit.id %}" class="btn delete">削除</a>
     </div>
 {% empty %}
     <p>習慣はありません</p>

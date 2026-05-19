@@ -1,0 +1,116 @@
+body {
+    overflow-y: scroll;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    vertical-align: top;
+    height: 100px;
+}
+
+.today {
+    background-color: #fff3cd;
+}
+
+/* カード化 */
+.card {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+}
+
+/* ボタン */
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.2s;
+    color: white;
+}
+
+/* 作成 */
+.create {
+    background-color: #4caf50;
+}
+.create:hover {
+    background-color: #43a047;
+}
+
+/* 詳細 */
+.detail {
+    background-color: #2196f3;
+}
+.detail:hover {
+    background-color: #1e88e5;
+}
+
+/* 編集 */
+.edit {
+    background-color: #ff9800;
+}
+.edit:hover {
+    background-color: #fb8c00;
+}
+
+/* 削除 */
+.delete {
+    background-color: #f44336;
+}
+.delete:hover {
+    background-color: #e53935;
+}
+
+/* 更新 */
+.update {
+    background-color: #009688;
+}
+.update:hover {
+    background-color: #00897b;
+}
+
+/* 下書き */
+.draft {
+    background-color: #90a4ae;
+}
+.draft:hover {
+    background-color: #78909c;
+}
+
+/* 戻る */
+.back {
+    background-color: gray;
+}
+.back:hover {
+    background-color: dimgray;
+}
+
+/* 実行（習慣） */
+.check {
+    background-color: #4caf50;
+}
+.check:hover {
+    background-color: #43a047;
+}
+
+/* 完了済み */
+.disabled {
+    background-color: #9e9e9e;
+    cursor: default;
+}
+
+input,
+select {
+    padding: 8px;
+}

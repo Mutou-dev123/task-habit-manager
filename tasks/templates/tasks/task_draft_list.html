@@ -10,13 +10,13 @@
     <li>
         {{ task.title }}
 
-        <a href="{% url 'task_update' task.id %}">編集</a>
+        <a href="{% url 'task_update' task.id %}" class="btn edit">編集</a>
     </li>
 {% empty %}
     <li>下書きはありません</li>
 {% endfor %}
 </ul>
 
-<a href="{% url 'task_create' %}">タスク作成へ戻る</a>
+<a href="{% url 'task_create' %}" class="btn back">タスク作成へ戻る</a>
 
 {% endblock %}

@@ -5,10 +5,11 @@
 {% block content %}
 <h2>タスク一覧</h2>
 
-<a href="{% url 'task_create' %}">＋新規作成</a>
+<a href="{% url 'task_create' %}" class="btn create">＋新規作成</a>
 
-<form method="get">
+<form method="get" class="inline-form">
 
+    <!-- 検索 -->
     <input
         type="text"
         name="q"
@@ -52,10 +53,8 @@
 
 </form>
 
-<hr>
-
 {% for task in tasks %}
-    <div>
+    <div class="card">
         <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
         <p>{{ task.status }}</p>
 
@@ -72,11 +71,9 @@
             <span>✅ 完了済み</span>
         {% endif %}
         
-        <a href="{% url 'task_detail' task.id %}">詳細</a>
-        <a href="{% url 'task_update' task.id %}">編集</a> 
-        <a href="{% url 'task_delete' task.id %}">削除</a>
-
-        <hr>
+        <a href="{% url 'task_detail' task.id %}" class="btn detail">詳細</a>
+        <a href="{% url 'task_update' task.id %}" class="btn edit">編集</a> 
+        <a href="{% url 'task_delete' task.id %}" class="btn delete">削除</a>
     </div>
 {% empty %}
     <p>タスクはありません</p>

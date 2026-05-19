@@ -42,22 +42,22 @@
         <option value="done" {% if task.status == "done" %}selected{% endif %}>完了</option>
     </select>
 
-    <button type="submit">更新</button>
+    <button type="submit" class="btn update">更新</button>
 </form>
 
 <hr>
 
 <div>
-    <a href="{% url 'task_list' %}">一覧へ戻る</a>
-    <a href="{% url 'task_update' task.id %}">編集</a> 
-    <a href="{% url 'task_delete' task.id %}">削除</a>
+    <a href="{% url 'task_list' %}" class="btn back">一覧へ戻る</a>
+    <a href="{% url 'task_update' task.id %}" class="btn edit">編集</a> 
+    <a href="{% url 'task_delete' task.id %}" class="btn delete">削除</a>
 </div>
 
 {% if from_day %}
 <div>
-    <a href="{% url 'day_detail' year month day %}">日付に戻る</a>
+    <a href="{% url 'day_detail' year month day %}" class="btn back">日付に戻る</a>
     |
-    <a href="{% url 'calendar_view' %}">カレンダーへ戻る</a>
+    <a href="{% url 'calendar_view' %}" class="btn back">カレンダーへ戻る</a>
 </div>
 {% endif %}
 

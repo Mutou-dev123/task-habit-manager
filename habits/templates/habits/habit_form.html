@@ -8,7 +8,7 @@
 <h2>{% if form.instance.pk %}習慣編集{% else %}習慣作成{% endif %}</h2>
 
 {% if draft_exists %}
-    <a href="{% url 'habit_draft_list' %}">
+    <a href="{% url 'habit_draft_list' %}" class="btn draft">
         下書き一覧を見る
     </a>
 {% endif %}
@@ -59,15 +59,15 @@
 
     <div class="form-actions">
         {% if form.instance.pk %}
-            <button type="submit">更新する</button>
+            <button type="submit" class="btn update">更新する</button>
         {% else %}
-            <button type="submit" name="save_habit">作成する</button>
-            <button type="submit" name="save_draft">下書き保存</button>
+            <button type="submit" name="save_habit" class="btn create">作成する</button>
+            <button type="submit" name="save_draft" class="btn draft">下書き保存</button>
         {% endif %}
     </div>
 </form>
 
-<a href="{% url 'habit_list' %}">一覧へ戻る</a>
+<a href="{% url 'habit_list' %}" class="btn back">一覧へ戻る</a>
 
 {# 動的制御スクリプト #}
 <script>
@@ -93,10 +93,4 @@
     });
 </script>
 
-<style>
-    .conditional-field { margin: 15px 0; padding: 10px; background: #f9f9f9; border-radius: 4px; }
-    .field-group { margin-bottom: 15px; }
-    .weekday-checkboxes ul { list-style: none; display: flex; gap: 10px; padding: 0; }
-    label { font-weight: bold; display: block; margin-bottom: 5px; }
-</style>
 {% endblock %}
