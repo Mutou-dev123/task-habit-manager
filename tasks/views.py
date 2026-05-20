@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from .forms import TaskForm
 from django.db.models import Q, F, Case, When, Value, IntegerField
+from django.core.paginator import Paginator
 
 # タスク一覧
 def task_list(request):
@@ -25,10 +26,10 @@ def task_list(request):
 
     # 並び替え
     if sort == "due":
-        tasks = tasks.order_by("due_date")
+        tasks = tasks.order_by("due_date", "id")
 
     elif sort == "title":
-        tasks = tasks.order_by("title")
+        tasks = tasks.order_by("title", "id")
 
     else:
         # デフォルト（ユーザーがソートを指定していない時）の並び順設定
@@ -43,13 +44,29 @@ def task_list(request):
         )
 
         # 「ステータス順」かつ「更新日時が新しい順」でソート実行
-        tasks = tasks.order_by("status_order", "-updated_at")
+        tasks = tasks.order_by("status_order", "-updated_at", "id")
+
+    # ページネーション（無限スクロール）
+    paginator = Paginator(tasks, 9) # 1ページに9個ずつに分割
+    page_number = request.GET.get('page', 1)    # 何ページ目かをURLから取得（デフォルト＝1）
+    page_obj = paginator.get_page(page_number)
+
+    # JSからの「追加読み込み」要求（XMLHttpRequest）の際、
+    # ページ全体ではなく、追加分のカードのHTML（部分用テンプレート）だけを返す
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and 'page' in request.GET:
+        response = render(request, "tasks/task_list_partials.html", {"tasks": page_obj})
+
+        # 次があるかの情報を載せる
+        response['X-Has-Next'] = 'true' if page_obj.has_next() else 'false'
+
+        return response
 
     context = {
-        "tasks": tasks,
+        "tasks": page_obj,
         "q": q,
         "status": status,
         "sort": sort,
+        "has_next": page_obj.has_next() # 次のページがあるかどうかのフラグ
     }
 
     return render(request, "tasks/task_list.html", context)
