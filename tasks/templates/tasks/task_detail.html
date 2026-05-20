@@ -1,64 +1,77 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}タスク詳細{% endblock %}
+{% block title %}Task detail{% endblock %}
 
 {% block content %}
-<h2>タスク詳細</h2>
+<link rel="stylesheet" href="{% static 'css/detail-layout.css' %}">
 
-<div>
-    <h3>{{ task.title }}</h3>
+<div class="detail-container">
+    <h2>タスク詳細</h2>
 
-    <p><strong>ステータス：</strong> {{ task.get_status_display }}</p>
+    <div class="detail-card">
+        <h3 class="detail-title">{{ task.title }}</h3>
 
-    <p><strong>メモ：</strong><br>
-    {{ task.description|linebreaks }}</p>
+        <div class="detail-meta-row">
+            <strong>ステータス：</strong> {{ task.get_status_display }}
+        </div>
 
-    <p><strong>期限：</strong>
-        {% if task.due_date %}
-            {{ task.due_date|date:"Y/m/d" }}
-        {% else %}
-            未設定
-        {% endif %}
-    </p>
+        <div class="detail-meta-row">
+            <strong>期限：</strong>
+            {% if task.due_date %}
+                {{ task.due_date|date:"Y/m/d" }}
+            {% else %}
+                <span class="text-muted">未設定</span>
+            {% endif %}
+        </div>
 
-    <p><strong>リンク：</strong>
-    {% if task.link %}
-        <a href="{{ task.link }}" target="_blank">開く</a>
-    {% else %}
-        なし
+        <div class="detail-meta-row">
+            <strong>リンク：</strong>
+            {% if task.link %}
+                <a href="{{ task.link }}" target="_blank" class="external-link">
+                    開く <i class="fa-solid fa-external-link"></i>
+                </a>
+            {% else %}
+                <span class="text-muted">なし</span>
+            {% endif %}
+        </div>
+
+        <div class="detail-meta-row detail-meta-row-desc">
+            <strong>メモ：</strong>
+            <div class="detail-description-box">
+                {{ task.description|linebreaks }}
+            </div>
+        </div>
+
+        <form method="post" action="{% url 'task_update_status' task.id %}" class="detail-status-form">
+            {% csrf_token %}
+            <select name="status" class="detail-status-select">
+                <option value="todo" {% if task.status == "todo" %}selected{% endif %}>未着手</option>
+                <option value="doing" {% if task.status == "doing" %}selected{% endif %}>進行中</option>
+                <option value="done" {% if task.status == "done" %}selected{% endif %}>完了</option>
+            </select>
+            <button type="submit" class="btn update detail-status-submit">状態を更新</button>
+        </form>
+    </div>
+
+    <div class="detail-actions">
+        <a href="{% url 'task_list' %}" class="btn back">一覧へ戻る</a>
+        <a href="{% url 'task_update' task.id %}" class="btn edit">編集する</a> 
+        <a href="{% url 'task_delete' task.id %}" class="btn delete"><i class="fa-solid fa-trash"></i></a>
+    </div>
+
+    {% if from_day %}
+    <div class="detail-nav-links">
+        <a href="{% url 'day_detail' year month day %}">📅 日付に戻る</a>
+        <span class="divider">|</span>
+        <a href="{% url 'calendar_view' %}">🗓️ カレンダーへ戻る</a>
+    </div>
     {% endif %}
-    </p>
 
-    <p><strong>作成日時：</strong>{{ task.created_at|date:"Y/m/d H:i" }}</p>
-    <p><strong>更新日時：</strong>{{ task.updated_at|date:"Y/m/d H:i" }}</p>
+    <div style="text-align: center; margin-top: 40px; font-size: 12px; color: #9ca3af;">
+        <span>作成: {{ task.created_at|date:"Y/m/d H:i" }}</span>
+        <span style="margin-left: 15px;">更新: {{ task.updated_at|date:"Y/m/d H:i" }}</span>
+    </div>
+
 </div>
-
-<form method="post" action="{% url 'task_update_status' task.id %}">
-    {% csrf_token %}
-
-    <select name="status">
-        <option value="todo" {% if task.status == "todo" %}selected{% endif %}>未着手</option>
-        <option value="doing" {% if task.status == "doing" %}selected{% endif %}>進行中</option>
-        <option value="done" {% if task.status == "done" %}selected{% endif %}>完了</option>
-    </select>
-
-    <button type="submit" class="btn update">更新</button>
-</form>
-
-<hr>
-
-<div>
-    <a href="{% url 'task_list' %}" class="btn back">一覧へ戻る</a>
-    <a href="{% url 'task_update' task.id %}" class="btn edit">編集</a> 
-    <a href="{% url 'task_delete' task.id %}" class="btn delete">削除</a>
-</div>
-
-{% if from_day %}
-<div>
-    <a href="{% url 'day_detail' year month day %}" class="btn back">日付に戻る</a>
-    |
-    <a href="{% url 'calendar_view' %}" class="btn back">カレンダーへ戻る</a>
-</div>
-{% endif %}
-
 {% endblock %}
