@@ -7,6 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     {% block extra_css %}{% endblock %}
     <title>{% block title %}Task App{% endblock %}</title>
 </head>
@@ -15,28 +16,21 @@
 
     <div class="container">
 
-        <header>
+        <header class="app-header">
+            <h1 class="app-title">Task & Habit App</h1>
 
-            <h1>Task & Habit App</h1>
-
-            <nav>
-
-                <a href="/">Dashboard</a> 
-
-                <a href="/tasks/">Tasks</a> 
-
-                <a href="/habits/">Habits</a>
-
-                <a href="/schedule/">Schedule</a>
-
+            <nav class="tab-nav">
+                <a href="/" class="tab-nav-item {% if request.path == '/' %}is-active{% endif %}">Dashboard</a> 
+                <a href="/tasks/" class="tab-nav-item {% if '/tasks/' in request.path %}is-active{% endif %}">Tasks</a> 
+                <a href="/habits/" class="tab-nav-item {% if '/habits/' in request.path %}is-active{% endif %}">Habits</a>
+                <a href="/schedule/" class="tab-nav-item {% if '/schedule/' in request.path %}is-active{% endif %}">Schedule</a>
             </nav>
+        </header>
 
-    </header>
-
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
 
     </div>
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from .forms import TaskForm
-from django.db.models import Q, F
+from django.db.models import Q, F, Case, When, Value, IntegerField
 
 # タスク一覧
 def task_list(request):
@@ -29,6 +29,21 @@ def task_list(request):
 
     elif sort == "title":
         tasks = tasks.order_by("title")
+
+    else:
+        # デフォルト（ユーザーがソートを指定していない時）の並び順設定
+        # doing → todo → done の順に並び変えるためのマッピング
+        tasks = tasks.annotate(
+            status_order=Case(
+                When(status="doing", then=Value(1)),
+                When(status="todo", then=Value(2)),
+                When(status="done", then=Value(3)),
+                output_field=IntegerField(),
+            )
+        )
+
+        # 「ステータス順」かつ「更新日時が新しい順」でソート実行
+        tasks = tasks.order_by("status_order", "-updated_at")
 
     context = {
         "tasks": tasks,

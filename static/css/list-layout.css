@@ -1,0 +1,102 @@
+/* 検索・フィルターフォームの横並び設定 */
+.inline-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0 30px 0;
+    flex-wrap: wrap;        /* 画面が狭くなったら自動で折り返す */
+}
+
+/* 検索フォーム内の入力要素とボタンの調整 */
+.inline-form input,
+.inline-form select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.inline-form input:focus,
+.inline-form select:focus {
+    border-color: #1f2937;
+}
+
+.inline-form button {
+    padding: 8px;
+    background-color: #1f2937;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.inline-form button:hover {
+    background-color: #374151;
+}
+
+
+/* カードリストのグリッド化（3列） */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+/* アクションボタン */
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;   /* ボタンが常に下に揃う */
+
+    width: 100%;
+}
+
+/* .actions内のボタンを均等に */
+.actions .btn {
+    flex: 1;
+    text-align: center;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 900px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);  /* タブレットサイズでは2列 */
+    }
+}
+
+@media (max-width: 600px) {
+    .card-grid {
+        grid-template-columns: 1fr; /* スマホサイズでは1列 */
+    }
+}
+
+.task-link {
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* 1番目：進行中（doing） */
+.card.status-doing {
+    order: 1;
+}
+
+/* 2番目：未着手（todo） */
+.card.status-todo {
+    order: 2;
+}
+
+/* 3番目：進行中（done） */
+.card.status-done {
+    order: 3;
+}
+
+.card {
+    view-transition-name: var(--task-id);
+}
