@@ -150,9 +150,14 @@ def task_delete(request, pk):
 
     if request.method == "POST":
         task.delete()
-        return redirect("task_list")
+        
+        # JavaScriptからの削除リクエストの場合、画面遷移せず「成功した」とだけ返す
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            from django.http import JsonResponse
+            return JsonResponse({"status": "success"})
     
-    return render(request, "tasks/task_confirm_delete.html", {"task": task})
+        return redirect("task_list")
+    return redirect("task_list")
 
 # タスク完了
 def task_complete(request, pk):

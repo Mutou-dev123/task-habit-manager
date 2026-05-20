@@ -20,7 +20,16 @@
         <div class="actions">
             <a href="{% url 'task_detail' task.id %}" class="btn detail" title="詳細"><i class="fa-solid fa-circle-info"></i></a>
             <a href="{% url 'task_update' task.id %}" class="btn edit" title="編集"><i class="fa-solid fa-pen"></i></a> 
-            <a href="{% url 'task_delete' task.id %}" class="btn delete" title="削除"><i class="fa-solid fa-trash"></i></a>
+            
+            <button 
+                type="button" 
+                class="btn delete" 
+                title="削除"
+                data-url="{% url 'task_delete' task.id %}"
+                onclick="deleteTask(this); event.stopPropagation();"
+                style="border: none; cursor: pointer;">
+                <i class="fa-solid fa-trash"></i>
+            </button>
         </div>
     </div>
 {% endfor %}
