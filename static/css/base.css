@@ -5,6 +5,7 @@
    ========================================================================== */
 body {
     overflow-y: scroll;
+    background-color: #f8fafc;
 }
 
 .container {
