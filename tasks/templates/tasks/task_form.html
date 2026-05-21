@@ -12,8 +12,8 @@
 <h2>{% if form.instance.pk %}タスク編集{% else %}タスク作成{% endif %}</h2>
 
 {% if draft_exists %}
-    <a href="{% url 'task_draft_list' %}" class="btn draft">
-        下書き一覧を見る
+    <a href="{% url 'task_draft_list' %}?from=create" class="btn draft">
+        下書きタスク一覧を見る
     </a>
 {% endif %}
 

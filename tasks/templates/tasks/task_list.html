@@ -85,7 +85,7 @@
             </a>
             
             {% if draft_count > 0 %}
-            <a href="{% url 'task_draft_list' %}" class="btn-draft">
+            <a href="{% url 'task_draft_list' %}?from=list" class="btn-draft">
                 📝 下書きを見る ({{ draft_count }})
             </a>
             {% endif %}

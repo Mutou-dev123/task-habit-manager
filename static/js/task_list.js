@@ -59,13 +59,7 @@ if (trigger && grid && grid.dataset.hasNext !== 'false') {
                     const html = await response.text();
                     const hasNextHeader = response.headers.get('X-Has-Next');
 
-                    if (document.startViewTransition) {
-                        document.startViewTransition(() => {
-                            grid.insertAdjacentHTML('beforeend', html);
-                        });
-                    } else {
-                        grid.insertAdjacentHTML('beforeend', html);
-                    }
+                    grid.insertAdjacentHTML('beforeend', html);
 
                     // 次がない場合、終了
                     if (hasNextHeader === 'false' || html.trim() === "") {
@@ -85,7 +79,7 @@ if (trigger && grid && grid.dataset.hasNext !== 'false') {
                 isLoading = false;
             }
         }
-    }, { rootMargin: '200px' });
+    }, { rootMargin: '800px' });
 
     observer.observe(trigger);
 }
