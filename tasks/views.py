@@ -6,8 +6,17 @@ from django.core.paginator import Paginator
 
 # タスク一覧
 def task_list(request):
+    # 下書きを除いたすべてのタスクのベース
+    all_non_draft_tasks = Task.objects.exclude(status="draft")
 
-    tasks = Task.objects.exclude(status="draft")
+    # 下書き以外のタスクがDBに1件でも存在するかをチェックするフラグ
+    # 検索結果が0件なのか、初期状態の0件なのかがHTML側で判断可能に
+    has_tasks_at_all = all_non_draft_tasks.exists()
+
+    # ステータスが "draft" のタスクの総数をカウント
+    draft_count = Task.objects.filter(status="draft").count()
+
+    tasks = all_non_draft_tasks
 
     q = request.GET.get("q", "").strip()
     status = request.GET.get("status", "").strip()
@@ -19,7 +28,7 @@ def task_list(request):
             Q(title__icontains=q) |
             Q(description__icontains=q)
         )
-
+    
     # フィルター
     if status:
         tasks = tasks.filter(status=status)
@@ -27,7 +36,7 @@ def task_list(request):
     # 並び替え
     if sort == "due":
         tasks = tasks.order_by("due_date", "id")
-
+    
     elif sort == "title":
         tasks = tasks.order_by("title", "id")
 
@@ -60,13 +69,15 @@ def task_list(request):
         response['X-Has-Next'] = 'true' if page_obj.has_next() else 'false'
 
         return response
-
+    
     context = {
         "tasks": page_obj,
         "q": q,
         "status": status,
         "sort": sort,
-        "has_next": page_obj.has_next() # 次のページがあるかどうかのフラグ
+        "has_next": page_obj.has_next(), # 次のページがあるかどうかのフラグ
+        "draft_count": draft_count,      # 下書き件数
+        "has_tasks_at_all": has_tasks_at_all, # 通常タスク有無フラグ
     }
 
     return render(request, "tasks/task_list.html", context)

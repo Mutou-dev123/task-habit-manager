@@ -64,18 +64,35 @@
 </div>
 
 <!-- メッセージエリア -->
-{% if tasks %}
-    <div id="empty-message" style="display: none; text-align: center; padding: 40px 20px; color: #6b7280;">
-{% else %}
-    <div id="empty-message" style="display: block; text-align: center; padding: 40px 20px; color: #6b7280;">
-{% endif %}
-        <i class="fa-solid fa-folder-open" style="font-size: 48px; margin-bottom: 16px; color: #d1d5db; display: block;"></i>
-        <p style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">一致するタスクはありません</p>
-        <p style="font-size: 14px; color: #9ca3af;">検索ワードやフィルターの条件を変更してみてください。</p>
-        <a href="{% url 'task_list' %}" class="search-reset-btn">
+<div id="empty-message" class="empty-state-container {% if tasks.object_list %}is-hidden{% endif %}">
+    
+    {% if has_tasks_at_all %}
+        <i class="fa-solid fa-magnifying-glass empty-icon"></i>
+        <p class="empty-title">一致するタスクはありません</p>
+        <p class="empty-subtitle">検索ワードやフィルターの条件を変更してみてください。</p>
+        <a href="{% url 'task_list' %}" class="search-reset-btn" style="display: inline-flex;">
             ✖ 条件をクリアしてすべて表示
         </a>
-    </div>
+
+    {% else %}
+        <i class="fa-solid fa-clipboard-list empty-icon"></i>
+        <p class="empty-title">タスクはまだありません</p>
+        <p class="empty-subtitle">最初のタスクを作成して、管理を始めましょう！</p>
+        
+        <div class="empty-actions">
+            <a href="{% url 'task_create' %}" class="btn create">
+                ＋新規作成
+            </a>
+            
+            {% if draft_count > 0 %}
+            <a href="{% url 'task_draft_list' %}" class="btn-draft">
+                📝 下書きを見る ({{ draft_count }})
+            </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
 
 <!-- スクロールトリガー -->
 <div id="infinite-scroll-trigger" style="text-align: center; padding: 20px; font-weight: bold; color: #9e9e9e;">

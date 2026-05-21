@@ -125,3 +125,64 @@
 .card {
     view-transition-name: var(--task-id);
 }
+
+/* ==============================
+0件メッセージ（Empty State）
+   ============================== */
+.empty-state-container {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+}
+
+/* Djangoで非表示にする用のクラス */
+.is-hidden {
+    display: none !important;
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: #d1d5db;
+    display: block;
+}
+
+.empty-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.empty-subtitle {
+    font-size: 14px;
+    color: #9ca3af;
+    margin-bottom: 24px;
+}
+
+.empty-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* 新規作成ボタンの少し大きい版 */
+.empty-actions .btn.create {
+    padding: 10px 24px;
+    text-decoration: none;
+}
+
+/* 下書きボタン */
+.btn-draft {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    border: 1px solid #e5e7eb;
+    transition: background-color 0.2s;
+}
+
+.btn-draft:hover {
+    background-color: #e5e7eb;
+}
