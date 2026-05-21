@@ -173,15 +173,16 @@ function updateCardGrid(newGrid, response) {
     // 🌟 現在のアドレスバーのURLを完全にクリーンに取得する
     const currentSearch = window.location.search;
 
+    // querySelectorAllを使って、クラス名で複数のボタンを一気に捕まえる
+    const resetBtn = document.querySelectorAll('.search-reset-btn');
+
     // 🌟 1. そもそもURLに「?」が一切ない、または「?」だけなら絶対に非表示にして即終了
     if (!currentSearch || currentSearch === '?') {
-        const resetBtn = document.getElementById('search-reset-btn');
-        if (resetBtn) resetBtn.style.display = 'none'; // 強制非表示
-        return; 
+        resetBtn.forEach(btn => btn.style.display = 'none');
+        return;
     }
 
     const urlParams = new URLSearchParams(currentSearch);
-    
     const qValue = urlParams.get('q');
     const statusValue = urlParams.get('status');
     const sortValue = urlParams.get('sort');
@@ -191,12 +192,12 @@ function updateCardGrid(newGrid, response) {
                             (statusValue !== null && statusValue.trim() !== '') ||
                             (sortValue !== null && sortValue.trim() !== '');
 
-    const resetBtn = document.getElementById('search-reset-btn');
-    if (resetBtn) {
+    // 捕まえたボタン全部に同じ命令を出す
+    resetBtn.forEach(btn => {
         if (hasActiveFilter) {
-            resetBtn.style.display = 'inline-flex'; // 条件が本当にある時だけ表示
+            btn.style.display = 'inline-flex';   // 条件があれば表示
         } else {
-            resetBtn.style.display = 'none'; // そうじゃなければ絶対に非表示！
+            btn.style.display = 'none';         // なければ非表示
         }
-    }
+    });
 })();
