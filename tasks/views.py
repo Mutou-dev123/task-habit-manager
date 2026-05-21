@@ -3,6 +3,7 @@ from .models import Task
 from .forms import TaskForm
 from django.db.models import Q, F, Case, When, Value, IntegerField
 from django.core.paginator import Paginator
+import time
 
 # タスク一覧
 def task_list(request):

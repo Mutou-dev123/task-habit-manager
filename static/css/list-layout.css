@@ -186,3 +186,19 @@
 .btn-draft:hover {
     background-color: #e5e7eb;
 }
+
+/* ==============================
+    無限スクロールのローディングエリア
+   ============================== */
+.scroll-trigger-area {
+    text-align: center;
+    padding: 30px 20px 40px; /* 下に少し余裕を持たせる */
+    color: #9ca3af;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.loading-spinner {
+    font-size: 28px;
+    color: #3b82f6; /* オシャレなブルー（アプリのテーマカラーに合わせて変更OKです！） */
+}
