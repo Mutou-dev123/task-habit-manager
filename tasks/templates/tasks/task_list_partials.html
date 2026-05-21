@@ -22,12 +22,10 @@
             <a href="{% url 'task_update' task.id %}" class="btn edit" title="編集"><i class="fa-solid fa-pen"></i></a> 
             
             <button 
-                type="button" 
-                class="btn delete" 
-                title="削除"
+                onclick="deleteTask(this)"
                 data-url="{% url 'task_delete' task.id %}"
-                onclick="deleteTask(this); event.stopPropagation();"
-                style="border: none; cursor: pointer;">
+                data-title="{{ task.title }}"
+                class="btn delete">
                 <i class="fa-solid fa-trash"></i>
             </button>
         </div>

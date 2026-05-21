@@ -12,6 +12,26 @@
     <title>{% block title %}Task App{% endblock %}</title>
 </head>
 
+<!-- オリジナル削除確認ウィンドウ -->
+<dialog id="custom-delete-modal" class="custom-modal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h3>タスクを削除しますか？</h3>
+
+        <div class="modal-task-name-box">
+            <span id="delete-task-name"></span>
+        </div>
+
+        <p>この操作は取り消すことができません。</p>
+        <div class="modal-actions">
+            <button id="cancel-delete-btn" class="btn cancel">キャンセル</button>
+            <button id="confirm-delete-btn" class="btn delete">削除する</button>
+        </div>
+    </div>
+</dialog>
+
 <body>
 
     <div class="container">

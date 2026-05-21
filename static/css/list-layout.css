@@ -82,6 +82,9 @@
 .actions .btn {
     flex: 1;
     text-align: center;
+
+    border: none;       /* ブラウザ標準の枠線を強制的に削除 */
+    cursor: pointer;    /* マウスを載せた際、「指マーク」にする */
 }
 
 /* レスポンシブ対応 */

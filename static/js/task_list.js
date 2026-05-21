@@ -91,10 +91,39 @@ if (trigger && grid && grid.dataset.hasNext !== 'false') {
 }
 
 // 検索条件を保持しながら、その場でタスクを消滅させる削除機能
+function showDeleteConfirm(taskTitle) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('custom-delete-modal');
+        const nameSpan = document.getElementById('delete-task-name');
+        const confirmBtn = document.getElementById('confirm-delete-btn');
+        const cancelBtn = document.getElementById('cancel-delete-btn');
+
+        // モーダルを開く前のタスク名を設定（取得できなかった時の保険も用意）
+        nameSpan.textContent = taskTitle ? taskTitle: "このタスク";
+
+        modal.showModal(); // フワッと画面中央に出現
+
+        // ボタンが押されたときの処理
+        const onConfirm = () => { cleanup(); resolve(true); };
+        const onCancel = () => { cleanup(); resolve(false); };
+
+        // 終わったらイベントを片付けてモーダルを閉じる
+        const cleanup = () => {
+            modal.close();
+            confirmBtn.removeEventListener('click', onConfirm);
+            cancelBtn.removeEventListener('click', onCancel);
+        };
+
+        confirmBtn.addEventListener('click', onConfirm);
+        cancelBtn.addEventListener('click', onCancel);
+    });
+}
+
+// 実際の削除処理
 async function deleteTask(button) {
-    if (!confirm("このタスクを本当に削除しますか？")) {
-        return;
-    }
+    const taskTitle = button.dataset.title;
+    const isConfirmed = await showDeleteConfirm(taskTitle);
+    if (!isConfirmed) return; // キャンセルされたらここで終了
 
     const url = button.dataset.url;
     const grid = document.querySelector('.card-grid');
@@ -135,7 +164,6 @@ async function deleteTask(button) {
                 window.location.reload();
             }
         } else {
-            const errorText = await response.text();
             alert("削除に失敗しました。ステータス: " + response.status);
         }
     } catch (error) {

@@ -282,3 +282,108 @@ td {
     animation-duration: 0.3s; /* ピュッと動く心地いい速度（0.3秒） */
     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
+/* ==============================
+   カスタム削除モーダル (Notion/モダン風)
+   ============================== */
+
+/* 1. モーダル本体のダサい黒枠を完全に消去して、影でフワッと浮かせる */
+dialog#custom-delete-modal {
+    border: none !important;
+    border-radius: 16px;
+    padding: 32px 24px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* 背景の暗転とぼかし */
+dialog#custom-delete-modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px); 
+}
+
+/* 2. アイコンを「赤い円」で囲ってプロっぽくする */
+.modal-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #fee2e2; /* 薄い赤色 */
+    color: #ef4444;            /* 濃い赤色 */
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* 見出しとテキスト */
+dialog#custom-delete-modal h3 {
+    margin: 0 0 12px 0;
+    color: #111827;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+dialog#custom-delete-modal p {
+    margin: 0 0 28px 0;
+    color: #6b7280;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* 3. ボタンエリアの調整（幅を均等に、黒枠を消す） */
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-actions button {
+    flex: 1; /* ボタンの横幅をピッタリ同じにする */
+    padding: 12px 0;
+    border: none !important; /* ダサい黒枠を強制排除 */
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+}
+
+/* キャンセルボタン（文字色を強制的にダークグレーにして見えるようにする） */
+.modal-actions #cancel-delete-btn {
+    background-color: #f3f4f6;
+    color: #374151 !important; 
+}
+
+.modal-actions #cancel-delete-btn:hover {
+    background-color: #e5e7eb;
+}
+
+/* 削除ボタン */
+.modal-actions #confirm-delete-btn {
+    background-color: #ef4444;
+    color: #ffffff !important;
+}
+
+.modal-actions #confirm-delete-btn:hover {
+    background-color: #dc2626;
+}
+
+/* タスク名を表示する専用ボックス */
+.modal-task-name-box {
+    background-color: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 0 auto 20px auto; /* 中央寄せ＆下の余白 */
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 15px;
+    word-break: break-all; /* 長いタイトルでも枠をはみ出さないようにする */
+    display: inline-block;
+    max-width: 100%;
+}
