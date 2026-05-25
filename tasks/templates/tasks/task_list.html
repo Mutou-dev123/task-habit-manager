@@ -22,7 +22,12 @@
 
         <option value="todo"
             {% if status == "todo" %}selected{% endif %}>
-            未完了
+            未着手
+        </option>
+
+        <option value="todo"
+            {% if status == "doing" %}selected{% endif %}>
+            進行中
         </option>
 
         <option value="done"
