@@ -18,10 +18,12 @@
         <div class="modal-icon">
             <i class="fa-solid fa-triangle-exclamation"></i>
         </div>
-        <h3>タスクを削除しますか？</h3>
+        <h3 id="modal-title">
+            タスクを削除しますか？
+        </h3>
 
         <div class="modal-task-name-box">
-            <span id="delete-task-name"></span>
+            <span id="modal-target-name"></span>
         </div>
 
         <p>この操作は取り消すことができません。</p>
@@ -53,6 +55,8 @@
         </main>
 
     </div>
+
+<script src="{% static 'js/common/confirm_modal.js' %}" defer></script>
 
 </body>
 </html>
