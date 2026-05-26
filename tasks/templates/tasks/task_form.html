@@ -17,17 +17,32 @@
     </a>
 {% endif %}
 
-<form method="post">
+<form method="post" class="form-card">
     {% csrf_token %}
-    {{ form.as_p }}
 
-    {% if mode == "edit" %}
-        <button type="submit" class="btn update">更新する</button>
-    {% else %}
-        <button type="submit" name="save_task" class="btn create">作成する</button>
-        <button type="submit" name="save_draft" class="btn draft">下書き保存</button>
-    {% endif %}
+    <div class="form-group">
+        <label>タイトル</label>
+        {{ form.title }}
+    </div>
 
+    <div class="form-group">
+        <label>説明</label>
+        {{ form.description }}
+    </div>
+
+    <div class="form-group">
+        <label>期限</label>
+        {{ form.due_date }}
+    </div>
+
+    <div class="form-actions">
+        {% if mode == "edit" %}
+            <button type="submit" class="btn update">更新する</button>
+        {% else %}
+            <button type="submit" name="save_task" class="btn create">作成する</button>
+            <button type="submit" name="save_draft" class="btn draft">下書き保存</button>
+        {% endif %}
+    </div>
 </form>
 
 <a href="{% url 'task_list' %}" class="btn back">一覧へ戻る</a>
