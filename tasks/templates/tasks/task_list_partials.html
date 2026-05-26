@@ -1,3 +1,5 @@
+<!-- タスク一覧画面読み込み部分テンプレート -->
+
 {% for task in tasks %}
     <div class="card status-{{ task.status }}" style="--task-id: task-{{ task.id }};">
         <a href="{% url 'task_detail' task.id %}" class="card-main-link"></a>
