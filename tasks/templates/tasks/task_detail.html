@@ -3,11 +3,14 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Task detail{% endblock %}
+{% block title %}タスク詳細{% endblock %}
 
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/detail-layout.css' %}">
+
+<!-- 汎用確認モーダル -->
+<script src="{% static 'js/common/confirm_modal.js' %}" defer></script>
 
 <!-- 詳細画面共通削除処理 -->
 <script src="{% static 'js/detail_delete.js' %}" defer></script>
@@ -134,10 +137,10 @@
         <!-- 削除 -->
         <button
             type="button"
-            class="btn delete"
+            class="btn delete js-detail-delete"
             data-url="{% url 'task_delete' task.id %}"
             data-title="{{ task.title }}"
-            onclick="deleteFromDetail(this, '{% url 'task_list' %}')"
+            data-redirect="{% url 'task_list' %}"
         >
             <i class="fa-solid fa-trash"></i>
         </button>

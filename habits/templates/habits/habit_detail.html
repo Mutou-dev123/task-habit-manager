@@ -1,33 +1,54 @@
+<!-- 習慣詳細画面テンプレート -->
+
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}習慣詳細{% endblock %}
 
 {% block content %}
-<h2>習慣詳細</h2>
 
-<div>
-    <h3>{{ habit.title }}</h3>
+<link rel="stylesheet" href="{% static 'css/detail-layout.css' %}">
 
-    <p><strong>ステータス：</strong>{{ habit.get_status_display }}</p>
+<!-- 汎用確認モーダル -->
+<script src="{% static 'js/common/confirm_modal.js' %}" defer></script>
+
+<!-- 詳細画面共通削除処理 -->
+<script src="{% static 'js/detail_delete.js' %}" defer></script>
+
+<div class="detail-container">
+
+    <h2>習慣詳細</h2>
+
+    <div class="detail-card">
+
+        <h3 class="detail-title">
+            {{ habit.title }}
+        </h3>
+
+        <div class="detail-meta-row">
+            <strong>ステータス：</strong>
+            {{ task.get_status_display }}
+        </div>
+
 
     <p><strong>メモ：</strong><br>
     {{ habit.description|linebreaks }}</p>
 
-    <p><strong>開始：</strong>
+    <strong>開始：</strong>
         {% if habit.start_date %}
             {{ habit.start_date|date:"Y/m/d" }}
         {% else %}
             未設定
         {% endif %}
-    </p>
+    
 
-    <p><strong>終了：</strong>
+    <strong>終了：</strong>
         {% if habit.end_date %}
             {{ habit.end_date|date:"Y/m/d" }}
         {% else %}
             未設定
         {% endif %}
-    </p>
+    
 
     <p><strong>リンク：</strong>
     {% if habit.link %}
@@ -57,12 +78,22 @@
 <div>
     <a href="{% url 'habit_list' %}" class="btn back">一覧へ戻る</a>
     <a href="{% url 'habit_update' habit.id %}" class="btn edit">編集</a>
-    <a href="{% url 'habit_delete' habit.id %}" class="btn delete">削除</a>
+    <button
+        type="button"
+        class="btn delete js-detail-delete"
+        data-url="{% url 'habit_delete' habit.id %}"
+        data-title="{{ habit.title }}"
+        data-redirect="{% url 'habit_list' %}"
+    >
+        <i class="fa-solid fa-trash"></i>
+    </button>
 </div>
 
-{% if from_day %}
-<div>
-    <a href="{% url 'day_detail' year month day %}">日付に戻る</a>
+    {% if from_day %}
+
+    <div class="detail-nav-links">
+
+        <a href="{% url 'day_detail' year month day %}">日付に戻る</a>
     |
     <a href="{% url 'calendar_view' %}">カレンダーへ戻る</a>
 </div>

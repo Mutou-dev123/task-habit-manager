@@ -8,6 +8,7 @@ async function showConfirmModal({
     confirmText = "実行",
     isDanger = false
 }) {
+
     return new Promise((resolve) => {
 
         const modal = document.getElementById('custom-delete-modal');
@@ -43,6 +44,7 @@ async function showConfirmModal({
         };
 
         const cleanup = () => {
+
             modal.close();
 
             confirmBtn.removeEventListener('click', onConfirm);
@@ -54,14 +56,17 @@ async function showConfirmModal({
     });
 }
 
+
 // ==============================
 // CSRF取得
 // ==============================
 
 function getCsrfToken() {
+
     const cookies = document.cookie.split(';');
 
     for (let cookie of cookies) {
+
         cookie = cookie.trim();
 
         if (cookie.startsWith('csrftoken=')) {
@@ -71,6 +76,7 @@ function getCsrfToken() {
 
     return null;
 }
+
 
 // ==============================
 // 汎用削除処理
@@ -83,6 +89,7 @@ async function deleteItem({
 }) {
 
     const isConfirmed = await showConfirmModal({
+
         title: "削除しますか？",
         targetName: itemName,
         confirmText: "削除",
@@ -94,7 +101,9 @@ async function deleteItem({
     try {
 
         const response = await fetch(url, {
+
             method: 'POST',
+
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRFToken': getCsrfToken()
@@ -102,7 +111,9 @@ async function deleteItem({
         });
 
         if (!response.ok) {
+
             alert("削除に失敗しました");
+
             return false;
         }
 
@@ -114,7 +125,9 @@ async function deleteItem({
         return true;
 
     } catch (error) {
+
         console.error(error);
+
         return false;
     }
 }

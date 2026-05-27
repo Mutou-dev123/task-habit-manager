@@ -1,20 +1,27 @@
 // 詳細画面共通削除処理
 
-async function deleteFromDetail(button, redirectUrl) {
-
-    const itemTitle = button.dataset.title;
-
-    const url = button.dataset.url;
+async function deleteFromDetail(button) {
 
     await deleteItem({
 
-        url: url,
+        url: button.dataset.url,
 
-        itemName: itemTitle,
+        itemName: button.dataset.title,
 
         successCallback: () => {
 
-            window.location.href = redirectUrl;
+            window.location.href = button.dataset.redirect;
         }
     });
 }
+
+
+// 削除ボタンイベント登録
+
+document.querySelectorAll('.js-detail-delete').forEach(button => {
+
+    button.addEventListener('click', async () => {
+
+        await deleteFromDetail(button);
+    });
+});
