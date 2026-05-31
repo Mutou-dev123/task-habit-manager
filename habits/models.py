@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import timedelta
 
 # 習慣モデル
 class Habit(models.Model):
@@ -88,50 +87,6 @@ class Habit(models.Model):
         if self.end_date and self.end_date < self.start_date:
             raise ValidationError("終了日は開始日より後にしてください")
     
-    # その日に実施予定か判定メソッド
-    def is_scheduled_for(self, target_date):
-
-        # 開始日より前
-        if target_date < self.start_date:
-            return False
-        
-        # 終了日より後
-        if self.end_date and target_date > self.end_date:
-            return False
-        
-        # 習慣スキップかどうか？
-        if HabitSkip.objects.filter(habit=self, date=target_date).exists():
-            return False
-        
-        # 毎日
-        if self.frequency == "daily":
-            return True
-        
-        # ○日おき
-        elif self.frequency == "interval":
-
-            if not self.interval_days:
-                return False
-
-            # 開始日から何日経過したかを計算
-            delta_days = (target_date - self.start_date).days
-
-            return delta_days % self.interval_days == 0
-        
-        # 曜日指定
-        elif self.frequency == "weekday":
-
-            if not self.weekdays:
-                return False
-
-            return target_date.weekday() in self.weekdays
-        
-        # 回数指定
-        elif self.frequency == "count":
-            return True
-        
-        return False
-
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
@@ -164,4 +119,9 @@ class HabitSkip(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("habit", "date")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["habit", "date"],
+                name="unique_habit_skip"
+            )
+        ]

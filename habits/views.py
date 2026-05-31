@@ -1,80 +1,64 @@
+# 習慣ビュー
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Habit, HabitLog, HabitSkip
 from .forms import HabitForm
-from datetime import date
+from datetime import date, timedelta
 from django.db.models import Q
 
 # 習慣一覧
 def habit_list(request):
     today = date.today()
 
-    # 実行中のみ
-    habits = Habit.objects.filter(status="active")
-
-    # 今日対象のみ
-    habits = [
-        habit for habit in habits
-        if habit.is_scheduled_for(today)
-    ]
+    habits = Habit.objects.exclude(
+        status="draft"
+    )
 
     # 今日のログ
     logs = HabitLog.objects.filter(date=today)
 
     done_habit_ids = set(
-        log.habit_id for log in logs
+        logs.values_list(
+            "habit_id",
+            flat=True
+        )
     )
 
     # 検索
     q = request.GET.get("q", "").strip()
 
     if q:
-        habits = [
-            habit for habit in habits
-            if q.lower() in habit.title.lower()
-            or q.lower() in habit.description.lower()
-        ]
-    
+        habits = habits.filter(
+            Q(title__icontains=q) |
+            Q(description__icontains=q)
+        )
+
     # 実施状態
     state = request.GET.get("state", "").strip()
 
     if state == "done":
 
-        habits = [
-            habit for habit in habits
-            if habit.id in done_habit_ids
-        ]
+        habits = habits.filter(
+            id__in=done_habit_ids
+        )
 
     elif state == "not_done":
 
-        habits = [
-            habit for habit in habits
-            if habit.id not in done_habit_ids
-        ]
+        habits = habits.exclude(
+            id__in=done_habit_ids
+        )
 
     # 並び替え
     sort = request.GET.get("sort", "").strip()
 
     if sort == "title":
-
-        habits = sorted(
-            habits,
-            key=lambda h: h.title.lower()
-        )
+        habits = habits.order_by("title")
 
     elif sort == "old":
-
-        habits = sorted(
-            habits,
-            key=lambda h: h.created_at
-        )
+        habits = habits.order_by("created_at")
 
     else:
-
-        habits = sorted(
-            habits,
-            key=lambda h: h.created_at,
-            reverse=True
-        )
+        habits = habits.order_by("-created_at")
 
     return render(request, "habits/habit_list.html", {
         "habits": habits,
@@ -92,7 +76,10 @@ def habit_draft_list(request):
 # 習慣詳細
 def habit_detail(request, pk):
     
-    habit = Habit.objects.get(id=pk)
+    habit = get_object_or_404(
+        Habit,
+        pk=pk
+    )
 
     from_day = request.GET.get("from") == "day"
 
@@ -115,7 +102,7 @@ def habit_create(request):
 
     draft_exists = Habit.objects.filter(
         status="draft"
-    ).exists
+    ).exists()
 
     if request.method == "POST":
         form = HabitForm(request.POST)
@@ -170,7 +157,10 @@ def habit_delete(request, pk):
 
 # 習慣記録
 def habit_check(request, pk):
-    habit = Habit.objects.get(pk=pk)
+    habit = get_object_or_404(
+        Habit,
+        pk=pk
+    )
     today = date.today()
 
     HabitLog.objects.get_or_create(
@@ -178,11 +168,22 @@ def habit_check(request, pk):
         date=today
     )
 
+    if habit.frequency == "interval":
+
+        habit.next_run_date = (
+            today + timedelta(days=habit.interval_days)
+        )
+
+        habit.save()
+
     return redirect("habit_list")
 
 # 習慣記録取り消し
 def habit_uncheck(request, pk):
-    habit = Habit.objects.get(pk=pk)
+    habit = get_object_or_404(
+        Habit,
+        pk=pk
+    )
     today = date.today()
 
     HabitLog.objects.filter(
