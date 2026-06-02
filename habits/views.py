@@ -7,6 +7,7 @@ from datetime import date, timedelta
 from django.db.models import Q
 from django.core.paginator import Paginator
 from habits.services import HabitService
+from django.http import JsonResponse
 
 # 習慣一覧
 def habit_list(request):
@@ -195,8 +196,8 @@ def habit_delete(request, pk):
     if request.method == "POST":
         habit.delete()
         
+        # JavaScriptからの削除リクエストの場合、画面遷移せず「成功した」とだけ返す
         if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-            from django.http import JsonResponse
             return JsonResponse({"status": "success"})
         
         return redirect("habit_list")

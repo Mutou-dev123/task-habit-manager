@@ -1,7 +1,7 @@
 // 習慣一覧画面専用JS
 
 // 習慣更新
-async function updateHabit(button) {
+window.completeHabit = async function(button) {
     
     const url = button.dataset.url;
 

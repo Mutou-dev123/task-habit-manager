@@ -5,6 +5,7 @@ from .models import Task
 from .forms import TaskForm
 from django.db.models import Q, Case, When, Value, IntegerField
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 # タスク一覧
 def task_list(request):
@@ -169,7 +170,6 @@ def task_delete(request, pk):
         
         # JavaScriptからの削除リクエストの場合、画面遷移せず「成功した」とだけ返す
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            from django.http import JsonResponse
             return JsonResponse({"status": "success"})
     
         return redirect("task_list")

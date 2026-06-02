@@ -21,42 +21,64 @@ async function refreshCardGrid() {
 // カードグリッド更新
 function updateCardGrid(newGrid) {
 
-    const grid = document.querySelector('.card-grid');
+    const grid =
+        document.querySelector('.card-grid');
 
     if (!newGrid || !grid) return;
 
     grid.innerHTML = newGrid.innerHTML;
 
-    const cardCount = newGrid.querySelectorAll('.card').length;
+    grid.dataset.hasNext =
+        newGrid.dataset.hasNext;
 
-    const emptyMessage = document.getElementById('empty-message');
+    updateEmptyState();
 
-    const trigger = document.getElementById('infinite-scroll-trigger');
-
-    // 0件時
-    if (cardCount === 0) {
-
-        if (emptyMessage) {
-            emptyMessage.style.display = 'block';
-        }
-
-        if (trigger) {
-            trigger.style.display = 'none';
-        }
-
-        return;
-    }
-
-    // カードあり
-    if (emptyMessage) {
-        emptyMessage.style.display = 'none';
-    }
+    const trigger =
+        document.getElementById(
+            'infinite-scroll-trigger'
+        );
 
     if (trigger) {
 
         trigger.style.display =
-            grid.CDATA_SECTION_NODE.hasNext === 'true'
+            grid.dataset.hasNext === 'true'
             ? 'block'
             : 'none';
+    }
+
+}
+
+// 空状態更新
+function updateEmptyState() {
+    
+    const cards =
+        document.querySelectorAll('.card');
+
+    const emptyMessage =
+        document.getElementById('empty-message');
+
+    const trigger =
+        document.getElementById(
+            'infinite-scroll-trigger'
+        );
+
+    if (cards.length === 0) {
+
+        if (emptyMessage) {
+
+            emptyMessage.style.display = 'block';
+        }
+
+        if (trigger) {
+
+            trigger.style.display = 'none';
+        }
+
+    } else {
+
+        if (emptyMessage) {
+
+            emptyMessage.style.display = 'none';
+        }
     }
 }
