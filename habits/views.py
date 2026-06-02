@@ -5,14 +5,28 @@ from .models import Habit, HabitLog, HabitSkip
 from .forms import HabitForm
 from datetime import date, timedelta
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 # 習慣一覧
 def habit_list(request):
+
     today = date.today()
 
-    habits = Habit.objects.exclude(
+    # 下書きを除いたすべての習慣のベース
+    all_non_draft_habits = Habit.objects.exclude(
         status="draft"
     )
+
+    # 下書き以外の習慣がDBに1件でも存在するかをチェックするフラグ
+    # 検索結果が0件なのか、初期状態の0件なのかがHTML側で判断可能に
+    has_habits_at_all = all_non_draft_habits.exists()
+
+    # ステータスが "draft" の習慣の総数をカウント
+    draft_count = Habit.objects.filter(
+        status="draft"
+    ).count()
+
+    habits = all_non_draft_habits
 
     # 今日のログ
     logs = HabitLog.objects.filter(date=today)
@@ -60,13 +74,33 @@ def habit_list(request):
     else:
         habits = habits.order_by("-created_at")
 
-    return render(request, "habits/habit_list.html", {
-        "habits": habits,
+    # ページネーション（無限スクロール）
+    paginator = Paginator(habits, 9)    # 1ページに9個ずつに分割
+    page_number = request.GET.get("page", 1)    # 何ページ目かをURLから取得（デフォルト=1）
+    page_obj = paginator.get_page(page_number)
+
+    # JSからの「追加読み込み」要求（XMLHttpRequest）の際、
+    # ページ全体ではなく、追加分のカードのHTML（部分用テンプレート）だけを返す
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and 'page' in request.GET:
+        response = render(request, "habits/habit_list_partials.html", {"habits": page_obj})
+
+        # 次があるかの情報を載せる
+        response['X-Has-Next'] = 'true' if page_obj.has_next() else 'false'
+
+        return response
+
+    context = {
+        "habits": page_obj,
         "done_habit_ids": done_habit_ids,
         "q": q,
         "state": state,
         "sort": sort,
-    })
+        "has_next": page_obj.has_next(),    # 次のページがあるかどうかのフラグ
+        "draft_count": draft_count, # 下書き件数
+        "has_habits_at_all": has_habits_at_all, # 通常習慣有無フラグ
+    }
+
+    return render(request, "habits/habit_list.html", context)
 
 # 下書き習慣一覧
 def habit_draft_list(request):

@@ -3,12 +3,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from .forms import TaskForm
-from django.db.models import Q, F, Case, When, Value, IntegerField
+from django.db.models import Q, Case, When, Value, IntegerField
 from django.core.paginator import Paginator
-import time
 
 # タスク一覧
 def task_list(request):
+
     # 下書きを除いたすべてのタスクのベース
     all_non_draft_tasks = Task.objects.exclude(status="draft")
 
@@ -17,7 +17,9 @@ def task_list(request):
     has_tasks_at_all = all_non_draft_tasks.exists()
 
     # ステータスが "draft" のタスクの総数をカウント
-    draft_count = Task.objects.filter(status="draft").count()
+    draft_count = Task.objects.filter(
+        status="draft"
+    ).count()
 
     tasks = all_non_draft_tasks
 
@@ -78,7 +80,7 @@ def task_list(request):
         "q": q,
         "status": status,
         "sort": sort,
-        "has_next": page_obj.has_next(), # 次のページがあるかどうかのフラグ
+        "has_next": page_obj.has_next(),    # 次のページがあるかどうかのフラグ
         "draft_count": draft_count,      # 下書き件数
         "has_tasks_at_all": has_tasks_at_all, # 通常タスク有無フラグ
     }
