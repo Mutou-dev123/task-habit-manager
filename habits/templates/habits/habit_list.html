@@ -6,7 +6,6 @@
 {% block title %}習慣一覧{% endblock %}
 
 {% block content %}
-
 <h2>習慣一覧</h2>
 
 <a href="{% url 'habit_create' %}" class="btn create">
@@ -60,7 +59,7 @@
 
     </select>
 
-    <!-- 条件リセット -->
+    <!-- 条件リセットボタン -->
     <a href="{% url 'habit_list' %}" class="search-reset-btn">
         ✖ 条件をクリア
     </a>
@@ -71,130 +70,49 @@
 
 </form>
 
+<!-- カードグリッド表示エリア -->
+<div class="card-grid" data-has-next="{{ has_next|yesno:'true,false' }}" data-page="1">
+    {% include "habits/habit_list_partials.html" %}
+</div>
 
-<!-- カード一覧 -->
-<div class="card-grid">
+<!-- メッセージエリア -->
+<div id="empty-message" class="empty-state-container {% if habits.object_list %}is-hidden{% endif %}">
 
-{% for habit in habits %}
-
-    <div class="card">
-
-        <!-- カード全体リンク -->
-        <a
-            href="{% url 'habit_detail' habit.id %}"
-            class="card-main-link"
-        ></a>
-
-        <!-- タイトル -->
-        <a
-            href="{% url 'habit_detail' habit.id %}"
-            class="task-link"
-        >
-            {{ habit.title }}
+    {% if has_habits_at_all %}
+        <i class="fa-solid fa-magnifying-glass empty-icon"></i>
+        <p class="empty-title">一致するタスクはありません</p>
+        <p class="empty-subtitle">検索ワードやフィルターの条件を変更してみてください。</p>
+        <a href="{% url 'habit_list' %}" class="search-reset-btn" style="display: inline-flex;">
+            ✖ 条件をクリアしてすべて表示
         </a>
 
-        <!-- 状態 -->
-        <p>
-            {{ habit.status }}
-        </p>
+    {% else %}
+        <i class="fa-solid fa-clipboard-list empty-icon"></i>
+        <p class="empty-title">習慣はありません</p>
+        <p class="empty-subtitle">最初の習慣を作成して、管理を始めましょう！</p>
 
-        <!-- 実行ボタン -->
-        {% if habit.status == "active" %}
+        <div class="empty-actions">
+            <a href="{% url 'habit_create' %}" class="btn create">
+                ＋新規作成
+            </a>
 
-            {% if habit.id in done_habit_ids %}
-
-                <form
-                    method="post"
-                    action="{% url 'habit_uncheck' habit.id %}"
-                    class="inline-form"
-                >
-
-                    {% csrf_token %}
-
-                    <button class="btn disabled">
-                        ✅ 実施済み
-                    </button>
-
-                </form>
-
-            {% else %}
-
-                <form
-                    method="post"
-                    action="{% url 'habit_check' habit.id %}"
-                    class="inline-form"
-                >
-
-                    {% csrf_token %}
-
-                    <button class="btn check">
-                        実行
-                    </button>
-
-                </form>
-
+            {% if draft_count > 0 %}
+            <a href="{% url 'habit_draft_list' %}?from=list" class="btn-draft">
+                📝 下書きを見る ({{ draft_count }})
+            </a>
             {% endif %}
-
-        {% endif %}
-
-        <!-- アクション -->
-        <div class="actions">
-
-            <a
-                href="{% url 'habit_detail' habit.id %}"
-                class="btn detail"
-            >
-                詳細
-            </a>
-
-            <a
-                href="{% url 'habit_update' habit.id %}"
-                class="btn edit"
-            >
-                編集
-            </a>
-
-            <a
-                href="{% url 'habit_delete' habit.id %}"
-                class="btn delete"
-            >
-                削除
-            </a>
-
         </div>
-
-    </div>
-
-{% empty %}
+    {% endif %}
 
 </div>
 
-<!-- Empty State -->
-<div class="empty-state-container">
-
-    <i class="fa-solid fa-repeat empty-icon"></i>
-
-    <p class="empty-title">
-        習慣はまだありません
-    </p>
-
-    <p class="empty-subtitle">
-        最初の習慣を作成して、継続を始めましょう！
-    </p>
-
-    <div class="empty-actions">
-
-        <a
-            href="{% url 'habit_create' %}"
-            class="btn create"
-        >
-            ＋新規作成
-        </a>
-
-    </div>
-
+<!-- スクロールトリガー -->
+<div id="infinite-scroll-trigger" class="scroll-trigger-area">
+    {% if has_next %}
+    <i class="fa-solid fa-circle-notch fa-spin loading-spinner"></i>
+    {% endif %}
 </div>
 
-{% endfor %}
+<!-- JavaScript読み出し -->
 
 {% endblock %}
