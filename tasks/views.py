@@ -16,7 +16,7 @@ def task_list(request):
     # 検索結果が0件なのか、初期状態の0件なのかがHTML側で判断可能に
     has_tasks_at_all = all_non_draft_tasks.exists()
 
-    # ステータスが "draft" のタスクの総数をカウント
+    # 下書きタスク数
     draft_count = Task.objects.filter(
         status="draft"
     ).count()
@@ -94,7 +94,7 @@ def task_draft_list(request):
 
 # タスク詳細
 def task_detail(request, pk):
-    task = Task.objects.get(id=pk)
+    task = get_object_or_404(Task, pk=pk)
 
     from_day = request.GET.get("from") == "day"
 

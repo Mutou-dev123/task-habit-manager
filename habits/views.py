@@ -21,7 +21,7 @@ def habit_list(request):
     # 検索結果が0件なのか、初期状態の0件なのかがHTML側で判断可能に
     has_habits_at_all = all_non_draft_habits.exists()
 
-    # ステータスが "draft" の習慣の総数をカウント
+    # 下書き習慣数
     draft_count = Habit.objects.filter(
         status="draft"
     ).count()
@@ -82,7 +82,15 @@ def habit_list(request):
     # JSからの「追加読み込み」要求（XMLHttpRequest）の際、
     # ページ全体ではなく、追加分のカードのHTML（部分用テンプレート）だけを返す
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and 'page' in request.GET:
-        response = render(request, "habits/habit_list_partials.html", {"habits": page_obj})
+        response = render(
+            request,
+            "habits/habit_list_partials.html",
+            {
+                "habits": page_obj,
+                "done_habit_ids": done_habit_ids,
+                
+            }
+        )
 
         # 次があるかの情報を載せる
         response['X-Has-Next'] = 'true' if page_obj.has_next() else 'false'
@@ -185,9 +193,13 @@ def habit_delete(request, pk):
 
     if request.method == "POST":
         habit.delete()
+        
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            from django.http import JsonResponse
+            return JsonResponse({"status": "success"})
+        
         return redirect("habit_list")
-    
-    return render(request, "habits/habit_confirm_delete.html", {"habit": habit})
+    return redirect("habit_list")
 
 # 習慣記録
 def habit_check(request, pk):
