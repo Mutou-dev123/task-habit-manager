@@ -6,6 +6,7 @@ from .forms import HabitForm
 from datetime import date, timedelta
 from django.db.models import Q
 from django.core.paginator import Paginator
+from habits.services import HabitService
 
 # 習慣一覧
 def habit_list(request):
@@ -201,7 +202,7 @@ def habit_delete(request, pk):
         return redirect("habit_list")
     return redirect("habit_list")
 
-# 習慣記録
+# 実施記録
 def habit_check(request, pk):
     habit = get_object_or_404(
         Habit,
@@ -209,9 +210,9 @@ def habit_check(request, pk):
     )
     today = date.today()
 
-    HabitLog.objects.get_or_create(
-        habit=habit,
-        date=today
+    HabitService.complete(
+        habit,
+        today
     )
 
     if habit.frequency == "interval":
@@ -224,7 +225,7 @@ def habit_check(request, pk):
 
     return redirect("habit_list")
 
-# 習慣記録取り消し
+# 実施記録取り消し
 def habit_uncheck(request, pk):
     habit = get_object_or_404(
         Habit,
@@ -232,10 +233,10 @@ def habit_uncheck(request, pk):
     )
     today = date.today()
 
-    HabitLog.objects.filter(
-        habit=habit,
-        date=today
-    ).delete()
+    HabitService.uncomplete(
+        habit,
+        today
+    )
 
     return redirect("habit_list")
 
@@ -254,16 +255,10 @@ def habit_skip(request, pk):
     habit = get_object_or_404(Habit, pk=pk)
     today = date.today()
 
-    HabitSkip.objects.get_or_create(
-        habit=habit,
-        date=today
+    HabitService.skip(
+        habit,
+        today
     )
-
-    # 習慣を完了した記録を消す
-    HabitLog.objects.filter(
-        habit=habit,
-        date=today
-    ).delete()
 
     return redirect("habit_list")
 
@@ -272,10 +267,9 @@ def habit_unskip(request, pk):
     habit = get_object_or_404(Habit, pk=pk)
     today = date.today()
 
-    # 習慣をスキップした記録を消す
-    HabitSkip.objects.filter(
-        habit=habit,
-        date=today
-    ).delete()
+    HabitService.unskip(
+        habit,
+        today
+    )
 
     return redirect("habit_list")

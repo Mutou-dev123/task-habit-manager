@@ -5,6 +5,7 @@ from collections import defaultdict # dict（辞書）の拡張モジュール
 from django.shortcuts import render
 from tasks.models import Task
 from habits.models import Habit, HabitLog, HabitSkip
+from habits.services import HabitService
 
 # カレンダー
 def calendar_view(request):
@@ -66,7 +67,7 @@ def calendar_view(request):
 
             for habit in habits:
 
-                if habit.is_scheduled_for(current_date):
+                if HabitService.is_scheduled_for(habit, current_date):
 
                     log_set = set(
                         (log["habit_id"], log["date"].day)
@@ -99,12 +100,14 @@ def calendar_view(request):
 
 # 日別詳細
 def day_detail(request, year, month, day):
-    
-    current_date = date(int(year), int(month), int(day))
 
-    # 前日
+    current_date = date(
+        int(year),
+        int(month),
+        int(day)
+    )
+
     prev_date = current_date - timedelta(days=1)
-    # 翌日
     next_date = current_date + timedelta(days=1)
 
     tasks = Task.objects.filter(
@@ -113,62 +116,25 @@ def day_detail(request, year, month, day):
         status="draft"
     )
 
-    # 習慣取得
-    habits = Habit.objects.filter(status="active")
-
-    # その日に予定されている習慣
-    scheduled_habits = [
-        habit for habit in habits
-        if habit.is_scheduled_for(current_date)
-    ]
-
-    # 完了記録
-    done_habit_ids = set(
-        HabitLog.objects.filter(date=current_date)
-        .values_list("habit_id", flat=True)
+    habit_states = (
+        HabitService.get_habit_states(
+            current_date
+        )
     )
-
-    # スキップ記録
-    skipped_habit_ids = set(
-        HabitSkip.objects.filter(date=current_date)
-        .values_list("habit_id", flat=True)
-    )
-
-    # 実行状態付きリスト
-    habit_states = []
-
-    for habit in scheduled_habits:
-
-        if habit.id in done_habit_ids:
-            state = "none"
-        elif habit.id in skipped_habit_ids:
-            state = "skipped"
-        else:
-            state = "todo"
-        
-        habit_states.append({
-            "habit": habit,
-            "state": state,
-        })
 
     context = {
         "current_date": current_date,
 
-        # 前日
         "prev_year": prev_date.year,
         "prev_month": prev_date.month,
         "prev_day": prev_date.day,
 
-        # 翌日
         "next_year": next_date.year,
         "next_month": next_date.month,
         "next_day": next_date.day,
 
         "tasks": tasks,
-
-        # 実行状態付きリスト
         "habit_states": habit_states,
-
     }
 
     return render(
