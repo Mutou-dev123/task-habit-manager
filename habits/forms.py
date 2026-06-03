@@ -4,6 +4,7 @@ from datetime import date
 
 # 習慣作成フォーム
 class HabitForm(forms.ModelForm):
+
     WEEKDAY_CHOICES = [
         (0, "月"), (1, "火"), (2, "水"), (3, "木"), (4, "金"), (5, "土"), (6, "日"),
     ]
@@ -26,7 +27,7 @@ class HabitForm(forms.ModelForm):
 
         labels = {
             "title": "タイトル",
-            "description": "詳細",
+            "description": "メモ",
             "start_date": "開始日",
             "end_date": "終了日",
             "frequency": "習慣頻度",
@@ -37,8 +38,42 @@ class HabitForm(forms.ModelForm):
         }
 
         widgets = {
-            "start_date": forms.DateInput(attrs={"type": "date"}),
-            "end_date": forms.DateInput(attrs={"type": "date"}),
+
+            # タイトル
+            "title": forms.TextInput(
+                attrs={
+                    "placeholder": "例：ランニング"
+                }
+            ),
+
+            # 詳細
+            "description": forms.Textarea(
+                attrs={
+                    "rows": 4,
+                    "placeholder": "メモや補足を書く",
+                }
+            ),
+
+            # 開始日入力
+            "start_date": forms.DateInput(
+                attrs={
+                    "type": "date"
+                }
+            ),
+
+            # 終了日入力
+            "end_date": forms.DateInput(
+                attrs={
+                    "type": "date"
+                }
+            ),
+
+            # URL
+            "link": forms.URLInput(
+                attrs={
+                    "placeholder": "https://...",
+                }
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -51,6 +86,9 @@ class HabitForm(forms.ModelForm):
         # 作成時の開始日を今日に設定
         if not self.instance.pk:
             self.initial["start_date"] = date.today()
+
+        # 回数指定時のカウント単位のblankを非表示
+        self.fields["count_type"].choices = Habit.COUNT_TYPE_CHOICES
 
     def clean_weekdays(self):
         weekdays = self.cleaned_data.get("weekdays")

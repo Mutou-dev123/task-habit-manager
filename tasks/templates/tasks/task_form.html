@@ -19,23 +19,21 @@
     </a>
 {% endif %}
 
+<!-- 入力フォーム -->
 <form method="post" class="form-card">
     {% csrf_token %}
 
-    <div class="form-group">
-        <label>タイトル</label>
-        {{ form.title }}
-    </div>
+    <!-- タイトル -->
+    {% include "components/form_field.html" with field=form.title %}
 
-    <div class="form-group">
-        <label>説明</label>
-        {{ form.description }}
-    </div>
+    <!-- メモ -->
+    {% include "components/form_field.html" with field=form.description %}
 
-    <div class="form-group">
-        <label>期限</label>
-        {{ form.due_date }}
-    </div>
+    <!-- 期限日 -->
+    {% include "components/form_field.html" with field=form.due_date %}
+
+    <!-- リンク -->
+    {% include "components/form_field.html" with field=form.link %}
 
     <div class="form-actions">
         {% if mode == "edit" %}

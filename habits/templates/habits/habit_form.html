@@ -1,3 +1,5 @@
+<!-- 習慣作成・編集画面テンプレート -->
+
 {% extends "base.html" %}
 
 {% block title %}
@@ -13,49 +15,50 @@
     </a>
 {% endif %}
 
-<form method="post" id="habit-form">
+<!-- 入力フォーム -->
+<form method="post" id="habit-form" class="form-card">
     {% csrf_token %}
 
-    {# 基本情報 #}
-    <div class="field-group">
-        {{ form.title.label_tag }} {{ form.title }}
-        {{ form.description.label_tag }} {{ form.description }}
+    <!-- タイトル -->
+    {% include "components/form_field.html" with field=form.title %}
+
+    <!-- メモ -->
+    {% include "components/form_field.html" with field=form.description %}
+
+    <!-- 開始日 -->
+    {% include "components/form_field.html" with field=form.start_date %}
+
+    <!-- 終了日 -->
+    {% include "components/form_field.html" with field=form.end_date %}
+
+    <!-- 頻度設定 -->
+    {% include "components/form_field.html" with field=form.frequency %}
+
+    <!-- 〇日おき指定 -->
+    <div id="div_interval">
+        {% include "components/form_field.html" with field=form.interval_days %}
     </div>
 
-    <div class="field-group">
-        {{ form.start_date.label_tag }} {{ form.start_date }}
-        {{ form.end_date.label_tag }} {{ form.end_date }}
-    </div>
+    <!-- 曜日指定 -->
+    <div id="div_weekday">
 
-    <hr>
+        <label>
+            {{ form.weekdays.label }}
+        </label>
 
-    {# 頻度設定 #}
-    <div class="field-group">
-        {{ form.frequency.label_tag }} {{ form.frequency }}
-    </div>
-
-    {# 〇日おき指定 #}
-    <div id="div_interval" class="conditional-field">
-        {{ form.interval_days.label_tag }} {{ form.interval_days }}
-    </div>
-
-    {# 曜日指定 #}
-    <div id="div_weekday" class="conditional-field">
-        {{ form.weekdays.label_tag }}
         <div class="weekday-checkboxes">
             {{ form.weekdays }}
         </div>
     </div>
 
-    {# 回数指定 #}
-    <div id="div_count" class="conditional-field">
-        {{ form.count_type.label_tag }} {{ form.count_type }}
-        {{ form.target_count.label_tag }} {{ form.target_count }}
+    <!-- 回数指定 -->
+    <div id="div_count">
+        {% include "components/form_field.html" with field=form.count_type %}
+        {% include "components/form_field.html" with field=form.target_count %}
     </div>
 
-    <div class="field-group">
-        {{ form.link.label_tag }} {{ form.link }}
-    </div>
+    <!-- リンク -->
+    {% include "components/form_field.html" with field=form.link %}
 
     <div class="form-actions">
         {% if form.instance.pk %}
@@ -69,7 +72,7 @@
 
 <a href="{% url 'habit_list' %}" class="btn back">一覧へ戻る</a>
 
-{# 動的制御スクリプト #}
+<!-- プルダウンリストJS -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const freqSelect = document.querySelector('select[name="frequency"]');

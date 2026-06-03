@@ -47,7 +47,15 @@ class Habit(models.Model):
         ("week", "週"),
         ("month", "月"),
     ]
-    count_type = models.CharField(max_length=10, choices=COUNT_TYPE_CHOICES, null=True, blank=True)
+    # カウント単位
+    count_type = models.CharField(
+        max_length=10,
+        choices=COUNT_TYPE_CHOICES,
+        default="week",
+        null=True,
+        blank=True
+    )
+    # 目標回数
     target_count = models.PositiveIntegerField(null=True, blank=True)
 
     link = models.URLField(blank=True)

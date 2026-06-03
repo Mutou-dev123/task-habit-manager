@@ -17,7 +17,7 @@ class TaskForm (forms.ModelForm):
 
         labels = {
             "title": "タイトル",
-            "description": "詳細",
+            "description": "メモ",
             "due_date": "期限日",
             "link": "関連リンク",
         }
@@ -31,7 +31,7 @@ class TaskForm (forms.ModelForm):
                 }
             ),
 
-            # 詳細
+            # メモ
             "description": forms.Textarea(
                 attrs={
                     "rows": 4,
@@ -39,7 +39,7 @@ class TaskForm (forms.ModelForm):
                 }
             ),
 
-            # 日付入力
+            # 期限日
             "due_date": forms.DateInput(
                 attrs={
                     "type": "date",
