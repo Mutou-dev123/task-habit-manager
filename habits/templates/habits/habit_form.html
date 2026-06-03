@@ -1,33 +1,99 @@
+<!-- 習慣作成・編集画面テンプレート -->
+
 {% extends "base.html" %}
 
 {% block title %}
-    {% if habit %}
-        習慣編集
-    {% else %}
-        習慣作成
-    {% endif %}
+    {% if habit %}習慣編集{% else %}習慣作成{% endif %}
 {% endblock %}
 
 {% block content %}
-{% if mode == "edit" %}
-    <h2>習慣編集</h2>
-{% else %}
-    <h2>習慣作成</h2>
-    <a href="{% url 'draft_list' %}">下書き一覧を見る</a>
+<h2>{% if form.instance.pk %}習慣編集{% else %}習慣作成{% endif %}</h2>
+
+{% if draft_exists %}
+    <a href="{% url 'habit_draft_list' %}" class="btn draft">
+        下書き一覧を見る
+    </a>
 {% endif %}
 
-<form method="post">
+<!-- 入力フォーム -->
+<form method="post" id="habit-form" class="form-card">
     {% csrf_token %}
-    {{ form.as_p }}
 
-    {% if mode == "edit" %}
-        <button type="submit">更新する</button>
-    {% else %}
-        <button type="submit" name="save_habit">作成する</button>
-        <button type="submit" name="save_draft">下書き保存</button>
-    {% endif %}
+    <!-- タイトル -->
+    {% include "components/form_field.html" with field=form.title %}
+
+    <!-- メモ -->
+    {% include "components/form_field.html" with field=form.description %}
+
+    <!-- 開始日 -->
+    {% include "components/form_field.html" with field=form.start_date %}
+
+    <!-- 終了日 -->
+    {% include "components/form_field.html" with field=form.end_date %}
+
+    <!-- 頻度設定 -->
+    {% include "components/form_field.html" with field=form.frequency %}
+
+    <!-- 〇日おき指定 -->
+    <div id="div_interval">
+        {% include "components/form_field.html" with field=form.interval_days %}
+    </div>
+
+    <!-- 曜日指定 -->
+    <div id="div_weekday">
+
+        <label>
+            {{ form.weekdays.label }}
+        </label>
+
+        <div class="weekday-checkboxes">
+            {{ form.weekdays }}
+        </div>
+    </div>
+
+    <!-- 回数指定 -->
+    <div id="div_count">
+        {% include "components/form_field.html" with field=form.count_type %}
+        {% include "components/form_field.html" with field=form.target_count %}
+    </div>
+
+    <!-- リンク -->
+    {% include "components/form_field.html" with field=form.link %}
+
+    <div class="form-actions">
+        {% if form.instance.pk %}
+            <button type="submit" class="btn update">更新する</button>
+        {% else %}
+            <button type="submit" name="save_habit" class="btn create">作成する</button>
+            <button type="submit" name="save_draft" class="btn draft">下書き保存</button>
+        {% endif %}
+    </div>
 </form>
 
-<a href="{% url 'habit_list' %}">一覧へ戻る</a>
+<a href="{% url 'habit_list' %}" class="btn back">一覧へ戻る</a>
+
+<!-- プルダウンリストJS -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const freqSelect = document.querySelector('select[name="frequency"]');
+        const fields = {
+            'interval': document.getElementById('div_interval'),
+            'weekday': document.getElementById('div_weekday'),
+            'count': document.getElementById('div_count')
+        };
+
+        function toggleFields() {
+            const val = freqSelect.value;
+            Object.values(fields).forEach(el => el.style.display = 'none');
+
+            if (fields[val]) {
+                fields[val].style.display = 'block';
+            }
+        }
+
+        freqSelect.addEventListener('change', toggleFields);
+        toggleFields();
+    });
+</script>
 
 {% endblock %}

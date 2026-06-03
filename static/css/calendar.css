@@ -1,0 +1,83 @@
+/* =========================
+    カレンダーレイアウト
+========================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background-color: white;
+}
+
+/* ヘッダー */
+th {
+    padding: 8px;
+    border: 1px solid #ddd;
+    background-color: #f5f5f5;
+    font-weight: normal;
+}
+
+/* セル */
+td {
+    vertical-align: top;
+    height: 120px;
+    padding: 6px;
+    border: 1px solid #eee;
+    font-size: 14px;
+    word-break: break-word;
+}
+
+/* 今日 */
+.today {
+    background-color: #fff3cd;
+}
+
+/* 日付リンク */
+td a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #333;
+}
+
+td a:hover {
+    color: #2196f3;
+}
+
+/* タスク */
+td div {
+    margin-top: 4px;
+    font-size: 12px;
+}
+
+/* タスク状態 */
+.task-done {
+    color: gray;
+}
+
+.task-todo {
+    color: #333;
+}
+
+/* 習慣 */
+.habit-done {
+    color: green;
+}
+
+.habit-undone {
+    color: #555;
+}
+
+/* 上部リンク */
+.calendar-nav {
+    margin: 10px 0;
+}
+
+.calendar-nav a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #2196f3;
+}
+
+.calendar-nav a:hover {
+    text-decoration: underline;
+}

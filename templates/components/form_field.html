@@ -1,0 +1,17 @@
+<!-- 作成・編集画面の共通部分テンプレート -->
+
+<div class="form-group">
+
+    <label for="{{ field.id_for_label }}">
+        {{ field.label }}
+    </label>
+
+    {{ field }}
+
+    {% if field.errors %}
+        <div class="form-error">
+            {{ field.errors }}
+        </div>
+    {% endif %}
+    
+</div>

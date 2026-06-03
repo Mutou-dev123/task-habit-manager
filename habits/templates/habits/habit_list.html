@@ -1,21 +1,123 @@
-{% extends "base.html" %}
+<!-- 習慣一覧画面テンプレート -->
 
-{% block title %}Habits{% endblock %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}習慣一覧{% endblock %}
 
 {% block content %}
 <h2>習慣一覧</h2>
 
-<a href="{% url 'habit_create' %}">＋新規作成</a>
+<a href="{% url 'habit_create' %}" class="btn create">
+    ＋新規作成
+</a>
 
-{% for habit in habits %}
-    <div>
-        <a href="{% url 'habit_detail' habit.id %}">{{ habit.title }}</a>
-        <p>{{ habit.status }}</p>
+<form method="get" class="inline-form">
 
-        <a href="{% url 'habit_detail' habit.id %}">詳細</a>
-        <a href="{% url 'habit_update' habit.id %}">編集</a>
-        <a href="{% url 'habit_delete' habit.id %}">削除</a>
-    </div>
-{% endfor %}
+    <!-- 検索 -->
+    <input
+        type="text"
+        name="q"
+        placeholder="検索"
+        value="{{ q }}"
+    >
+
+    <!-- 実施状態 -->
+    <select name="state">
+
+        <option value="">すべて</option>
+
+        <option value="done"
+            {% if state == "done" %}selected{% endif %}>
+            実施済み
+        </option>
+
+        <option value="not_done"
+            {% if state == "not_done" %}selected{% endif %}>
+            未実施
+        </option>
+
+    </select>
+
+    <!-- 並び替え -->
+    <select name="sort">
+
+        <option value=""
+            {% if not sort %}selected{% endif %}>
+            新しい順
+        </option>
+
+        <option value="old"
+            {% if sort == "old" %}selected{% endif %}>
+            古い順
+        </option>
+
+        <option value="title"
+            {% if sort == "title" %}selected{% endif %}>
+            タイトル順
+        </option>
+
+    </select>
+
+    <!-- 条件リセットボタン -->
+    <a href="{% url 'habit_list' %}" class="search-reset-btn">
+        ✖ 条件をクリア
+    </a>
+
+    <button type="submit">
+        検索
+    </button>
+
+</form>
+
+<!-- カードグリッド表示エリア -->
+<div class="card-grid" data-has-next="{{ has_next|yesno:'true,false' }}" data-page="1">
+    {% include "habits/habit_list_partials.html" %}
+</div>
+
+<!-- メッセージエリア -->
+<div id="empty-message" class="empty-state-container {% if habits.object_list %}is-hidden{% endif %}">
+
+    {% if has_habits_at_all %}
+        <i class="fa-solid fa-magnifying-glass empty-icon"></i>
+        <p class="empty-title">一致するタスクはありません</p>
+        <p class="empty-subtitle">検索ワードやフィルターの条件を変更してみてください。</p>
+        <a href="{% url 'habit_list' %}" class="search-reset-btn" style="display: inline-flex;">
+            ✖ 条件をクリアしてすべて表示
+        </a>
+
+    {% else %}
+        <i class="fa-solid fa-clipboard-list empty-icon"></i>
+        <p class="empty-title">習慣はありません</p>
+        <p class="empty-subtitle">最初の習慣を作成して、管理を始めましょう！</p>
+
+        <div class="empty-actions">
+            <a href="{% url 'habit_create' %}" class="btn create">
+                ＋新規作成
+            </a>
+
+            {% if draft_count > 0 %}
+            <a href="{% url 'habit_draft_list' %}?from=list" class="btn-draft">
+                📝 下書きを見る ({{ draft_count }})
+            </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+
+<!-- スクロールトリガー -->
+<div id="infinite-scroll-trigger" class="scroll-trigger-area">
+    {% if has_next %}
+    <i class="fa-solid fa-circle-notch fa-spin loading-spinner"></i>
+    {% endif %}
+</div>
+
+<!-- JS読み出し -->
+<script src="{% static 'js/list/grid_refresh.js' %}" defer></script>
+<script src="{% static 'js/list/infinite_scroll.js' %}" defer></script>
+<script src="{% static 'js/list/filter_ui.js' %}" defer></script>
+<script src="{% static 'js/list/habit_list.js' %}" defer></script>
+<script src="{% static 'js/list/list_delete.js' %}" defer></script>
 
 {% endblock %}

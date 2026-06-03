@@ -1,56 +1,194 @@
+<!-- タスク詳細画面テンプレート -->
+
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}タスク詳細{% endblock %}
 
 {% block content %}
-<h2>タスク詳細</h2>
 
-<div>
-    <h3>{{ task.title }}</h3>
+<link rel="stylesheet" href="{% static 'css/detail-layout.css' %}">
 
-    <p><strong>ステータス：</strong> {{ task.get_status_display }}</p>
+<!-- 汎用確認モーダル -->
+<script src="{% static 'js/common/confirm_modal.js' %}" defer></script>
 
-    <p><strong>メモ：</strong><br>
-    {{ task.description|linebreaks }}</p>
+<!-- 詳細画面共通削除処理 -->
+<script src="{% static 'js/detail_delete.js' %}" defer></script>
 
-    <p><strong>期限：</strong>
-        {% if task.due_date %}
-            {{ task.due_date }}
-        {% else %}
-            未設定
-        {% endif %}
-    </p>
+<div class="detail-container">
 
-    <p><strong>リンク：</strong>
-    {% if task.link %}
-        <a href="{{ task.link }}" target="_blank">開く</a>
-    {% else %}
-        なし
+    <h2>タスク詳細</h2>
+
+    <div class="detail-card">
+
+        <h3 class="detail-title">
+            {{ task.title }}
+        </h3>
+
+        <div class="detail-meta-row">
+            <strong>ステータス：</strong>
+            {{ task.get_status_display }}
+        </div>
+
+        <div class="detail-meta-row">
+            <strong>期限：</strong>
+
+            {% if task.due_date %}
+                {{ task.due_date|date:"Y/m/d" }}
+            {% else %}
+                <span class="text-muted">未設定</span>
+            {% endif %}
+        </div>
+
+        <div class="detail-meta-row">
+            <strong>リンク：</strong>
+
+            {% if task.link %}
+                <a
+                    href="{{ task.link }}"
+                    target="_blank"
+                    class="external-link"
+                >
+                    開く
+                    <i class="fa-solid fa-external-link"></i>
+                </a>
+
+            {% else %}
+
+                <span class="text-muted">なし</span>
+
+            {% endif %}
+        </div>
+
+        <div class="detail-meta-row detail-meta-row-desc">
+
+            <strong>メモ：</strong>
+
+            <div class="detail-description-box">
+                {{ task.description|linebreaks }}
+            </div>
+
+        </div>
+
+        <!-- ステータス更新 -->
+        <form
+            method="post"
+            action="{% url 'task_update_status' task.id %}"
+            class="detail-status-form"
+        >
+
+            {% csrf_token %}
+
+            <select
+                name="status"
+                class="detail-status-select"
+            >
+                <option
+                    value="todo"
+                    {% if task.status == "todo" %}selected{% endif %}
+                >
+                    未着手
+                </option>
+
+                <option
+                    value="doing"
+                    {% if task.status == "doing" %}selected{% endif %}
+                >
+                    進行中
+                </option>
+
+                <option
+                    value="done"
+                    {% if task.status == "done" %}selected{% endif %}
+                >
+                    完了
+                </option>
+
+            </select>
+
+            <button
+                type="submit"
+                class="btn update detail-status-submit"
+            >
+                状態を更新
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- 下部アクション -->
+    <div class="detail-actions">
+
+        <a
+            href="{% url 'task_list' %}"
+            class="btn back"
+        >
+            一覧へ戻る
+        </a>
+
+        <a
+            href="{% url 'task_update' task.id %}"
+            class="btn edit"
+        >
+            編集する
+        </a>
+
+        <!-- 削除 -->
+        <button
+            type="button"
+            class="btn delete js-detail-delete"
+            data-url="{% url 'task_delete' task.id %}"
+            data-title="{{ task.title }}"
+            data-redirect="{% url 'task_list' %}"
+        >
+            <i class="fa-solid fa-trash"></i>
+        </button>
+
+    </div>
+
+    {% if from_day %}
+
+    <div class="detail-nav-links">
+
+        <a href="{% url 'day_detail' year month day %}">
+            📅 日付に戻る
+        </a>
+
+        <span class="divider">|</span>
+
+        <a href="{% url 'calendar_view' %}">
+            🗓️ カレンダーへ戻る
+        </a>
+
+    </div>
+
     {% endif %}
-    </p>
 
-    <p><strong>作成日：</strong>{{ task.created_at }}</p>
-    <p><strong>更新日：</strong>{{ task.updated_at }}</p>
-</div>
+    <!-- 作成・更新日時 -->
+    <div
+        style="
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+            color: #9ca3af;
+        "
+    >
 
-<form method="post" action="{% url 'task_update_status' task.id %}">
-    {% csrf_token %}
+        <span>
+            作成:
+            {{ task.created_at|date:"Y/m/d H:i" }}
+        </span>
 
-    <select name="status">
-        <option value="todo" {% if task.status == "todo" %}selected{% endif %}>未着手</option>
-        <option value="doing" {% if task.status == "doing" %}selected{% endif %}>進行中</option>
-        <option value="done" {% if task.status == "done" %}selected{% endif %}>完了</option>
-    </select>
+        <span style="margin-left: 15px;">
 
-    <button type="submit">更新</button>
-</form>
+            更新:
+            {{ task.updated_at|date:"Y/m/d H:i" }}
 
-<hr>
+        </span>
 
-<div>
-    <a href="{% url 'task_list' %}">一覧へ戻る</a>
-    <a href="{% url 'task_update' task.id %}">編集</a> 
-    <a href="{% url 'task_delete' task.id %}">削除</a>
+    </div>
+
 </div>
 
 {% endblock %}

@@ -1,0 +1,47 @@
+<!-- タスク一覧画面読み込み部分テンプレート -->
+
+{% for task in tasks %}
+    <div class="card status-{{ task.status }}" style="--task-id: task-{{ task.id }};">
+        <a href="{% url 'task_detail' task.id %}" class="card-main-link"></a>
+        <h3 class="task-link" style="font-weight: bold; font-size: 18px;">{{ task.title }}</h3>
+        <p>{{ task.status }}</p>
+
+        {% if task.status != "done" %}
+            <button
+                type="button"
+                class="btn update status-toggle-btn"
+                data-url="{% url 'task_next_status' task.id %}"
+                onclick="toggleTaskStatus(this)"
+                style="text-align: center; margin-bottom: 8px; width: 100%; border: none; cursor: pointer;">
+                {% if task.status == "todo" %}▶ 開始{% elif task.status == "doing" %}✓ 完了{% endif %}
+            </button>
+        {% else %}
+            <span class="btn update text-disabled" style="text-align: center; cursor: default; background-color: #9e9e9e;">✅ 完了済み</span>
+        {% endif %}
+        
+        <!-- アクションボタン -->
+        <div class="actions">
+
+            <!-- 詳細 -->
+            <a href="{% url 'task_detail' task.id %}" class="btn detail" title="詳細">
+                <i class="fa-solid fa-circle-info"></i>
+            </a>
+
+            <!-- 編集 -->
+            <a href="{% url 'task_update' task.id %}" class="btn edit" title="編集">
+                <i class="fa-solid fa-pen"></i>
+            </a> 
+            
+            <!-- 削除 -->
+            <!-- JSでオリジナルの確認モーダルを表示する -->
+            <button 
+                onclick="deleteTask(this)"
+                data-url="{% url 'task_delete' task.id %}"
+                data-title="{{ task.title }}"
+                class="btn delete">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+
+        </div>
+    </div>
+{% endfor %}

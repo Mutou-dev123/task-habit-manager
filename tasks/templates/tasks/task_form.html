@@ -1,3 +1,5 @@
+<!-- タスク作成・編集画面テンプレート -->
+
 {% extends "base.html" %}
 
 {% block title %}
@@ -9,26 +11,40 @@
 {% endblock %}
 
 {% block content %}
-{% if mode == "edit" %}
-    <h2>タスク編集</h2>
-{% else %}
-    <h2>タスク作成</h2>
-    <a href="{% url 'draft_list' %}">下書き一覧を見る</a>
+<h2>{% if form.instance.pk %}タスク編集{% else %}タスク作成{% endif %}</h2>
+
+{% if draft_exists %}
+    <a href="{% url 'task_draft_list' %}?from=create" class="btn draft">
+        下書きタスク一覧を見る
+    </a>
 {% endif %}
 
-<form method="post">
+<!-- 入力フォーム -->
+<form method="post" class="form-card">
     {% csrf_token %}
-    {{ form.as_p }}
 
-    {% if mode == "edit" %}
-        <button type="submit">更新する</button>
-    {% else %}
-        <button type="submit" name="save_task">作成する</button>
-        <button type="submit" name="save_draft">下書き保存</button>
-    {% endif %}
+    <!-- タイトル -->
+    {% include "components/form_field.html" with field=form.title %}
 
+    <!-- メモ -->
+    {% include "components/form_field.html" with field=form.description %}
+
+    <!-- 期限日 -->
+    {% include "components/form_field.html" with field=form.due_date %}
+
+    <!-- リンク -->
+    {% include "components/form_field.html" with field=form.link %}
+
+    <div class="form-actions">
+        {% if mode == "edit" %}
+            <button type="submit" class="btn update">更新する</button>
+        {% else %}
+            <button type="submit" name="save_task" class="btn create">作成する</button>
+            <button type="submit" name="save_draft" class="btn draft">下書き保存</button>
+        {% endif %}
+    </div>
 </form>
 
-<a href="{% url 'task_list' %}">一覧へ戻る</a>
+<a href="{% url 'task_list' %}" class="btn back">一覧へ戻る</a>
 
 {% endblock %}
