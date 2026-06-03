@@ -19,10 +19,10 @@
             <i class="fa-solid fa-triangle-exclamation"></i>
         </div>
         <h3 id="modal-title">
-            タスクを削除しますか？
+            削除しますか？
         </h3>
 
-        <div class="modal-task-name-box">
+        <div class="modal-target-name-box">
             <span id="modal-target-name"></span>
         </div>
 
@@ -41,6 +41,7 @@
         <header class="app-header">
             <h1 class="app-title">Task & Habit App</h1>
 
+            <!-- ナビゲーションボタン -->
             <nav class="tab-nav">
                 <a href="/" class="tab-nav-item {% if request.path == '/' %}is-active{% endif %}">Dashboard</a> 
                 <a href="/tasks/" class="tab-nav-item {% if '/tasks/' in request.path %}is-active{% endif %}">Tasks</a> 

@@ -85,12 +85,12 @@ function getCsrfToken() {
 async function deleteItem({
     url,
     itemName = "",
+    modalTitle = "削除しますか？",
     successCallback = null
 }) {
-
     const isConfirmed = await showConfirmModal({
 
-        title: "削除しますか？",
+        title: modalTitle,
         targetName: itemName,
         confirmText: "削除",
         isDanger: true

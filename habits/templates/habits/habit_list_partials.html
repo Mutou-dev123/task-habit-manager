@@ -5,9 +5,7 @@
 {% for habit in habits %}
     <div class="card">
 
-        <a href="{% url 'habit_detail' habit.id %}"
-        class="card-main-link">
-        </a>
+        <a href="{% url 'habit_detail' habit.id %}" class="card-main-link"></a>
 
         <h3 style="font-weight: bold; font-size: 18px;">
             {{ habit.title }}
@@ -46,34 +44,29 @@
 
         {% endif %}
 
+        <!-- アクションボタン -->
         <div class="actions">
 
-            <a
-                href="{% url 'habit_detail' habit.id %}"
-                class="btn detail"
-                title="詳細">
+            <!-- 詳細 -->
+            <a href="{% url 'habit_detail' habit.id %}" class="btn detail" title="詳細">
                 <i class="fa-solid fa-circle-info"></i>
             </a>
 
-            <a
-                href="{% url 'habit_update' habit.id %}"
-                class="btn edit"
-                title="編集">
+            <!-- 編集 -->
+            <a href="{% url 'habit_update' habit.id %}" class="btn edit" title="編集">
                 <i class="fa-solid fa-pen"></i>
             </a>
 
+            <!-- 削除 -->
+            <!-- JSでオリジナルの確認モーダルを表示する -->
             <button
-                onclick="deleteFromList(this)"
+                onclick="deleteHabit(this)"
                 data-url="{% url 'habit_delete' habit.id %}"
                 data-title="{{ habit.title }}"
                 class="btn delete">
-
                 <i class="fa-solid fa-trash"></i>
-
             </button>
 
         </div>
-
     </div>
-
 {% endfor %}

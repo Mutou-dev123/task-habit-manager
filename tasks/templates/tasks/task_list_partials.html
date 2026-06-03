@@ -19,17 +19,29 @@
             <span class="btn update text-disabled" style="text-align: center; cursor: default; background-color: #9e9e9e;">✅ 完了済み</span>
         {% endif %}
         
+        <!-- アクションボタン -->
         <div class="actions">
-            <a href="{% url 'task_detail' task.id %}" class="btn detail" title="詳細"><i class="fa-solid fa-circle-info"></i></a>
-            <a href="{% url 'task_update' task.id %}" class="btn edit" title="編集"><i class="fa-solid fa-pen"></i></a> 
+
+            <!-- 詳細 -->
+            <a href="{% url 'task_detail' task.id %}" class="btn detail" title="詳細">
+                <i class="fa-solid fa-circle-info"></i>
+            </a>
+
+            <!-- 編集 -->
+            <a href="{% url 'task_update' task.id %}" class="btn edit" title="編集">
+                <i class="fa-solid fa-pen"></i>
+            </a> 
             
+            <!-- 削除 -->
+            <!-- JSでオリジナルの確認モーダルを表示する -->
             <button 
-                onclick="deleteFromList(this)"
+                onclick="deleteTask(this)"
                 data-url="{% url 'task_delete' task.id %}"
                 data-title="{{ task.title }}"
                 class="btn delete">
                 <i class="fa-solid fa-trash"></i>
             </button>
+
         </div>
     </div>
 {% endfor %}

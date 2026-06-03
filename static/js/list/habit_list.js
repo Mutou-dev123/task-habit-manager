@@ -55,3 +55,12 @@ window.completeHabit = async function(button) {
         }
     }
 }
+
+// 習慣専用削除確認モーダル
+function deleteHabit(button) {
+
+    deleteFromList(
+        button,
+        "この習慣を削除しますか？"
+    );
+}

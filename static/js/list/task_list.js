@@ -49,3 +49,12 @@ function toggleTaskStatus(button) {
         });
     }
 }
+
+// タスク専用削除確認モーダル
+function deleteTask(button) {
+
+    deleteFromList(
+        button,
+        "このタスクを削除しますか？"
+    );
+}

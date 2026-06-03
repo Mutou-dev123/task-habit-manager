@@ -284,7 +284,7 @@ td {
     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 /* ==============================
-   カスタム削除モーダル (Notion/モダン風)
+    カスタム削除モーダル (Notion/モダン風)
    ============================== */
 
 /* 1. モーダル本体のダサい黒枠を完全に消去して、影でフワッと浮かせる */
@@ -375,7 +375,7 @@ dialog#custom-delete-modal p {
 }
 
 /* タスク名を表示する専用ボックス */
-.modal-task-name-box {
+.modal-target-name-box {
     background-color: #f8fafc;
     border: 1px solid #e5e7eb;
     border-radius: 6px;

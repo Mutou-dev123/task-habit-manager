@@ -1,14 +1,16 @@
 // 一覧画面共通削除処理
 
-async function deleteFromList(button) {
+async function deleteFromList(button, modalTitle = "削除しますか？") {
 
-    const card = button.closest('card');
-    
+    const card = button.closest('.card');
+
     await deleteItem({
 
         url: button.dataset.url,
 
         itemName: button.dataset.title,
+
+        modalTitle: modalTitle,
 
         successCallback: () => {
 
@@ -18,15 +20,15 @@ async function deleteFromList(button) {
 
                 document.startViewTransition(() => {
 
-                    acard.remove();
+                    card.remove();
 
                     updateEmptyState();
                 });
-            
+
             } else {
 
                 card.remove();
-                
+
                 updateEmptyState();
             }
         }
