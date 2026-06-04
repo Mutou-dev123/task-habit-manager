@@ -57,6 +57,11 @@ def calendar_view(request):
 
     habit_dict = defaultdict(list)
     
+    log_set = set(
+        (log["habit_id"], log["date"].day)
+        for log in logs
+    )
+    
     for week in cal:
         for day in week:
 
@@ -66,21 +71,18 @@ def calendar_view(request):
             current_date = date(year, month, day)
 
             for habit in habits:
-
+                
+                # その日にやるべき習慣かチェック
                 if HabitService.is_scheduled_for(habit, current_date):
 
-                    log_set = set(
-                        (log["habit_id"], log["date"].day)
-                        for log in logs
-                    )
-
-                    # 完了済み判定
+                    # 完了済み判定（上で作った log_set を使い回すだけ！）
                     is_done = (habit.id, day) in log_set
 
                     habit_dict[day].append({
                         "habit": habit,
                         "is_done": is_done,
                     })
+    
 
     context = {
         "calendar": cal,
