@@ -1,83 +1,298 @@
-/* =========================
-    カレンダーレイアウト
-========================= */
-
+/* ==========================================================================
+    カレンダー全体・テーブル構造
+   ========================================================================== */
 table {
     width: 100%;
-    border-collapse: collapse;
+    margin-bottom: 60px;
+    border-collapse: separate;
+    border-spacing: 8px;
     table-layout: fixed;
-    background-color: white;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
 }
 
-/* ヘッダー */
+/* 曜日ヘッダー */
 th {
-    padding: 8px;
-    border: 1px solid #ddd;
-    background-color: #f5f5f5;
-    font-weight: normal;
+    padding: 12px 8px;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-weight: 600;
+    color: #4b5563;
+    font-size: 14px;
+    text-align: center;
 }
 
-/* セル */
+/* カレンダーセル */
 td {
+    position: relative;
     vertical-align: top;
     height: 120px;
-    padding: 6px;
-    border: 1px solid #eee;
+    padding: 8px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
     font-size: 14px;
-    word-break: break-word;
+    word-break: break-all;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s;
 }
 
-/* 今日 */
+/* 日付のない空のマス */
+td:not(.has-date) {
+    background-color: #f9fafb;
+    border: 1px dashed #e5e7eb;
+    opacity: 0.5;
+}
+
+/* 当日（今日）のハイライト */
 .today {
-    background-color: #fff3cd;
+    background-color: #fefcbf !important;
+    border-color: #fef08a;
 }
 
-/* 日付リンク */
-td a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #333;
+/* セル全体を覆う透明なリンク */
+.cell-cover-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
-td a:hover {
-    color: #2196f3;
+/* 日付の数字のデザイン */
+td strong.day-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 6px;
 }
 
-/* タスク */
+/* ==========================================================================
+    マスのホバー効果（ほんの少し浮かせる表現）
+   ========================================================================== */
+td.has-date {
+    cursor: pointer;
+}
+
+td.has-date:hover {
+    background-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    z-index: 2;
+}
+
+td.today:hover {
+    background-color: #fefcbf !important;
+}
+
+/* ==========================================================================
+    要素（タスク・習慣）アイテム
+   ========================================================================== */
 td div {
+    position: relative;
+    z-index: 2;
     margin-top: 4px;
-    font-size: 12px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* タスク状態 */
-.task-done {
-    color: gray;
+/* 未完了状態（共通） */
+td div:not(:contains("✓")) {
+    background-color: #f3f4f6;
+    color: #374151;
 }
 
-.task-todo {
-    color: #333;
+/* 完了状態（共通） */
+td div:contains("✓") {
+    background-color: #ecfdf5;
+    color: #10b981;
+    text-decoration: line-through;
+    opacity: 0.7;
 }
 
-/* 習慣 */
-.habit-done {
-    color: green;
+/* ==========================================================================
+    カレンダー上部：ナビゲーション・フィルター
+   ========================================================================== */
+.calendar-header-wrapper {
+    margin: 20px 0 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
-.habit-undone {
-    color: #555;
+/* 年月タイトル・選択機能 */
+.calendar-jump-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #111827;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
 }
 
-/* 上部リンク */
-.calendar-nav {
-    margin: 10px 0;
+.calendar-jump-title:hover {
+    background-color: #e5e7eb;
 }
 
-.calendar-nav a {
-    margin-right: 10px;
+.calendar-jump-title::after {
+    content: "\f0d7";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 16px;
+    color: #9ca3af;
+}
+
+/* 隠しカレンダー入力枠 */
+.hidden-month-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+}
+
+/* コントロールコンテナ */
+.calendar-controls {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+/* ナビゲーション（前月・今日・翌月） */
+.nav-cluster {
+    display: flex;
+    background-color: #f3f4f6;
+    padding: 4px;
+    border-radius: 8px;
+    gap: 2px;
+}
+
+.btn-nav, .btn-today {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     text-decoration: none;
-    color: #2196f3;
+    color: #4b5563;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
 }
 
-.calendar-nav a:hover {
-    text-decoration: underline;
+.btn-nav:hover, .btn-today:hover {
+    background-color: #ffffff;
+    color: #111827;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+/* フィルター（ナビゲーションとデザイン統一） */
+.filter-cluster {
+    display: inline-flex;
+    background-color: #f3f4f6;
+    padding: 6px;
+    border-radius: 9999px;
+    gap: 4px;
+}
+
+.filter-item {
+    display: inline-block;
+    padding: 10px 24px;
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 9999px;
+    position: relative;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
+}
+
+.filter-item:hover {
+    color: #111827;
+    background-color: rgba(0, 0, 0, 0.04);
+    transform: scale(1.03);
+}
+
+.filter-item.is-active {
+    background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    view-transition-name: active-calendar-filter;
+}
+
+/* ==========================================================================
+    レスポンシブ対応
+   ========================================================================== */
+@media (max-width: 768px) {
+    .calendar-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .nav-cluster, .filter-cluster {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .btn-nav, .filter-item {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+    カレンダー専用 アニメーション (View Transitions)
+   ========================================================================== */
+#calendar-main-area table {
+    view-transition-name: calendar-area;
+}
+
+:root[data-transition="slide-next"]::view-transition-old(calendar-area) {
+    animation: slide-out-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+:root[data-transition="slide-next"]::view-transition-new(calendar-area) {
+    animation: slide-in-right 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+:root[data-transition="slide-prev"]::view-transition-old(calendar-area) {
+    animation: slide-out-right 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+:root[data-transition="slide-prev"]::view-transition-new(calendar-area) {
+    animation: slide-in-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+:root[data-transition="fade"]::view-transition-old(calendar-area) {
+    animation: fade-out-scale 0.2s ease-out forwards;
+}
+:root[data-transition="fade"]::view-transition-new(calendar-area) {
+    animation: fade-in-scale 0.2s ease-in forwards;
+}
+
+@keyframes slide-out-left { to { transform: translateX(-40px); opacity: 0; } }
+@keyframes slide-in-right { from { transform: translateX(40px); opacity: 0; } }
+@keyframes slide-out-right { to { transform: translateX(40px); opacity: 0; } }
+@keyframes slide-in-left { from { transform: translateX(-40px); opacity: 0; } }
+@keyframes fade-out-scale { to { opacity: 0; transform: scale(0.98); } }
+@keyframes fade-in-scale { from { opacity: 0; transform: scale(0.98); } }

@@ -1,4 +1,7 @@
+<!-- カレンダー画面テンプレート -->
+
 {% extends "base.html" %}
+
 {% load static %}
 {% load custom_tags %}
 
@@ -12,77 +15,113 @@
 
 <h2>カレンダー</h2>
 
-<h2>{{ year }}年 {{ month }}月</h2>
+<div id="calendar-main-area">
 
-<a href="?year={{ prev_year }}&month={{ prev_month }}">← 前の月</a>
-<a href="{% url 'calendar_view' %}">今日</a>
-<a href="?year={{ next_year }}&month={{ next_month }}">次の月 →</a>
+    <!-- カレンダー上部表示要素 -->
+    <div class="calendar-header-wrapper">
+    
+        <!-- 表示中の年月 -->
+        <div class="calendar-title-row">
+            <h2 class="calendar-jump-title" id="calendar-header-trigger">
+                {{ year }}年 {{ month }}月
+            </h2>
+            <input type="month" id="month-picker" class="hidden-month-input" value="{{ year }}-{{ month|stringformat:'02d' }}">
+        </div>
+    
+        <!-- 表示ボタン -->
+        <div class="calendar-controls">
+    
+            <!-- 前月・今月・翌月移動ボタン -->
+            <div class="nav-cluster">
+    
+                <a href="?year={{ prev_year }}&month={{ prev_month }}{% if request.GET.mode %}&mode={{ request.GET.mode }}{% endif %}" class="btn-nav">
+                    <i class="fa-solid fa-chevron-left"></i> 前の月
+                </a>
+    
+                <a href="{% url 'calendar_view' %}" class="btn-today">今日</a>
+    
+                <a href="?year={{ next_year }}&month={{ next_month }}{% if request.GET.mode %}&mode={{ request.GET.mode }}{% endif %}" class="btn-nav">
+                    次の月 <i class="fa-solid fa-chevron-right"></i>
+                </a>
+    
+            </div>
+    
+            <!-- 表示フィルター -->
+            <div class="filter-cluster">
+                <a href="?year={{ year }}&month={{ month }}&mode=all" class="filter-item {% if not request.GET.mode or request.GET.mode == 'all' %}is-active{% endif %}">すべて</a>
+                <a href="?year={{ year }}&month={{ month }}&mode=tasks" class="filter-item {% if request.GET.mode == 'tasks' %}is-active{% endif %}">タスク</a>
+                <a href="?year={{ year }}&month={{ month }}&mode=habits" class="filter-item {% if request.GET.mode == 'habits' %}is-active{% endif %}">習慣</a>
+            </div>
+    
+        </div>
+    </div>
+    
+    <table>
+        <tr>
+            <th>月</th>
+            <th>火</th>
+            <th>水</th>
+            <th>木</th>
+            <th>金</th>
+            <th>土</th>
+            <th>日</th>
+        </tr>
+    
+        {% for week in calendar %}
+        <tr>
+            {% for day in week %}
+    
+            <td class="{% if day != 0 %}has-date{% endif %} {% if day != 0 and year == today.year and month == today.month and day == today.day %}today{% endif %}">
 
-<div>
-    <a href="?year={{ year }}&month={{ month }}&mode=all">[すべて]</a>
-    <a href="?year={{ year }}&month={{ month }}&mode=tasks">[タスク]</a>
-    <a href="?year={{ year }}&month={{ month }}&mode=habits">[習慣]</a>
+                {% if day != 0 %}
+
+                    <a href="{% url 'day_detail' year month day %}" class="cell-cover-link"></a>
+    
+                    <strong class="day-number">
+                        {{ day }}
+                    </strong>
+    
+                    {% if mode == "all" or mode == "tasks" %}
+    
+                        {% for task in task_dict|get_item:day %}
+    
+                            {% if task.status == "done" %}
+                                <div>✓ {{ task.title }}</div>
+                            {% else %}
+                                <div>📌 {{ task.title }}</div>
+                            {% endif %}
+    
+                        {% endfor %}
+    
+                    {% endif %}
+    
+                    {% if mode == "all" or mode == "habits" %}
+    
+                        {% for item in habit_dict|get_item:day %}
+    
+                            {% if item.is_done %}
+                                <div>✓ {{ item.habit.title }}</div>
+                            {% else %}
+                                <div>⬜ {{ item.habit.title }}</div>
+                            {% endif %}
+    
+                        {% endfor %}
+    
+                    {% endif %}
+    
+                {% endif %}
+    
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    
+    </table>
+
 </div>
 
-<table>
-    <tr>
-        <th>月</th>
-        <th>火</th>
-        <th>水</th>
-        <th>木</th>
-        <th>金</th>
-        <th>土</th>
-        <th>日</th>
-    </tr>
 
-    {% for week in calendar %}
-    <tr>
-        {% for day in week %}
-        <td class="{% if day != 0 and year == today.year and month == today.month and day == today.day %}today{% endif %}">
-
-            {% if day != 0 %}
-
-                <strong>
-                    <a href="{% url 'day_detail' year month day %}">
-                        {{ day }}
-                    </a>
-                </strong>
-
-                {% if mode == "all" or mode == "tasks" %}
-
-                    {% for task in task_dict|get_item:day %}
-
-                        {% if task.status == "done" %}
-                            <div>✓ {{ task.title }}</div>
-                        {% else %}
-                            <div>📌 {{ task.title }}</div>
-                        {% endif %}
-
-                    {% endfor %}
-
-                {% endif %}
-
-                {% if mode == "all" or mode == "habits" %}
-
-                    {% for item in habit_dict|get_item:day %}
-
-                        {% if item.is_done %}
-                            <div>✓ {{ item.habit.title }}</div>
-                        {% else %}
-                            <div>⬜ {{ item.habit.title }}</div>
-                        {% endif %}
-
-                    {% endfor %}
-
-                {% endif %}
-
-            {% endif %}
-
-        </td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-
-</table>
+<!-- JS読み込み -->
+<script src="{% static 'js/calendar_jump.js' %}" defer></script>
 
 {% endblock %}
