@@ -27,33 +27,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 urlParams.set('year', year);
                 urlParams.set('month', parseInt(month, 10));
                 
-                // 🌟 アニメーションタイプを 'fade' に指定
+                // アニメーションタイプを 'fade' に指定
                 fetchAndReplace(window.location.pathname + '?' + urlParams.toString(), 'fade');
             }
         }
     });
 
-    // 3. リンクを押した時の処理（ボタンごとに動きを変える！）
+    // 🌟 3. リンクを押した時の処理（アイコンで100%確実に判定！）
     document.body.addEventListener('click', function(e) {
         const link = e.target.closest('.btn-nav, .btn-today, .filter-item');
         if (link) {
             e.preventDefault(); 
             
-            // 🌟 押されたボタンのテキストから、どのアニメーションにするか判定する
             let animType = 'fade'; // デフォルトはふわっと着地
-            const btnText = link.textContent.trim();
             
-            if (btnText.includes('前の月')) {
-                animType = 'slide-prev';
-            } else if (btnText.includes('次の月')) {
-                animType = 'slide-next';
+            // 🌟 修正ポイント：テキストではなく「中のアイコン」で前月・翌月を判定する
+            if (link.querySelector('.fa-chevron-left')) {
+                animType = 'slide-prev'; // 左向きアイコンなら左スライド
+            } else if (link.querySelector('.fa-chevron-right')) {
+                animType = 'slide-next'; // 右向きアイコンなら右スライド
             }
             
             fetchAndReplace(link.href, animType);
         }
     });
 
-    // 4. 魔法の関数（アニメーションの種別を受け取るように進化！）
+    // 4. 魔法の関数（裏側でHTMLを取ってきてアニメーション付きで差し替える）
     async function fetchAndReplace(url, transitionType = 'fade') {
         try {
             const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });

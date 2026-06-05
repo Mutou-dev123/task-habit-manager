@@ -35,13 +35,13 @@
             <div class="nav-cluster">
     
                 <a href="?year={{ prev_year }}&month={{ prev_month }}{% if request.GET.mode %}&mode={{ request.GET.mode }}{% endif %}" class="btn-nav">
-                    <i class="fa-solid fa-chevron-left"></i> 前の月
+                    <i class="fa-solid fa-chevron-left"></i> 前月
                 </a>
     
-                <a href="{% url 'calendar_view' %}" class="btn-today">今日</a>
+                <a href="{% url 'calendar_view' %}" class="btn-today">今月</a>
     
                 <a href="?year={{ next_year }}&month={{ next_month }}{% if request.GET.mode %}&mode={{ request.GET.mode }}{% endif %}" class="btn-nav">
-                    次の月 <i class="fa-solid fa-chevron-right"></i>
+                    翌月 <i class="fa-solid fa-chevron-right"></i>
                 </a>
     
             </div>
