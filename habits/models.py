@@ -145,7 +145,6 @@ class HabitSchedule(models.Model):
         ("scheduled", "予定"),
         ("completed", "実施"),
         ("skipped", "スキップ"),
-        ("missed", "未実施"),
     ]
 
     habit = models.ForeignKey(
@@ -160,6 +159,10 @@ class HabitSchedule(models.Model):
         max_length=20,
         choices=STATUS_CHOICES,
         default="scheduled"
+    )
+
+    note = models.TextField(
+        blank=True
     )
 
     created_at = models.DateTimeField(
