@@ -8,10 +8,27 @@
 <h3>今日のタスク</h3>
 
 <ul>
-{% for task in tasks %}
-    <li>{{ task.title }}（{{ task.get_status_display }}）</li>
+
+{% for item in today_items %}
+
+    <li>
+
+        {% if item.type == "task" %}
+            📋
+        {% else %}
+            🔥
+        {% endif %}
+
+        {{ item.title }}
+
+    </li>
+
 {% empty %}
-    <li>タスクはありません</li>
+
+    <li>今日やることはありません</li>
+
 {% endfor %}
+
 </ul>
+
 {% endblock %}

@@ -100,6 +100,7 @@ class Habit(models.Model):
         super().save(*args, **kwargs)
 
 # 習慣実行ログ
+# 習慣を実行した日を保存するテーブル。将来的にはHabitScheduleに統合予定。
 class HabitLog(models.Model):
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE, related_name="logs")
     date = models.DateField()
@@ -119,8 +120,9 @@ class HabitLog(models.Model):
         ordering = ["-date"]
 
 # 習慣スキップ
+# 習慣をスキップした日を保存するテーブル。将来的にはHabitScheduleに統合予定。
 class HabitSkip(models.Model):
-    habit = models.ForeignKey("Habit", on_delete=models.CASCADE)
+    habit = models.ForeignKey("Habit", on_delete=models.CASCADE, related_name="skips")
     date = models.DateField()
 
     reason = models.CharField(max_length=200, blank=True)
@@ -133,3 +135,59 @@ class HabitSkip(models.Model):
                 name="unique_habit_skip"
             )
         ]
+
+# 習慣スケジュール
+class HabitSchedule(models.Model):
+
+    STATUS_CHOICES = [
+        ("scheduled", "予定"),
+        ("completed", "実施"),
+        ("skipped", "スキップ"),
+        ("missed", "未実施"),
+    ]
+
+    habit = models.ForeignKey(
+        Habit,
+        on_delete=models.CASCADE,
+        related_name="schedules"
+    )
+
+    date = models.DateField()
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="scheduled"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["habit", "date"],
+                name="unique_habit_schedule"
+            )
+        ]
+
+        indexes = [
+            models.Index(
+                fields=["habit", "date"]
+            )
+        ]
+
+        ordering = ["date"]
+
+    def __str__(self):
+        return (
+            f"{self.habit.title} "
+            f"{self.date}"
+            f"{self.status}"
+        )
