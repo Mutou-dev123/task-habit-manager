@@ -137,6 +137,8 @@ class HabitSkip(models.Model):
         ]
 
 # 習慣スケジュール
+# 日ごとの習慣状況を保持するテーブル
+# 180日後まで自動生成し、それより先は状態変更した場合にだけ生成する
 class HabitSchedule(models.Model):
 
     STATUS_CHOICES = [
