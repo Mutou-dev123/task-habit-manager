@@ -56,7 +56,6 @@ def calendar_view(request):
         task_dict[task.due_date.day].append(task)
 
     habit_dict = defaultdict(list)
-    
     log_set = set(
         (log["habit_id"], log["date"].day)
         for log in logs
@@ -83,7 +82,44 @@ def calendar_view(request):
                         "is_done": is_done,
                     })
     
+    calendar_items = defaultdict(list)
 
+    if mode in ["all", "tasks"]:
+
+        for day, tasks_in_day in task_dict.items():
+
+            for task in tasks_in_day:
+
+                icon = "✓" if task.status == "done" else "📌"
+
+                calendar_items[day].append({
+                    "text": f"{icon} {task.title}"
+                })
+
+    if mode in ["all", "habits"]:
+        
+        for day, habits in habit_dict.items():
+
+            for item in habits:
+
+                icon = "✓" if item["is_done"] else "⬜"
+
+                calendar_items[day].append({
+                    "text": f"{icon} {item['habit'].title}"
+                })
+    
+    calendar_preview = {}
+
+    for day, items in calendar_items.items():
+
+        preview_items = items[:2]
+
+        remain_count = max(0, len(items) - 2)
+
+        calendar_preview[day] = {
+            "items": preview_items,
+            "remain_count": remain_count,
+        }
     context = {
         "calendar": cal,
         "year": year,
@@ -96,6 +132,7 @@ def calendar_view(request):
         "task_dict": dict(task_dict),
         "habit_dict": dict(habit_dict),
         "mode": mode,
+        "calendar_preview": calendar_preview,
     }
 
     return render(request, "schedule/calendar.html", context)

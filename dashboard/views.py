@@ -13,7 +13,7 @@ def home(request):
     tasks = Task.objects.filter(
         due_date=today
     ).exclude(
-        status=["done", "draft"]
+        status__in=["done", "draft"]
     )
 
     today_items = []
@@ -28,10 +28,10 @@ def home(request):
 
     habits = Habit.objects.filter(
         status="active",
-        start_date_lte=today
+        start_date__lte=today
     ).filter(
-        models.Q(end_date__isnull=True) |
-        models.Q(end_date__gte=today)
+        Q(end_date__isnull=True) |
+        Q(end_date__gte=today)
     )
 
     for habit in habits:

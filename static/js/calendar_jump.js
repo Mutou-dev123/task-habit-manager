@@ -2,7 +2,6 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // 1. 年月タイトルのクリック処理
     document.body.addEventListener('click', function(e) {
         const titleTrigger = e.target.closest('#calendar-header-trigger');
         if (titleTrigger) {
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 2. 年月カレンダーで月を選んだ時の処理（ふわっと着地）
     document.body.addEventListener('change', function(e) {
         if (e.target.id === 'month-picker') {
             const dateVal = e.target.value;
@@ -33,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 🌟 3. リンクを押した時の処理（アイコンで100%確実に判定！）
     document.body.addEventListener('click', function(e) {
         const link = e.target.closest('.btn-nav, .btn-today, .filter-item');
         if (link) {
@@ -41,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             let animType = 'fade'; // デフォルトはふわっと着地
             
-            // 🌟 修正ポイント：テキストではなく「中のアイコン」で前月・翌月を判定する
+            // 修正ポイント：テキストではなく「中のアイコン」で前月・翌月を判定する
             if (link.querySelector('.fa-chevron-left')) {
                 animType = 'slide-prev'; // 左向きアイコンなら左スライド
             } else if (link.querySelector('.fa-chevron-right')) {
@@ -52,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 4. 魔法の関数（裏側でHTMLを取ってきてアニメーション付きで差し替える）
     async function fetchAndReplace(url, transitionType = 'fade') {
         try {
             const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
@@ -67,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (newContent && currentContent) {
                 if (document.startViewTransition) {
                     
-                    // 🌟 CSSに「この動きをして！」と指示を出す
+                    // CSSに「この動きをして！」と指示を出す
                     document.documentElement.setAttribute('data-transition', transitionType);
                     
                     const transition = document.startViewTransition(() => {
@@ -75,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.history.pushState({}, '', url);
                     });
                     
-                    // 🌟 アニメーションが終わったら指示を消去する
+                    // アニメーションが終わったら指示を消去する
                     transition.finished.finally(() => {
                         document.documentElement.removeAttribute('data-transition');
                     });

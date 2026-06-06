@@ -13,8 +13,6 @@
 
 {% block content %}
 
-<h2>カレンダー</h2>
-
 <div id="calendar-main-area">
 
     <!-- カレンダー上部表示要素 -->
@@ -77,38 +75,26 @@
 
                     <a href="{% url 'day_detail' year month day %}" class="cell-cover-link"></a>
     
+                    <!-- 日付表示 -->
                     <strong class="day-number">
                         {{ day }}
                     </strong>
     
-                    {% if mode == "all" or mode == "tasks" %}
-    
-                        {% for task in task_dict|get_item:day %}
-    
-                            {% if task.status == "done" %}
-                                <div>✓ {{ task.title }}</div>
-                            {% else %}
-                                <div>📌 {{ task.title }}</div>
+                    {% with preview=calendar_preview|get_item:day %}
+
+                        {% if preview %}
+
+                            {% for item in preview.items %}
+                                <div>{{ item.text }}</div>
+                            {% endfor %}
+
+                            {% if preview.remain_count > 0 %}
+                                <div class="more-items">
+                                    +{{ preview.remain_count }}件
+                                </div>
                             {% endif %}
-    
-                        {% endfor %}
-    
-                    {% endif %}
-    
-                    {% if mode == "all" or mode == "habits" %}
-    
-                        {% for item in habit_dict|get_item:day %}
-    
-                            {% if item.is_done %}
-                                <div>✓ {{ item.habit.title }}</div>
-                            {% else %}
-                                <div>⬜ {{ item.habit.title }}</div>
-                            {% endif %}
-    
-                        {% endfor %}
-    
-                    {% endif %}
-    
+                        {% endif %}
+                    {% endwith %}
                 {% endif %}
     
             </td>
