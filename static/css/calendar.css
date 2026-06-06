@@ -40,7 +40,7 @@ td {
 
 /* 日付のない空のマス */
 td:not(.has-date) {
-    background-color: #f9fafb;
+    background-color: #c1c1c1;
     border: 1px dashed #e5e7eb;
     opacity: 0.5;
 }
@@ -48,7 +48,7 @@ td:not(.has-date) {
 /* 当日（今日）のハイライト */
 .today {
     background-color: #fefcbf !important;
-    border-color: #fef08a;
+    border-color: #656565;
 }
 
 /* セル全体を覆う透明なリンク */
