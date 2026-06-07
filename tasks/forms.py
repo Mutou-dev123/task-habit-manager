@@ -13,6 +13,7 @@ class TaskForm (forms.ModelForm):
             "description",
             "due_date",
             "link",
+            'color',
         ]
 
         labels = {
@@ -20,6 +21,7 @@ class TaskForm (forms.ModelForm):
             "description": "メモ",
             "due_date": "期限日",
             "link": "関連リンク",
+            "color": "カラー",
         }
 
         widgets = {
@@ -50,6 +52,13 @@ class TaskForm (forms.ModelForm):
             "link": forms.URLInput(
                 attrs={
                     "placeholder": "https://...",
+                }
+            ),
+
+            # カラー
+            "color": forms.Select(
+                attrs={
+                    "class": "form-select"
                 }
             ),
         }

@@ -2,6 +2,8 @@
 
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}
     {% if habit %}習慣編集{% else %}習慣作成{% endif %}
 {% endblock %}
@@ -60,6 +62,10 @@
     <!-- リンク -->
     {% include "components/form_field.html" with field=form.link %}
 
+    <!-- カラー -->
+    {% include "components/form_field.html" with field=form.color %}
+
+
     <div class="form-actions">
         {% if form.instance.pk %}
             <button type="submit" class="btn update">更新する</button>
@@ -95,5 +101,7 @@
         toggleFields();
     });
 </script>
+
+<script src="{% static 'js/form_counter.js' %}" defer></script>
 
 {% endblock %}

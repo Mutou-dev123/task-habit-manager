@@ -22,7 +22,7 @@ class HabitForm(forms.ModelForm):
         fields = [
             "title", "description", "start_date", "end_date",
             "frequency", "interval_days", "weekdays",
-            "count_type", "target_count", "link",
+            "count_type", "target_count", "link", "color",
         ]
 
         labels = {
@@ -35,6 +35,7 @@ class HabitForm(forms.ModelForm):
             "count_type": "カウント単位",
             "target_count": "目標回数",
             "link": "関連リンク",
+            "color": "カラー",
         }
 
         widgets = {
@@ -72,6 +73,13 @@ class HabitForm(forms.ModelForm):
             "link": forms.URLInput(
                 attrs={
                     "placeholder": "https://...",
+                }
+            ),
+
+            # カラー
+            "color": forms.Select(
+                attrs={
+                    "class": "form-select"
                 }
             ),
         }

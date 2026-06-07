@@ -1,5 +1,15 @@
 from django.db import models
 
+COLOR_CHOICES = [
+    ('#ef4444', 'レッド'),
+    ('#f97316', 'オレンジ'),
+    ('#eab308', 'イエロー'),
+    ('#22c55e', 'グリーン'),
+    ('#3b82f6', 'ブルー'),
+    ('#a855f7', 'パープル'),
+    ('#64748b', 'グレー'),
+]
+
 # タスクモデル
 class Task(models.Model):
     title = models.CharField(max_length=100)
@@ -15,6 +25,7 @@ class Task(models.Model):
     link = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    color = models.CharField(max_length=7, choices=COLOR_CHOICES, default="#3b82f6")
 
     def __str__(self):
         return f"{self.title} ({self.status})"

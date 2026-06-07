@@ -1,5 +1,15 @@
 from django.db import models
 
+COLOR_CHOICES = [
+    ('#ef4444', 'レッド'),
+    ('#f97316', 'オレンジ'),
+    ('#eab308', 'イエロー'),
+    ('#22c55e', 'グリーン'),
+    ('#3b82f6', 'ブルー'),
+    ('#a855f7', 'パープル'),
+    ('#64748b', 'グレー'),
+]
+
 # 習慣モデル
 class Habit(models.Model):
     title = models.CharField(max_length=100)
@@ -61,6 +71,7 @@ class Habit(models.Model):
     link = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    color = models.CharField(max_length=7, choices=COLOR_CHOICES,default="#3b82f6")
 
     def clean(self):
         from django.core.exceptions import ValidationError

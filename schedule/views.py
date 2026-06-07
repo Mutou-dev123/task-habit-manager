@@ -93,7 +93,8 @@ def calendar_view(request):
                 icon = "✓" if task.status == "done" else "📌"
 
                 calendar_items[day].append({
-                    "text": f"{icon} {task.title}"
+                    "text": f"{icon} {task.title}",
+                    "color": task.color,
                 })
 
     if mode in ["all", "habits"]:
@@ -105,7 +106,8 @@ def calendar_view(request):
                 icon = "✓" if item["is_done"] else "⬜"
 
                 calendar_items[day].append({
-                    "text": f"{icon} {item['habit'].title}"
+                    "text": f"{icon} {item['habit'].title}",
+                    "color": item['habit'].color,
                 })
     
     calendar_preview = {}

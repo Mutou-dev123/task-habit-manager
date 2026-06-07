@@ -1,15 +1,10 @@
 <!-- 習慣一覧画面読み込み部分テンプレート -->
 
-{% load static %}
-
 {% for habit in habits %}
-    <div class="card">
-
+    <div class="card status-{{ habit.status }}" style="--item-id: habit-{{ habit.id }}; --item-color: {{ habit.color|default:'#e5e7eb' }}; background-color: #ffffff; color: #1f2937;">    
         <a href="{% url 'habit_detail' habit.id %}" class="card-main-link"></a>
-
-        <h3 style="font-weight: bold; font-size: 18px;">
-            {{ habit.title }}
-        </h3>
+        <h3 class="item-link" style="font-weight: bold; font-size: 18px;">{{ habit.title }}</h3>
+        <p>{{ habit.status }}</p>
 
         <p>{{ habit.get_frequency_display }}</p>
 

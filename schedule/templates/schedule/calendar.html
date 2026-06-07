@@ -85,7 +85,9 @@
                         {% if preview %}
 
                             {% for item in preview.items %}
-                                <div>{{ item.text }}</div>
+                                <div style="background-color: {{ item.color|default:'#e5e7eb' }};" class="calendar-item">
+                                    {{ item.text }}
+                                </div>
                             {% endfor %}
 
                             {% if preview.remain_count > 0 %}

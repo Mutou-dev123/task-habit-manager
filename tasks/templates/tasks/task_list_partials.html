@@ -1,9 +1,9 @@
 <!-- タスク一覧画面読み込み部分テンプレート -->
 
 {% for task in tasks %}
-    <div class="card status-{{ task.status }}" style="--task-id: task-{{ task.id }};">
+    <div class="card status-{{ task.status }}" style="--item-id: task-{{ task.id }}; --item-color: {{ task.color|default:'#e5e7eb' }}; background-color: #ffffff; color: #1f2937;">    
         <a href="{% url 'task_detail' task.id %}" class="card-main-link"></a>
-        <h3 class="task-link" style="font-weight: bold; font-size: 18px;">{{ task.title }}</h3>
+        <h3 class="item-link" style="font-weight: bold; font-size: 18px;">{{ task.title }}</h3>
         <p>{{ task.status }}</p>
 
         {% if task.status != "done" %}

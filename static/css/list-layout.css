@@ -100,7 +100,7 @@
     }
 }
 
-.task-link {
+.item-link {
     text-decoration: none;
     color: #1f2937;
     font-weight: bold;
@@ -123,7 +123,7 @@
 }
 
 .card {
-    view-transition-name: var(--task-id);
+    view-transition-name: var(--item-id);
 }
 
 /* ==============================

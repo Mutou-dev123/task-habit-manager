@@ -158,7 +158,7 @@ td {
 .card {
     background-color: white;
     border: 1px solid #e5e7eb;
-    padding: 20px;
+    padding: 24px 20px 20px;
     margin-bottom: 0;
     border-radius: 12px;
     display: flex;
@@ -170,12 +170,28 @@ td {
     cursor: pointer;
     
     /* ブラウザがカードの移動を追跡できるようにする固有の名前 */
-    view-transition-name: var(--task-id);
+    view-transition-name: var(--item-id);
 }
 
 .card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+    レイヤー構造（下から順に：帯 → 透明リンク → ボタン・文字）
+   ========================================================================== */
+
+/* カード上部のカラー帯 */
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 16px; /* 帯の太さ */
+    background-color: var(--item-color, #e5e7eb); /* HTMLから渡された色（なければグレー） */
+    z-index: 0;
 }
 
 /* カード全体を覆う透明なリンク */
@@ -186,22 +202,26 @@ td {
     width: 100%;
     height: 100%;
     z-index: 1;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* 透明リンクに隠れないよう前面に引っ張り上げる要素 */
-.inline-form,
-.btn,
-.actions,
-.update {
+.card .inline-form,
+.card .btn,
+.card .actions,
+.card .update,
+.card .item-link,
+.card p {
     position: relative;
     z-index: 2;
 }
 
-.task-link {
+.item-link {
     text-decoration: none;
     color: #1f2937;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 18px;
+    line-height: 1.4;
 }
 
 /* ==========================================================================
