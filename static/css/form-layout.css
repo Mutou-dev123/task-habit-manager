@@ -81,3 +81,25 @@
 .char-counter.is-over {
     color: #ef4444;
 }
+
+/* ==============================
+    フォーム要素の横並び（2カラム）
+============================== */
+.form-row-2col {
+    display: flex;
+    gap: 16px; /* 2つの入力欄の間の隙間 */
+    width: 100%;
+}
+
+/* 中にあるフォームグループ（入力ブロック）を均等な幅「1:1」にする */
+.form-row-2col > * {
+    flex: 1;
+}
+
+/* スマホなどの狭い画面では自動的に縦並びに */
+@media (max-width: 480px) {
+    .form-row-2col {
+        flex-direction: column;
+        gap: 0;
+    }
+}

@@ -30,6 +30,7 @@ class TaskForm (forms.ModelForm):
             "title": forms.TextInput(
                 attrs={
                     "placeholder": "例：レポート提出",
+                    "maxlength": "50",
                 }
             ),
 
@@ -38,6 +39,7 @@ class TaskForm (forms.ModelForm):
                 attrs={
                     "rows": 4,
                     "placeholder": "メモや補足を書く",
+                    "maxlength": "500",
                 }
             ),
 

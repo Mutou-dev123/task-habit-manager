@@ -132,11 +132,8 @@ td div:contains("✓") {
     カレンダー上部：ナビゲーション・フィルター
    ========================================================================== */
 .calendar-header-wrapper {
-    margin: 10px 0 30px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+    margin: 20px 0 30px 0;
+    width: 100%;
 }
 
 /* 年月タイトル・選択機能 */
@@ -177,11 +174,17 @@ td div:contains("✓") {
 /* コントロールコンテナ */
 .calendar-controls {
     display: flex;
-    width: 100%;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    width: 100%;
     gap: 16px;
+}
+
+/* 3つの要素をそれぞれ均等幅に収める */
+.calendar-controls > .nav-cluster,
+.calendar-controls > .calendar-jump-title,
+.calendar-controls > .filter-cluster {
+    flex: 1;
 }
 
 /* ナビゲーション（前月・今日・翌月） */
@@ -191,6 +194,36 @@ td div:contains("✓") {
     padding: 4px;
     border-radius: 8px;
     gap: 2px;
+    max-width: max-content;
+    margin-right: auto;
+}
+
+/* 年月タイトルは中央揃え */
+.calendar-jump-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #111827;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* フィルターは右寄せ */
+.filter-cluster {
+    display: inline-flex;
+    background-color: #f3f4f6;
+    padding: 4px;
+    border-radius: 9999px;
+    gap: 4px;
+    max-width: max-content;
+    margin-left: auto;
 }
 
 .btn-nav, .btn-today {
@@ -232,6 +265,8 @@ td div:contains("✓") {
     position: relative;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     transform: scale(1);
+
+    white-space: nowrap;
 }
 
 .filter-item:hover {

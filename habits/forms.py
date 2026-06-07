@@ -43,15 +43,17 @@ class HabitForm(forms.ModelForm):
             # タイトル
             "title": forms.TextInput(
                 attrs={
-                    "placeholder": "例：ランニング"
+                    "placeholder": "例：ランニング",
+                    "maxlength": "50",
                 }
             ),
 
-            # 詳細
+            # メモ
             "description": forms.Textarea(
                 attrs={
                     "rows": 4,
                     "placeholder": "メモや補足を書く",
+                    "maxlength": "500",
                 }
             ),
 

@@ -27,11 +27,13 @@
     <!-- メモ -->
     {% include "components/form_field.html" with field=form.description %}
 
-    <!-- 開始日 -->
-    {% include "components/form_field.html" with field=form.start_date %}
-
-    <!-- 終了日 -->
-    {% include "components/form_field.html" with field=form.end_date %}
+    <div class="form-row-2col">
+        <!-- 開始日 -->
+        {% include "components/form_field.html" with field=form.start_date %}
+    
+        <!-- 終了日 -->
+        {% include "components/form_field.html" with field=form.end_date %}
+    </div>
 
     <!-- 頻度設定 -->
     {% include "components/form_field.html" with field=form.frequency %}
