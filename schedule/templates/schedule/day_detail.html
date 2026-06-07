@@ -55,7 +55,7 @@
             {% endif %}
 
             <a href="{% url 'habit_detail' item.habit.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
-                {{ habit.title }}
+                {{ item.habit.title }}
             </a>
 
         </li>
