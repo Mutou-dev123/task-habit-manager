@@ -120,6 +120,7 @@ td {
     text-decoration: none;
     transition: 0.2s;
     color: white;
+    cursor: pointer;
 }
 
 .create  { background-color: #4caf50; }

@@ -61,12 +61,14 @@
         </div>
 
         <div class="detail-meta-row detail-meta-row-desc">
-
             <strong>メモ：</strong>
-
-            <div class="detail-description-box">
-                {{ task.description|linebreaks }}
-            </div>
+            {% if task.description %}
+                <div class="detail-description-box">
+                    {{ task.description|linebreaks }}
+                </div>
+            {% else %}
+                <span class="text-muted">なし</span>
+            {% endif %}
 
         </div>
 
@@ -120,6 +122,7 @@
     <!-- 下部アクション -->
     <div class="detail-actions">
 
+        <!-- 一覧へ戻るボタン -->
         <a
             href="{% url 'task_list' %}"
             class="btn back"
@@ -127,6 +130,7 @@
             一覧へ戻る
         </a>
 
+        <!-- 編集ボタン -->
         <a
             href="{% url 'task_update' task.id %}"
             class="btn edit"
@@ -134,8 +138,8 @@
             編集する
         </a>
 
-        <!-- 削除 -->
-        <button
+        <!-- 削除ボタン -->
+        <a
             type="button"
             class="btn delete js-detail-delete"
             data-url="{% url 'task_delete' task.id %}"
@@ -143,10 +147,11 @@
             data-redirect="{% url 'task_list' %}"
         >
             <i class="fa-solid fa-trash"></i>
-        </button>
+        </a>
 
     </div>
 
+    <!-- 日付詳細画面から来た場合の処理 -->
     {% if from_day %}
 
     <div class="detail-nav-links">
@@ -181,10 +186,8 @@
         </span>
 
         <span style="margin-left: 15px;">
-
             更新:
             {{ task.updated_at|date:"Y/m/d H:i" }}
-
         </span>
 
     </div>
