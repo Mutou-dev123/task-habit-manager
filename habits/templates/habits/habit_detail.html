@@ -1,0 +1,202 @@
+<!-- 習慣詳細画面テンプレート -->
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}習慣詳細{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/detail-layout.css' %}">
+
+<!-- 汎用確認モーダル -->
+<script src="{% static 'js/common/confirm_modal.js' %}" defer></script>
+
+<!-- 詳細画面共通削除処理 -->
+<script src="{% static 'js/detail_delete.js' %}" defer></script>
+
+<div class="detail-container">
+
+    <h2>習慣詳細</h2>
+
+    <div class="detail-card">
+
+        <h3 class="detail-title">
+            {{ habit.title }}
+        </h3>
+
+        <div class="detail-meta-row">
+            <strong>ステータス：</strong>
+            {{ habit.get_status_display }}
+        </div>
+
+
+        <div class="detail-meta-row">
+
+            <strong>開始：</strong>
+
+            {% if habit.start_date %}
+            {{ habit.start_date|date:"Y/m/d" }}
+            {% else %}
+            未設定
+            {% endif %}
+        </div>
+
+        <div class="detail-meta-row">
+        
+            <strong>終了：</strong>
+
+            {% if habit.end_date %}
+            {{ habit.end_date|date:"Y/m/d" }}
+            {% else %}
+            未設定
+            {% endif %}
+        </div>
+
+        <div class="detail-meta-row">
+            <strong>リンク：</strong>
+
+            {% if habit.link %}
+                <a
+                    href="{{ habit.link }}"
+                    target="_blank"
+                >
+                    開く
+                    <i class="fa-solid fa-external-link"></i>
+                </a>
+
+            {% else %}
+
+                <span class="text-muted">なし</span>
+                
+            {% endif %}
+
+        </div>
+
+        <div class="detail-meta-row detail-meta-row-desc">
+            <strong>メモ：</strong>
+            {% if habit.description %}
+                <div class="detail-description-box">
+                    {{ habit.description|linebreaks }}
+                </div>
+            {% else %}
+                <span class="text-muted">なし</span>
+            {% endif %}
+        </div>
+
+        <!-- ステータス更新 -->
+        <form
+            method="post"
+            action="{% url 'habit_update_status' habit.id %}"
+            class="detail-status-form"
+        >
+        
+            {% csrf_token %}
+
+            <select
+                name="status"
+                class="detail-status-select"
+            >
+                <option
+                    value="active"
+                    {% if habit.status == "active" %}selected{% endif %}
+                >
+                    実行
+                </option>
+
+                <option
+                    value="archived"
+                    {% if habit.status == "archived" %}selected{% endif %}
+                >
+                    終了
+                </option>
+
+            </select>
+
+            <button
+                type="submit"
+                class="btn update detail-status-submit"
+            >
+                状態を更新
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- 下部アクション -->
+    <div class="detail-actions">
+
+        <!-- 一覧へ戻るボタン -->
+        <a
+            href="{% url 'habit_list' %}"
+            class="btn back"
+        >
+            一覧へ戻る
+        </a>
+
+        <!-- 編集ボタン -->
+        <a
+            href="{% url 'habit_update' habit.id %}"
+            class="btn edit"
+        >
+            編集する
+        </a>
+
+        <!-- 削除ボタン -->
+        <a
+            type="button"
+            class="btn delete js-detail-delete"
+            data-url="{% url 'habit_delete' habit.id %}"
+            data-title="{{ habit.title }}"
+            data-redirect="{% url 'habit_list' %}"
+        >
+            <i class="fa-solid fa-trash"></i>
+        </a>
+
+    </div>
+
+    <!-- 日付詳細画面から来た場合の処理 -->
+    {% if from_day %}
+
+    <div class="detail-nav-links">
+
+        <a href="{% url 'day_detail' year month day %}">
+            📅 日付に戻る
+        </a>
+
+        <span class="divider">|</span>
+
+        <a href="{% url 'calendar_view' %}">
+            🗓️ カレンダーへ戻る
+        </a>
+
+    </div>
+
+    {% endif %}
+
+    <!-- 作成・更新日時 -->
+    <div
+        style="
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+            color: #9ca3af;
+        "
+    >
+
+        <span>
+            作成:
+            {{ habit.created_at|date:"Y/m/d H:i" }}
+        </span>
+
+        <span style="margin-left: 15px">
+            更新:
+            {{ habit.created_at|date:"Y/m/d H:i" }}
+        </span>
+
+    </div>
+
+</div>
+
+{% endblock %}

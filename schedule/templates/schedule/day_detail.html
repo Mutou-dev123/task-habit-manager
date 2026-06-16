@@ -1,0 +1,82 @@
+<!-- 日付詳細画面テンプレート -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>
+    {{ current_date.year }}年
+    {{ current_date.month }}月
+    {{ current_date.day }}日
+</h2>
+
+<!-- 前日・翌日移動 -->
+<div>
+    <a href="{% url 'day_detail' prev_year prev_month prev_day %}">前日</a>
+    |
+    <a href="{% url 'day_detail' next_year next_month next_day %}">翌日</a>
+</div>
+
+<hr>
+
+<h3>タスク</h3>
+
+{% if tasks %}
+    <ul>
+        {% for task in tasks %}
+            <li>
+                <a href="{% url 'task_detail' task.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
+                    {{ task.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% else %}
+    <p>タスクはありません</p>
+
+{% endif %}
+
+<hr>
+
+<h3>習慣</h3>
+
+{% if habit_states %}
+
+    <ul>
+
+        {% for item in habit_states %}
+
+        <li>
+            {% if item.state == "done" %}
+                ✓
+            {% elif item.state == "skipped" %}
+                ⏭
+            {% else %}
+                ⬜
+            {% endif %}
+
+            <a href="{% url 'habit_detail' item.habit.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
+                {{ item.habit.title }}
+            </a>
+
+        </li>
+
+        {% endfor %}
+
+    </ul>
+
+{% else %}
+
+    <p>習慣はありません</p>
+
+{% endif %}
+
+    </ul>
+<hr>
+
+<a href="{% url 'calendar_view' %}" class="btn back">
+    カレンダーへ戻る
+</a>
+
+{% endblock %}

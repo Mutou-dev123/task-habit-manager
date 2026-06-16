@@ -2,5 +2,13 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home),
+    path("", views.habit_list, name="habit_list"),
+    path("<int:pk>/", views.habit_detail, name="habit_detail"),
+    path("create/", views.habit_create, name="habit_create"),
+    path("<int:pk>/edit/", views.habit_update, name="habit_update"),
+    path("<int:pk>/delete/", views.habit_delete, name="habit_delete"),
+    path("<int:pk>/check/", views.habit_check, name="habit_check"),
+    path("<int:pk>/uncheck/", views.habit_uncheck, name="habit_uncheck"),
+    path("<int:pk>/status/", views.habit_update_status, name="habit_update_status"),
+    path("drafts/", views.habit_draft_list, name="habit_draft_list"),
 ]

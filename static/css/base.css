@@ -1,0 +1,432 @@
+@import "list-layout.css";
+@import "form-layout.css";
+
+/* ==========================================================================
+    全体・共通レイアウト (Base)
+   ========================================================================== */
+body {
+    overflow-y: scroll;
+    background-color: #f8fafc;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    vertical-align: top;
+    height: 100px;
+}
+
+.today {
+    background-color: #fff3cd;
+}
+
+/* ==========================================================================
+    ヘッダー・ナビゲーション
+   ========================================================================== */
+/* ヘッダー全体の中央寄せ */
+.app-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 0;
+    margin-bottom: 20px;
+}
+
+/* タイトル文字 */
+.app-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+}
+
+/* ナビゲーション土台 */
+.tab-nav {
+    display: inline-flex;
+    background-color: #f3f4f6;
+    padding: 6px;
+    border-radius: 9999px; /* 丸いカプセル型にする */
+    gap: 4px;
+}
+
+/* 各ナビゲーションリンクの基本スタイル */
+.tab-nav-item {
+    display: inline-block;
+    padding: 12px 32px;
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 9999px;
+    position: relative;
+    /* アニメーション */
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
+}
+
+/* ナビゲーションのマウスホバー時 */
+.tab-nav-item:hover {
+    color: #111827;
+    background-color: rgba(0, 0, 0, 0.04);
+    transform: scale(1.03);
+}
+
+/* ナビゲーションの現在開いているページ */
+.tab-nav-item.is-active {
+    background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================================
+    フッター
+   ========================================================================== */
+.app-footer {
+    width: 100%;
+    background-color: #111827;
+    color: #ffffff;
+    text-align: center;
+    padding: 24px 0;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+
+    margin-top: auto;
+}
+
+/* ==========================================================================
+    ボタン共通スタイル
+   ========================================================================== */
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.2s;
+    color: white;
+    cursor: pointer;
+}
+
+.create  { background-color: #4caf50; }
+.create:hover { background-color: #43a047; }
+
+.detail  { background-color: #2196f3; }
+.detail:hover { background-color: #1e88e5; }
+
+.edit    { background-color: #ff9800; }
+.edit:hover { background-color: #fb8c00; }
+
+.delete  { background-color: #f44336; }
+.delete:hover { background-color: #e53935; }
+
+.update  { background-color: #009688; }
+.update:hover { background-color: #00897b; }
+
+.draft   { background-color: #90a4ae; }
+.draft:hover { background-color: #78909c; }
+
+.back    { background-color: gray; }
+.back:hover { background-color: dimgray; }
+
+.check   { background-color: #4caf50; }
+.check:hover { background-color: #43a047; }
+
+.disabled {
+    background-color: #9e9e9e;
+    cursor: default;
+}
+
+/* ==========================================================================
+    コンポーネント (カード単体の見た目)
+   ========================================================================== */
+.card {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    padding: 24px 20px 20px;
+    margin-bottom: 0;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    
+    /* ブラウザがカードの移動を追跡できるようにする固有の名前 */
+    view-transition-name: var(--item-id);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+    レイヤー構造（下から順に：帯 → 透明リンク → ボタン・文字）
+   ========================================================================== */
+
+/* カード上部のカラー帯 */
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 16px; /* 帯の太さ */
+    background-color: var(--item-color, #e5e7eb); /* HTMLから渡された色（なければグレー） */
+    z-index: 0;
+}
+
+/* カード全体を覆う透明なリンク */
+.card-main-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 透明リンクに隠れないよう前面に引っ張り上げる要素 */
+.card .inline-form,
+.card .btn,
+.card .actions,
+.card .update,
+.card .item-link,
+.card p {
+    position: relative;
+    z-index: 2;
+}
+
+.item-link {
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+    一覧レイアウト (フォーム・グリッド)
+   ========================================================================== */
+/* 検索・フィルターフォームの横並び設定 */
+.inline-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0 30px 0;
+    flex-wrap: wrap; /* 画面が狭くなったら自動で折り返す */
+}
+
+.inline-form input,
+.inline-form select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.inline-form input:focus,
+.inline-form select:focus {
+    border-color: #1f2937;
+}
+
+.inline-form button {
+    padding: 8px;
+    background-color: #1f2937;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.inline-form button:hover {
+    background-color: #374151;
+}
+
+/* カードリストのグリッド化（3列） */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+/* アクションボタン */
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto; /* ボタンが常に下に揃う */
+    width: 100%;
+}
+
+/* .actions内のボタンを均等に */
+.actions .btn {
+    flex: 1;
+    text-align: center;
+}
+
+/* レスペンシブ対応 */
+@media (max-width: 900px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+    View Transitions (画面遷移・移動アニメーションの微調整)
+   ========================================================================== */
+@view-transition {
+    navigation: auto;
+}
+
+/* カプセルの移動アニメーションの名前を定義 */
+.tab-nav-item.is-active {
+    view-transition-name: active-tab;
+}
+
+/* 画面全体のフェード時間を少し速くして、リロードの隙間を感じさせなくする */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.15s;
+}
+
+/* アニメーション（カプセル・カード移動）を滑らかにする設定 */
+::view-transition-group(active-tab),
+::view-transition-group(*) {
+    animation-duration: 0.3s; /* ピュッと動く心地いい速度（0.3秒） */
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* ==============================
+    カスタム削除モーダル (Notion/モダン風)
+   ============================== */
+
+/* モーダル本体のダサい黒枠を完全に消去して、影でフワッと浮かせる */
+dialog#custom-delete-modal {
+    border: none !important;
+    border-radius: 16px;
+    padding: 32px 24px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* 背景の暗転とぼかし */
+dialog#custom-delete-modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px); 
+}
+
+/* アイコンを「赤い円」で囲ってプロっぽくする */
+.modal-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #fee2e2; /* 薄い赤色 */
+    color: #ef4444;            /* 濃い赤色 */
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* 見出しとテキスト */
+dialog#custom-delete-modal h3 {
+    margin: 0 0 12px 0;
+    color: #111827;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+dialog#custom-delete-modal p {
+    margin: 0 0 28px 0;
+    color: #6b7280;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* ボタンエリアの調整（幅を均等に、黒枠を消す） */
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-actions button {
+    flex: 1; /* ボタンの横幅をピッタリ同じにする */
+    padding: 12px 0;
+    border: none !important; /* ダサい黒枠を強制排除 */
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+}
+
+/* キャンセルボタン（文字色を強制的にダークグレーにして見えるようにする） */
+.modal-actions #cancel-delete-btn {
+    background-color: #f3f4f6;
+    color: #374151 !important; 
+}
+
+.modal-actions #cancel-delete-btn:hover {
+    background-color: #e5e7eb;
+}
+
+/* 削除ボタン */
+.modal-actions #confirm-delete-btn {
+    background-color: #ef4444;
+    color: #ffffff !important;
+}
+
+.modal-actions #confirm-delete-btn:hover {
+    background-color: #dc2626;
+}
+
+/* タスク名を表示する専用ボックス */
+.modal-target-name-box {
+    background-color: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 0 auto 20px auto; /* 中央寄せ＆下の余白 */
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 15px;
+    word-break: break-all; /* 長いタイトルでも枠をはみ出さないようにする */
+    display: inline-block;
+    max-width: 100%;
+}

@@ -1,0 +1,150 @@
+/* 詳細画面共通レイアウト */
+
+/* 中央にきゅっと収まるコンテナ */
+.detail-container {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* 白く浮き出るメインカード */
+.detail-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+}
+
+/* タスクのタイトル */
+.detail-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1f2937;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 12px;
+}
+
+/* 各情報行のスタイル */
+.detail-meta-row {
+    margin-bottom: 16px;
+    font-size: 15px;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.detail-meta-row strong {
+    color: #1f2937;
+    display: inline-block;
+    width: 100px; /* 見出しの縦ラインをピタッと揃える */
+}
+
+/* 未設定などのグレー文字用 */
+.text-muted {
+    color: #9ca3af;
+}
+
+/* 外部リンク用 */
+.external-link {
+    color: #2563eb;
+    font-weight: 600;
+}
+.external-link i {
+    font-size: 12px;
+}
+
+/* メモ（説明文）エリアの調整 */
+.detail-meta-row-desc {
+    margin-top: 20px;
+}
+
+/* メモ（説明文）のボックス */
+.detail-description-box {
+    background-color: #f9fafb;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 8px;
+    border: 1px solid #f3f4f6;
+    color: #374151;
+}
+
+/* ステータス更新フォーム */
+.detail-status-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+    margin-bottom: 0;
+    padding-top: 20px;
+    border-top: 1px dashed #e5e7eb;
+}
+
+/* ステータス更新のセレクトボックス */
+.detail-status-select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+/* ステータス更新のボタン */
+.detail-status-submit {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+/* 下部のアクションボタンエリア */
+.detail-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.detail-actions .btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* 各ボタン固有のスタイル */
+.detail-actions .btn.back {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    flex: 1;
+}
+
+.detail-actions .btn.edit {
+    background-color: #1f2937;
+    color: white;
+    flex: 1;
+}
+
+.detail-actions .btn.delete {
+    background-color: #ef4444;
+    color: white;
+    padding: 10px 14px;
+}
+
+/* カレンダー・日付に戻るナビゲーション */
+.detail-nav-links {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.detail-nav-links a {
+    color: #4b5563;
+    text-decoration: none;
+}
+
+.detail-nav-links .divider {
+    color: #d1d5db;
+}

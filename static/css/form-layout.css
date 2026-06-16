@@ -1,0 +1,105 @@
+/* ==============================
+    フォームカード（一覧・詳細と統一）
+============================== */
+.form-card {
+    max-width: 650px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+/* 入力ブロック */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+/* Djangoフォームのinput統一 */
+.form-card input,
+.form-card textarea,
+.form-card select {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    background-color: #fff;
+}
+
+.form-card input:focus,
+.form-card textarea:focus,
+.form-card select:focus {
+    border-color: #1f2937;
+}
+
+/* アクションボタン */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+/* 下書きなども均等配置 */
+.form-actions .btn {
+    flex: 1;
+    text-align: center;
+}
+
+.form-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.form-bottom-nav {
+    margin-top: 20px;    
+    margin-bottom: 80px; 
+}
+
+/* ==============================
+    文字数カウンター
+============================== */
+.char-counter {
+    text-align: right;
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+/* 文字数オーバーした時に赤くする用のクラス */
+.char-counter.is-over {
+    color: #ef4444;
+}
+
+/* ==============================
+    フォーム要素の横並び（2カラム）
+============================== */
+.form-row-2col {
+    display: flex;
+    gap: 16px; /* 2つの入力欄の間の隙間 */
+    width: 100%;
+}
+
+/* 中にあるフォームグループ（入力ブロック）を均等な幅「1:1」にする */
+.form-row-2col > * {
+    flex: 1;
+}
+
+/* スマホなどの狭い画面では自動的に縦並びに */
+@media (max-width: 480px) {
+    .form-row-2col {
+        flex-direction: column;
+        gap: 0;
+    }
+}

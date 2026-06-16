@@ -1,0 +1,123 @@
+<!-- タスク一覧画面テンプレート -->
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}タスク一覧{% endblock %}
+
+{% block content %}
+<h2>タスク一覧</h2>
+
+<a href="{% url 'task_create' %}" class="btn create">
+    ＋新規作成
+</a>
+
+<form method="get" class="inline-form">
+    
+    <!-- 検索 -->
+    <input
+        type="text"
+        name="q"
+        placeholder="検索"
+        value="{{ q }}"
+    >
+
+    <!-- 進行状況絞り込み -->
+    <select name="status">
+        <option value="">すべて</option>
+
+        <option value="todo"
+            {% if status == "todo" %}selected{% endif %}>
+            未着手
+        </option>
+
+        <option value="doing"
+            {% if status == "doing" %}selected{% endif %}>
+            進行中
+        </option>
+
+        <option value="done"
+            {% if status == "done" %}selected{% endif %}>
+            完了
+        </option>
+    </select>
+    
+    <!-- 並べ替え -->
+    <select name="sort">
+        <option value=""
+            {% if not sort %}selected{% endif %}>
+            新しい順
+        </option>
+
+        <option value="due"
+            {% if sort == "due" %}selected{% endif %}>
+            期限順
+        </option>
+
+        <option value="title"
+            {% if sort == "title" %}selected{% endif %}>
+            タイトル順
+        </option>
+    </select>
+
+    <!-- 条件リセットボタン -->
+    <a href="{% url 'task_list' %}" class="search-reset-btn">
+        ✖ 条件をクリア
+    </a>
+
+    <button type="submit">
+        検索
+    </button>
+
+</form>
+
+<!-- カードグリッド表示エリア -->
+<div class="card-grid" data-has-next="{{ has_next|yesno:'true,false' }}" data-page="1">
+    {% include "tasks/task_list_partials.html" %}
+</div>
+
+<!-- メッセージエリア -->
+<div id="empty-message" class="empty-state-container {% if tasks.object_list %}is-hidden{% endif %}">
+    
+    {% if has_tasks_at_all %}
+        <i class="fa-solid fa-magnifying-glass empty-icon"></i>
+        <p class="empty-title">一致するタスクはありません</p>
+        <p class="empty-subtitle">検索ワードやフィルターの条件を変更してみてください。</p>
+        <a href="{% url 'task_list' %}" class="search-reset-btn" style="display: inline-flex;">
+            ✖ 条件をクリアしてすべて表示
+        </a>
+
+    {% else %}
+        <i class="fa-solid fa-clipboard-list empty-icon"></i>
+        <p class="empty-title">タスクはまだありません</p>
+        <p class="empty-subtitle">最初のタスクを作成して、管理を始めましょう！</p>
+        
+        <div class="empty-actions">
+            <a href="{% url 'task_create' %}" class="btn create">
+                ＋新規作成
+            </a>
+            
+            {% if draft_count > 0 %}
+            <a href="{% url 'task_draft_list' %}?from=list" class="btn-draft">
+                📝 下書きを見る ({{ draft_count }})
+            </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+
+<!-- スクロールトリガー -->
+<div id="infinite-scroll-trigger" class="scroll-trigger-area">
+    {% if has_next %}
+        <i class="fa-solid fa-circle-notch fa-spin loading-spinner"></i>
+    {% endif %}
+</div>
+
+<!-- JS読み出し -->
+<script src="{% static 'js/list/grid_refresh.js' %}" defer></script>
+<script src="{% static 'js/list/infinite_scroll.js' %}" defer></script>
+<script src="{% static 'js/list/filter_ui.js' %}" defer></script>
+<script src="{% static 'js/list/task_list.js' %}" defer></script>
+<script src="{% static 'js/list/list_delete.js' %}" defer></script>
+{% endblock %}
