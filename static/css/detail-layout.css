@@ -148,3 +148,78 @@
 .detail-nav-links .divider {
     color: #d1d5db;
 }
+
+/* ==========================
+   日付詳細画面
+========================== */
+
+/* セクションタイトル */
+.detail-card h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f3f4f6;
+    color: #1f2937;
+    font-size: 18px;
+}
+
+/* タスク・習慣リスト */
+.detail-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* 各行 */
+.detail-list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+/* 最終行の罫線削除 */
+.detail-list-item:last-child {
+    border-bottom: none;
+}
+
+/* リンク */
+.detail-list-item a {
+    text-decoration: none;
+    color: #374151;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.detail-list-item a:hover {
+    color: #2563eb;
+}
+
+/* 状態アイコン */
+.detail-list-item span {
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* 日付カード内ナビ */
+.detail-card .detail-nav-links {
+    margin-top: 20px;
+}
+
+/* 日付カード用サマリー */
+.day-summary {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.day-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
