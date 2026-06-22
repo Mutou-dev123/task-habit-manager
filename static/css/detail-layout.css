@@ -150,7 +150,7 @@
 }
 
 /* ==========================
-   日付詳細画面
+    日付詳細画面
 ========================== */
 
 /* セクションタイトル */
@@ -222,4 +222,56 @@
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+/* ==========================================================================
+    詳細画面 View Transitions
+   ========================================================================== */
+
+#day-detail-content {
+    view-transition-name: day-detail-area;
+}
+
+:root[data-transition="slide-next"]::view-transition-old(day-detail-area) {
+    animation: slide-out-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+:root[data-transition="slide-next"]::view-transition-new(day-detail-area) {
+    animation: slide-in-right 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+:root[data-transition="slide-prev"]::view-transition-old(day-detail-area) {
+    animation: slide-out-right 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+:root[data-transition="slide-prev"]::view-transition-new(day-detail-area) {
+    animation: slide-in-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slide-out-left {
+    to {
+        transform: translateX(-40px);
+        opacity: 0;
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        transform: translateX(40px);
+        opacity: 0;
+    }
+}
+
+@keyframes slide-out-right {
+    to {
+        transform: translateX(40px);
+        opacity: 0;
+    }
+}
+
+@keyframes slide-in-left {
+    from {
+        transform: translateX(-40px);
+        opacity: 0;
+    }
 }

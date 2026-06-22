@@ -304,31 +304,40 @@ td div:contains("✓") {
 }
 
 /* ==========================================================================
-    カレンダー専用 アニメーション (View Transitions)
+    スライド表示アニメーション (View Transitions)
    ========================================================================== */
-#calendar-main-area table {
-    view-transition-name: calendar-area;
+.transition-area {
+    view-transition-name: page-area;
 }
 
-:root[data-transition="slide-next"]::view-transition-old(calendar-area) {
-    animation: slide-out-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-:root[data-transition="slide-next"]::view-transition-new(calendar-area) {
-    animation: slide-in-right 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+:root[data-transition="slide-next"]
+::view-transition-old(page-area) {
+    animation: slide-out-left .25s forwards;
 }
 
-:root[data-transition="slide-prev"]::view-transition-old(calendar-area) {
-    animation: slide-out-right 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-:root[data-transition="slide-prev"]::view-transition-new(calendar-area) {
-    animation: slide-in-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+:root[data-transition="slide-next"]
+::view-transition-new(page-area) {
+    animation: slide-in-right .25s forwards;
 }
 
-:root[data-transition="fade"]::view-transition-old(calendar-area) {
-    animation: fade-out-scale 0.2s ease-out forwards;
+:root[data-transition="slide-prev"]
+::view-transition-old(page-area) {
+    animation: slide-out-right .25s forwards;
 }
-:root[data-transition="fade"]::view-transition-new(calendar-area) {
-    animation: fade-in-scale 0.2s ease-in forwards;
+
+:root[data-transition="slide-prev"]
+::view-transition-new(page-area) {
+    animation: slide-in-left .25s forwards;
+}
+
+:root[data-transition="fade"]
+::view-transition-old(page-area) {
+    animation: fade-out-scale .2s forwards;
+}
+
+:root[data-transition="fade"]
+::view-transition-new(page-area) {
+    animation: fade-in-scale .2s forwards;
 }
 
 .more-items {

@@ -9,139 +9,154 @@
 
 <link rel="stylesheet" href="{% static 'css/detail-layout.css' %}">
 
+
 <div class="detail-container">
-
-    <!-- 日付ヘッダー -->
-    <div class="detail-card">
-
-        <h2 class="detail-title">
-            {{ current_date.year }}年
-            {{ current_date.month }}月
-            {{ current_date.day }}日
-        </h2>
-
-        <!-- 前日・翌日移動ボタン -->
-        <div class="detail-nav-links">
-
-            <a href="{% url 'day_detail' prev_year prev_month prev_day %}">
-                前日
-            </a>
-
-            <span class="divider">|</span>
-
-            <a href="{% url 'calendar_view' %}">
-                🗓️ カレンダー
-            </a>
-
-            <span class="divider">|</span>
-
-            <a href="{% url 'day_detail' next_year next_month next_day %}">
-                翌日
-            </a>
-
+    
+        <!-- 日付ヘッダー -->
+        <div class="detail-card">
+    
+            <h2 class="detail-title">
+                {{ current_date.year }}年
+                {{ current_date.month }}月
+                {{ current_date.day }}日
+            </h2>
+    
+            <!-- 前日・翌日移動ボタン -->
+            <div class="detail-nav-links">
+    
+                <a
+                    href="{% url 'day_detail' prev_year prev_month prev_day %}"
+                    class="day-nav-prev"
+                >
+                    前日
+                </a>
+    
+                <span class="divider">|</span>
+    
+                <a href="{% url 'calendar_view' %}">
+                    🗓️ カレンダー
+                </a>
+    
+                <span class="divider">|</span>
+    
+                <a
+                    href="{% url 'day_detail' next_year next_month next_day %}"
+                    class="day-nav-next"
+                >
+                    翌日
+                </a>
+    
+            </div>
+    
+        </div>
+    
+        <div
+            id="day-detail-content"
+            class="transition-area"
+        >
+            <!-- タスク -->
+            <div class="detail-card">
+        
+                <h3>
+                    📋 タスク
+                    {% if tasks %}
+                        ({{ tasks|length }}件)
+                    {% endif %}
+                </h3>
+        
+                {% if tasks %}
+        
+                    <ul class="detail-list">
+        
+                        {% for task in tasks %}
+        
+                        <li class="detail-list-item">
+        
+                            <a href="{% url 'task_detail' task.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
+                                {{ task.title }}
+                            </a>
+                            
+                        </li>
+        
+                        {% endfor %}
+        
+                    </ul>
+                
+                    {% else %}
+        
+                        <p class="text-muted">
+                            タスクはありません
+                        </p>
+        
+                    {% endif %}
+        
+            </div>
+        
+            <!-- 習慣 -->
+            <div class="detail-card">
+        
+                <h3>
+                    🔄 習慣
+                    {% if habit_states %}
+                        ({{ habit_states|length }}件)
+                    {% endif %}
+                </h3>
+        
+                {% if habit_states %}
+        
+                    <ul class="detail-list">
+        
+                        {% for item in habit_states %}
+        
+                        <li class="detail-list-item">
+        
+                            <span>
+        
+                                {% if item.state == "done" %}
+                                    ✓
+                                {% elif item.state == "skipped" %}
+                                    ⏭
+                                {% else %}
+                                    ⬜
+                                {% endif %}
+                            
+                            </span>
+        
+                            <a href="{% url 'habit_detail' item.habit.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
+                                {{ item.habit.title }}
+                            </a>
+        
+                        </li>
+        
+                        {% endfor %}
+        
+                    </ul>
+        
+                {% else %}
+        
+                    <p class="text-muted">
+                        習慣はありません
+                    </p>
+        
+                {% endif %}
+            
+            </div>
+        
+            <!-- アクションボタン -->
+            <div class="detail-actions">
+        
+                <a
+                    href="{% url 'calendar_view' %}"
+                    class="btn back"
+                >
+                    カレンダーへ戻る
+                </a>
+            </div>
         </div>
 
-    </div>
-
-    <!-- タスク -->
-    <div class="detail-card">
-
-        <h3>
-            📋 タスク
-            {% if tasks %}
-                ({{ tasks|length }}件)
-            {% endif %}
-        </h3>
-
-        {% if tasks %}
-
-            <ul class="detail-list">
-
-                {% for task in tasks %}
-
-                <li class="detail-list-item">
-
-                    <a href="{% url 'task_detail' task.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
-                        {{ task.title }}
-                    </a>
-                    
-                </li>
-
-                {% endfor %}
-
-            </ul>
-        
-            {% else %}
-
-                <p class="text-muted">
-                    タスクはありません
-                </p>
-
-            {% endif %}
-
-    </div>
-
-    <!-- 習慣 -->
-    <div class="detail-card">
-
-        <h3>
-            🔄 習慣
-            {% if habit_states %}
-                ({{ habit_states|length }}件)
-            {% endif %}
-        </h3>
-
-        {% if habit_states %}
-
-            <ul class="detail-list">
-
-                {% for item in habit_states %}
-
-                <li class="detail-list-item">
-
-                    <span>
-
-                        {% if item.state == "done" %}
-                            ✓
-                        {% elif item.state == "skipped" %}
-                            ⏭
-                        {% else %}
-                            ⬜
-                        {% endif %}
-                    
-                    </span>
-
-                    <a href="{% url 'habit_detail' item.habit.id %}?from=day&year={{ current_date.year }}&month={{ current_date.month }}&day={{ current_date.day }}">
-                        {{ item.habit.title }}
-                    </a>
-
-                </li>
-
-                {% endfor %}
-
-            </ul>
-
-        {% else %}
-
-            <p class="text-muted">
-                習慣はありません
-            </p>
-
-        {% endif %}
-    
-    </div>
-
-    <!-- アクションボタン -->
-    <div class="detail-actions">
-
-        <a
-            href="{% url 'calendar_view' %}"
-            class="btn back"
-        >
-            カレンダーへ戻る
-        </a>
-    </div>
-
 </div>
+
+<script src="{% static 'js/common/view_transition.js' %}" defer></script>
+<script src="{% static 'js/day_detail.js' %}" defer></script>
 
 {% endblock %}
